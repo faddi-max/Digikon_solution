@@ -6,9 +6,11 @@ import { Hero } from '@/components/sections/Hero/Hero'
 import { AboutSection } from '@/components/sections/About/AboutSection'
 import { ServicesSection } from '@/components/sections/Services/ServicesSection'
 import { WorkSection } from '@/components/sections/Work/WorkSection'
+
 import { ProcessSection } from '@/components/sections/Process/ProcessSection'
 import { FaqSection } from '@/components/sections/FAQ/FaqSection'
 import { Footer } from '@/components/sections/Footer/Footer'
+import { ProductsSection } from '@/components/Products/ProductsSection'
 
 function FoundationPage() {
   return (
@@ -32,6 +34,7 @@ function FoundationPage() {
       <AboutSection />
       <ServicesSection />
       <WorkSection />
+      <ProductsSection />
       <ProcessSection />
       <FaqSection />
       <Footer />

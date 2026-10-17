@@ -4,27 +4,37 @@ import { AppRouter } from '@/app/router'
 import { Header } from '@/components/layout/Header'
 import { Hero } from '@/components/sections/Hero/Hero'
 import { AboutSection } from '@/components/sections/About/AboutSection'
+import { ServicesSection } from '@/components/sections/Services/ServicesSection'
+import { WorkSection } from '@/components/sections/Work/WorkSection'
+import { ProcessSection } from '@/components/sections/Process/ProcessSection'
+import { FaqSection } from '@/components/sections/FAQ/FaqSection'
 import { Footer } from '@/components/sections/Footer/Footer'
+
 function FoundationPage() {
   return (
     <>
       <a className="dk-skip-link" href="#main">
         Skip to content
       </a>
+      <Helmet>
+        <title>DigiKon Solutions</title>
+        <meta name="description" content="DigiKon Solutions website." />
+      </Helmet>
+
+      {/* .dk-top is the shared header + hero shell (see Hero.css), so only those two live inside it. */}
       <div className="dk-top">
         <Header />
         <main className="text-body-m text-text-primary font-sans" id="main">
-          <Helmet>
-            <title>DigiKon Solutions</title>
-            <meta name="description" content="DigiKon Solutions website." />
-          </Helmet>
           <Hero />
-            <main>
-    <AboutSection />
-  </main>
-  <Footer />
         </main>
       </div>
+
+      <AboutSection />
+      <ServicesSection />
+      <WorkSection />
+      <ProcessSection />
+      <FaqSection />
+      <Footer />
     </>
   )
 }

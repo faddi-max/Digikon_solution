@@ -1,0 +1,48 @@
+/* Ported 1:1 from "Selected Work Gallery / FAQs / Ask the team". Every rule is scoped under .dk-faq. */
+.dk-faq a{color:#03171D}.dk-faq a:hover{color:#14282D}
+.dk-faq{font-family:'Manrope',system-ui,sans-serif;color:#03171D;background:#FFFFFF;position:relative;overflow:hidden;isolation:isolate}
+.dk-faq .serif{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
+.dk-faq .dots{position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(3,23,29,.12) 1px,transparent 1.4px);background-size:26px 26px;-webkit-mask-image:radial-gradient(ellipse 50% 60% at 78% 50%,#000,transparent 72%);mask-image:radial-gradient(ellipse 50% 60% at 78% 50%,#000,transparent 72%);pointer-events:none}
+.dk-faq .glow{position:absolute;z-index:-1;width:760px;height:760px;border-radius:50%;right:-200px;top:40px;background:radial-gradient(circle,rgba(129,216,112,.2),rgba(129,216,112,0) 62%);pointer-events:none}
+.dk-faq .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(3,23,29,.68)}
+.dk-faq .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.dk-faq .h2 em{font-style:italic;background:linear-gradient(transparent 64%,var(--accent) 64%,var(--accent) 92%,transparent 92%);padding:0 6px}
+.dk-faq .q{width:100%;min-height:64px;display:flex;align-items:center;gap:16px;padding:12px 12px 12px 18px;border-radius:18px;border:1px solid rgba(3,23,29,.1);background:#FFFFFF;color:#03171D;font:600 16px/1.35 'Manrope',system-ui,sans-serif;text-align:left;cursor:pointer;transition:background .3s,color .3s,border-color .3s,transform .3s;box-sizing:border-box}
+.dk-faq .q:hover{border-color:#03171D;transform:translateX(6px)}
+.dk-faq .q .n{flex:0 0 auto;font-size:12px;font-weight:700;color:rgba(3,23,29,.55);letter-spacing:.06em}
+.dk-faq .q .t{flex:1}
+.dk-faq .q .ic{flex:0 0 40px;height:40px;border-radius:50%;border:1px solid rgba(3,23,29,.2);display:inline-flex;align-items:center;justify-content:center;transition:all .3s}
+.dk-faq .q:hover .ic{background:var(--accent);border-color:var(--accent)}
+.dk-faq .q.on{background:#03171D;color:#FFFFFF;border-color:#03171D;transform:translateX(10px)}
+.dk-faq .q.on .n{color:var(--accent)}
+.dk-faq .q.on .ic{background:var(--accent);border-color:var(--accent);color:#03171D}
+.dk-faq .q.seen .n:after{content:' ✓';color:#3E8F33}
+.dk-faq .q:focus-visible{outline:2px solid #03171D;outline-offset:3px}
+.dk-faq .chat{flex:1 1 520px;min-width:0;background:#03171D;border-radius:30px;color:#FFFFFF;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 40px 90px rgba(3,23,29,.22)}
+.dk-faq .chead{display:flex;align-items:center;gap:14px;padding:22px 26px;border-bottom:1px solid rgba(255,255,255,.08)}
+.dk-faq .av{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#03171D;display:inline-flex;align-items:center;justify-content:center;font:400 18px 'DM Serif Display',Georgia,serif;flex:0 0 auto;position:relative}
+.dk-faq .av.sm{width:34px;height:34px;font-size:14px}
+.dk-faq .live{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:dk-faq-pulse 2s infinite}
+@keyframes dk-faq-pulse{0%{box-shadow:0 0 0 0 rgba(129,216,112,.6)}70%{box-shadow:0 0 0 8px rgba(129,216,112,0)}100%{box-shadow:0 0 0 0 rgba(129,216,112,0)}}
+.dk-faq .cbody{flex:1;min-height:440px;padding:26px;display:flex;flex-direction:column;justify-content:flex-end;gap:18px;position:relative;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.4px);background-size:22px 22px}
+.dk-faq .me{align-self:flex-end;max-width:78%;background:var(--accent);color:#03171D;padding:14px 18px;border-radius:20px 20px 6px 20px;font-weight:600;font-size:15px;line-height:1.45;animation:dk-faq-inR .5s cubic-bezier(.2,.8,.2,1) both}
+.dk-faq .them{display:flex;gap:12px;align-items:flex-end;max-width:86%}
+.dk-faq .bub{background:#14282D;border:1px solid rgba(255,255,255,.07);padding:16px 20px;border-radius:20px 20px 20px 6px;font-size:15px;line-height:1.6;color:rgba(255,255,255,.88);animation:dk-faq-inL .55s cubic-bezier(.2,.8,.2,1) both}
+.dk-faq .old{opacity:.38;transition:opacity .4s}
+.dk-faq .typing{display:inline-flex;gap:5px;padding:18px 20px;border-radius:20px 20px 20px 6px;background:#14282D;animation:dk-faq-inL .4s both}
+.dk-faq .typing i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6);animation:dk-faq-bounce 1s infinite}
+.dk-faq .typing i:nth-child(2){animation-delay:.15s}
+.dk-faq .typing i:nth-child(3){animation-delay:.3s}
+@keyframes dk-faq-bounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-6px);opacity:1}}
+@keyframes dk-faq-inR{from{opacity:0;transform:translate(24px,10px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes dk-faq-inL{from{opacity:0;transform:translate(-24px,10px) scale(.96)}to{opacity:1;transform:none}}
+.dk-faq .sugs{display:flex;flex-wrap:wrap;gap:8px;padding-left:46px;animation:dk-faq-inL .5s .3s both}
+.dk-faq .sug{height:38px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#FFFFFF;font:600 13px 'Manrope',system-ui,sans-serif;cursor:pointer;transition:all .25s}
+.dk-faq .sug:hover{background:#FFFFFF;color:#03171D}
+.dk-faq .cfoot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:18px 18px 18px 26px;border-top:1px solid rgba(255,255,255,.08)}
+.dk-faq .cta{display:inline-flex;align-items:center;gap:12px;height:52px;padding:0 8px 0 22px;border-radius:999px;background:var(--accent);color:#03171D;font-weight:700;font-size:14px;text-decoration:none;transition:gap .3s,background .3s}
+.dk-faq .cta:hover{gap:18px;color:#03171D;background:#9EE38F}
+.dk-faq .cta .ar{width:36px;height:36px;border-radius:50%;background:#03171D;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center}
+@media (max-width:760px){.dk-faq .cbody{min-height:400px;padding:18px}.dk-faq .me{max-width:90%}.dk-faq .them{max-width:100%}.dk-faq .sugs{padding-left:0}.dk-faq .q:hover,
+.dk-faq .q.on{transform:none}}
+@media (prefers-reduced-motion:reduce){.dk-faq *{animation:none!important;transition:none!important}}

@@ -1,9 +1,8 @@
-import {  useRef } from 'react'
+import { useRef } from 'react'
 
+import footerBgLogo from '@/assets/images/footer-bg-logo.png'
 import { ScrollRevealText } from '@/components/motion/ScrollRevealText'
 import { gsap, prefersReducedMotion, useGSAP } from '@/lib/motion'
-
-import './Footer.css'
 
 const EXPLORE = [
   { label: 'About', href: '#about' },
@@ -18,10 +17,27 @@ const MORE = [
   { label: 'FAQs', href: '#faqs' },
 ]
 
-/**
- * Footer mark. Replace the paths with the exported DK glyph from Figma so it
- * matches the header and centre disc exactly.
- */
+const titleCls =
+  'm-0 text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-green-500'
+
+const listCls = 'mt-6 grid list-none gap-3.5 p-0'
+
+const linkCls =
+  'relative inline-block rounded-sm text-[15px] leading-[1.4] text-canvas-50/80 no-underline ' +
+  'transition-colors duration-200 ease-out hover:text-canvas-50 focus-visible:text-canvas-50 ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-green-500 ' +
+  'after:absolute after:inset-x-0 after:-bottom-[3px] after:h-px after:origin-left after:scale-x-0 ' +
+  'after:bg-green-500 after:transition-transform after:duration-300 ' +
+  'hover:after:scale-x-100 focus-visible:after:scale-x-100 ' +
+  'motion-reduce:transition-none motion-reduce:after:transition-none'
+
+const chipCls =
+  'inline-block rounded-[3px] border border-canvas-50/30 px-2 py-[3px] text-[9.5px] font-bold ' +
+  'uppercase leading-[1.2] tracking-[0.12em] text-canvas-50/80 no-underline ' +
+  'transition-colors duration-200 hover:text-canvas-50 ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-green-500'
+
+/** Replace the paths with the exported DK glyph from Figma if you want it pixel-exact. */
 function FooterMark() {
   return (
     <svg viewBox="0 0 40 26" width="38" height="25" aria-hidden="true">
@@ -46,17 +62,14 @@ function FooterMark() {
 
 export function Footer() {
   const root = useRef<HTMLElement>(null)
-  const orbA = useRef<HTMLDivElement>(null)
-  const orbB = useRef<HTMLDivElement>(null)
+  const logo = useRef<HTMLImageElement>(null)
 
   useGSAP(
     () => {
       if (!root.current || prefersReducedMotion()) return
 
-      const enter = gsap.timeline({
-        scrollTrigger: { trigger: root.current, start: 'top 85%', once: true },
-      })
-      enter
+      gsap
+        .timeline({ scrollTrigger: { trigger: root.current, start: 'top 85%', once: true } })
         .from('[data-foot="col"]', {
           autoAlpha: 0,
           y: 24,
@@ -64,36 +77,38 @@ export function Footer() {
           stagger: 0.12,
           ease: 'power3.out',
         })
-        .from(
-          '[data-foot="rule"]',
-          { scaleX: 0, duration: 1.8, ease: 'power3.inOut', transformOrigin: 'left center' },
-          0.3,
-        )
-        .from('[data-foot="bottom"]', { autoAlpha: 0, y: 12, duration: 1.2, ease: 'power3.out' }, 0.6)
+        .from('[data-foot="bottom"]', { autoAlpha: 0, y: 12, duration: 1.2, ease: 'power3.out' }, 0.5)
 
-      // Glows drift slowly and out of phase, so the background never looks static.
-      if (orbA.current) {
-        gsap.to(orbA.current, { x: -48, y: 32, duration: 9, ease: 'sine.inOut', yoyo: true, repeat: -1 })
-      }
-      if (orbB.current) {
-        gsap.to(orbB.current, { x: 40, y: -26, duration: 11, ease: 'sine.inOut', yoyo: true, repeat: -1 })
+      // Very slow drift on the background logo so it never feels static.
+      if (logo.current) {
+        gsap.to(logo.current, { y: 14, duration: 12, ease: 'sine.inOut', yoyo: true, repeat: -1 })
       }
     },
     { scope: root },
   )
 
   return (
-    <footer ref={root} className="dk-footer" id="contact">
-      <div className="dk-footer__glows" aria-hidden="true">
-        <div ref={orbA} className="dk-footer__orb dk-footer__orb--a" />
-        <div ref={orbB} className="dk-footer__orb dk-footer__orb--b" />
+    <footer
+      ref={root}
+      id="contact"
+      className="relative isolate w-full overflow-hidden bg-teal-900 font-sans text-canvas-50"
+    >
+      {/* Background logo. The PNG already has its own alpha: teal D, green K. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <img
+          ref={logo}
+          src={footerBgLogo}
+          alt=""
+          draggable={false}
+          className="absolute -left-[40%] -top-[30%] w-[180%] max-w-none select-none md:-left-[20%] md:w-[140%] lg:-left-[14%] lg:-top-[67%] lg:w-[110%]"
+        />
       </div>
 
-      <div className="dk-footer__inner">
-        <div className="dk-footer__main">
+      <div className="px-6 pb-8 pt-[72px] sm:px-[6vw] sm:pt-24 lg:px-[8vw] xl:pb-[clamp(28px,2vw,40px)] xl:pl-[19.6%] xl:pr-[17%] xl:pt-[clamp(96px,6.7vw,130px)]">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_43%] lg:items-start lg:gap-0">
           <ScrollRevealText
             as="h2"
-            className="dk-footer__headline"
+            className="m-0 max-w-none text-wrap font-display text-[clamp(40px,4.2vw,84px)] font-normal leading-[1.06] tracking-[-0.02em] text-canvas-50 [font-synthesis:none]"
             text="Let's build change together."
             split="words"
             mode="play"
@@ -103,13 +118,13 @@ export function Footer() {
             start="top 85%"
           />
 
-          <div className="dk-footer__cols">
-            <nav className="dk-footer__col" aria-label="Explore" data-foot="col">
-              <h3 className="dk-footer__title">Explore</h3>
-              <ul className="dk-footer__list">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-[1fr_1fr_1.2fr]">
+            <nav aria-label="Explore" data-foot="col" className="min-w-0">
+              <h3 className={titleCls}>Explore</h3>
+              <ul className={listCls}>
                 {EXPLORE.map((l) => (
                   <li key={l.label}>
-                    <a className="dk-footer__link" href={l.href}>
+                    <a className={linkCls} href={l.href}>
                       {l.label}
                     </a>
                   </li>
@@ -117,12 +132,12 @@ export function Footer() {
               </ul>
             </nav>
 
-            <nav className="dk-footer__col" aria-label="More" data-foot="col">
-              <h3 className="dk-footer__title">More</h3>
-              <ul className="dk-footer__list">
+            <nav aria-label="More" data-foot="col" className="min-w-0">
+              <h3 className={titleCls}>More</h3>
+              <ul className={listCls}>
                 {MORE.map((l) => (
                   <li key={l.label}>
-                    <a className="dk-footer__link" href={l.href}>
+                    <a className={linkCls} href={l.href}>
                       {l.label}
                     </a>
                   </li>
@@ -130,21 +145,21 @@ export function Footer() {
               </ul>
             </nav>
 
-            <div className="dk-footer__col dk-footer__col--contact" data-foot="col">
-              <h3 className="dk-footer__title">Contact</h3>
-              <ul className="dk-footer__list">
+            <div data-foot="col" className="col-span-2 min-w-0 sm:col-span-1">
+              <h3 className={titleCls}>Contact</h3>
+              <ul className={listCls}>
                 <li>
-                  <a className="dk-footer__link" href="mailto:hello@example.com">
+                  <a className={linkCls} href="mailto:hello@example.com">
                     hello@example.com
                   </a>
                 </li>
                 <li>
-                  <a className="dk-footer__link dk-footer__link--chip" href="#contact">
+                  <a className={chipCls} href="#contact">
                     Placeholder
                   </a>
                 </li>
                 <li>
-                  <a className="dk-footer__link" href="#top">
+                  <a className={linkCls} href="#top">
                     Back to top ↑
                   </a>
                 </li>
@@ -153,14 +168,19 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="dk-footer__rule" data-foot="rule" aria-hidden="true" />
-
-        <div className="dk-footer__bottom" data-foot="bottom">
-          <div className="dk-footer__brand">
+        <div
+          data-foot="bottom"
+          className="mt-[clamp(72px,8.7vw,168px)] flex flex-col items-start gap-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+        >
+          <div className="flex flex-none items-center">
             <FooterMark />
           </div>
-          <p className="dk-footer__tagline">Intelligent system. Real revenue.</p>
-          <p className="dk-footer__copy">© 2026 DigiKon Solutions · Contact details are placeholders</p>
+          <p className="m-0 text-[13px] leading-[1.4] tracking-[0.01em] text-canvas-50/50">
+            Intelligent system. Real revenue.
+          </p>
+          <p className="m-0 text-[13px] leading-[1.4] tracking-[0.01em] text-canvas-50/50">
+            © 2026 DigiKon Solutions · Contact details are placeholders
+          </p>
         </div>
       </div>
     </footer>

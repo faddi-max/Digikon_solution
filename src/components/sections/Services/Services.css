@@ -1,0 +1,517 @@
+/*
+ * Services accordion. Measured from the Figma "All Services" frame (358px wide
+ * panels, scaled to a 1148px container). Values marked ~ are estimated from a
+ * low-resolution screenshot and should be nudged after an overlay check.
+ */
+.dk-svc {
+  --svc-ink: #03171d;
+  --svc-muted: #647174;
+  --svc-green: #81d870;
+
+  --svc-bar-h: clamp(56px, 6.97vw, 80px);          /* ~ collapsed bar */
+  --svc-pad-x: 8.9%;
+  --svc-ease: cubic-bezier(0.65, 0, 0.35, 1);       /* brand: section transition ease-in-out */
+  --svc-dur: 450ms;                                  /* brand: 300 to 500ms */
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #ffffff;
+  color: var(--svc-ink);
+  font-family: 'Manrope', system-ui, sans-serif;
+  padding-block: clamp(64px, 8vw, 112px);
+}
+
+.dk-svc__glow {
+  position: absolute;
+  z-index: -1;
+  right: -12%;
+  bottom: -18%;
+  width: 46%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(129, 216, 112, 0.28), rgba(129, 216, 112, 0) 65%);
+  pointer-events: none;
+}
+
+.dk-svc__inner {
+  width: min(100% - 32px, 1148px);
+  margin-inline: auto;
+}
+
+
+/* Intro: eyebrow left, heading centred */
+.dk-svc__intro {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.dk-svc__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--svc-ink);
+}
+
+.dk-svc__eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--svc-green);
+}
+
+.dk-svc__heading {
+  grid-column: 2;
+  margin: 0;
+  text-align: center;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(30px, 3.85vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+/* Stack */
+.dk-svc__list {
+  display: block;
+  width: min(100%, 1440px);
+  margin-inline: auto;
+}
+
+.dk-svc__item {
+  --bg: #fff;
+  --fg: var(--svc-ink);
+  --soft: rgba(3, 23, 29, 0.55);
+  --label: rgba(3, 23, 29, 0.7);
+  --btn-bg: var(--svc-ink);
+  --btn-fg: #fff;
+  --ghost: rgba(3, 23, 29, 0.1);
+
+  --svc-pt-px: clamp(32px, calc(var(--pt, 65) / 1440 * 100vw), calc(var(--pt, 65) * 1px));
+  --svc-pb-px: clamp(32px, calc(var(--pb, 65) / 1440 * 100vw), calc(var(--pb, 65) * 1px));
+  --svc-head-open: calc(var(--svc-pt-px) + clamp(96px, 8vw, 112px));
+  --svc-open-px: clamp(0px, calc(var(--open-h, 603) / 1440 * 100vw), calc(var(--open-h, 603) * 1px));
+  position: relative;
+  background: var(--bg);
+  color: var(--fg);
+  overflow: hidden;
+  box-shadow: 0 -24px 60px 0 rgba(3, 23, 29, 0.12);
+}
+
+/* Themes. Gradients, heights, padding and mockup specs are from Figma (1440px frame).
+   Automation & AI had no spec yet, so its values are still estimates (~). */
+.dk-svc__item[data-theme='seo'] {
+  --bg: linear-gradient(135deg, #c8f0be 0%, rgba(129, 216, 112, 0.9) 48%, rgba(46, 125, 50, 0.8) 100%);
+  --soft: rgba(3, 23, 29, 0.5);
+  --open-h: 603;
+  --pt: 65;
+  --pb: 65;
+  --art-w: 35.68%;
+  --art-ar: 513.82 / 342.55;
+  --art-rot: 5.1deg;
+}
+.dk-svc__item[data-theme='web'] {
+  --bg: linear-gradient(135deg, #1c2e33 0%, #0d3f3b 48%, #2e7d32 100%);
+  --fg: #fff;
+  --soft: rgba(255, 255, 255, 0.55);
+  --label: rgba(255, 255, 255, 0.75);
+  --btn-bg: #fff;
+  --btn-fg: var(--svc-ink);
+  --ghost: rgba(255, 255, 255, 0.1);
+  --open-h: 603;
+  --pt: 65;
+  --pb: 65;
+  --art-w: 36.61%;
+  --art-ar: 527.23 / 271.45;
+  --art-rot: -9.83deg;
+}
+.dk-svc__item[data-theme='content'] {
+  --bg: linear-gradient(135deg, #ffffff 0%, #c8f0be 48%, #81d870 100%);
+  --ghost: rgba(3, 23, 29, 0.12);
+  --open-h: 660;
+  --pt: 57;
+  --pb: 64;
+  --art-w: 36.11%;
+  --art-ar: 520 / 346.67;
+  --art-rot: 7deg;
+}
+.dk-svc__item[data-theme='analytics'] {
+  --bg: linear-gradient(138.05deg, #1c2e33 0%, #03171d 66.95%, #2e7d32 117.23%);
+  --fg: #fff;
+  --soft: rgba(255, 255, 255, 0.55);
+  --label: rgba(255, 255, 255, 0.75);
+  --btn-bg: #fff;
+  --btn-fg: var(--svc-ink);
+  --ghost: rgba(255, 255, 255, 0.1);
+  --open-h: 603;
+  --pt: 65;
+  --pb: 65;
+  --art-w: 36.61%;
+  --art-ar: 527.23 / 271.45;
+  --art-rot: -9.83deg;
+}
+.dk-svc__item[data-theme='automation'] {
+  --bg: linear-gradient(165deg, #88dc7a 0%, #6fcb68 38%, #4a9f57 74%, #1f5c3f 100%); /* ~ */
+  --soft: rgba(3, 23, 29, 0.5);
+  --btn-bg: #fff;
+  --btn-fg: var(--svc-ink);
+  --ghost: rgba(3, 23, 29, 0.14);
+  --open-h: 603; /* ~ */
+  --pt: 65; /* ~ */
+  --pb: 65; /* ~ */
+  --art-w: 36.61%; /* ~ */
+  --art-rot: 0deg; /* ~ */
+}
+
+/* Head: number + title. The button spans the whole bar so the click target is large. */
+.dk-svc__head {
+  margin: 0;
+  font: inherit;
+}
+
+.dk-svc__bar {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: var(--svc-bar-h);
+  padding: 0 var(--svc-pad-x);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: min-height var(--svc-dur) var(--svc-ease);
+}
+
+.dk-svc__item[data-open='true'] .dk-svc__bar {
+  min-height: var(--svc-head-open);
+  cursor: default;
+}
+
+.dk-svc__no {
+  position: absolute;
+  left: var(--svc-pad-x);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+  transition:
+    top var(--svc-dur) var(--svc-ease),
+    transform var(--svc-dur) var(--svc-ease);
+}
+
+.dk-svc__item[data-open='true'] .dk-svc__no {
+  top: var(--svc-pt-px);
+  transform: none;
+}
+
+.dk-svc__title {
+  position: absolute;
+  left: calc(var(--svc-pad-x) + 40px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition:
+    left var(--svc-dur) var(--svc-ease),
+    top var(--svc-dur) var(--svc-ease),
+    transform var(--svc-dur) var(--svc-ease),
+    font-size var(--svc-dur) var(--svc-ease);
+}
+
+.dk-svc__item[data-open='true'] .dk-svc__title {
+  left: var(--svc-pad-x);
+  top: calc(var(--svc-pt-px) + clamp(26px, 2.4vw, 34px));
+  transform: none;
+  font-size: clamp(30px, 3.9vw, 45px);
+  white-space: normal;
+}
+
+.dk-svc__bar:focus-visible {
+  outline: 2px solid var(--svc-green);
+  outline-offset: -4px;
+}
+
+/* Ghost number */
+.dk-svc__ghost {
+  position: absolute;
+  z-index: 0;
+  right: 9%;
+  top: var(--svc-pt-px);
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(64px, 9.6vw, 112px);
+  line-height: 1;
+  color: var(--ghost);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--svc-dur) var(--svc-ease);
+}
+
+.dk-svc__item[data-open='true'] .dk-svc__ghost {
+  opacity: 1;
+}
+
+/* Panel: grid-rows trick animates height without measuring */
+.dk-svc__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--svc-dur) var(--svc-ease);
+}
+
+.dk-svc__item[data-open='true'] .dk-svc__panel {
+  grid-template-rows: 1fr;
+}
+
+.dk-svc__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding-inline: var(--svc-pad-x);
+}
+
+.dk-svc__copy {
+  width: min(100%, 420px);
+  padding-block: 0 var(--svc-pb-px);
+  min-height: calc(var(--svc-open-px) - var(--svc-head-open));
+  align-content: start;
+  display: grid;
+  gap: clamp(18px, 2vw, 24px);
+  justify-items: start;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 400ms ease-out,
+    transform 400ms ease-out;
+}
+
+.dk-svc__item[data-open='true'] .dk-svc__copy {
+  opacity: 1;
+  transform: none;
+  transition-delay: 160ms;
+}
+
+.dk-svc__point {
+  display: grid;
+  gap: 8px;
+}
+
+.dk-svc__label {
+  position: relative;
+  margin: 0;
+  padding-left: 14px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+.dk-svc__label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  border-radius: 1px;
+  background: var(--svc-green);
+}
+
+.dk-svc__text {
+  margin: 0;
+  max-width: 340px;
+  font-size: clamp(14px, 1.45vw, 16px);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.dk-svc__soft {
+  color: var(--soft);
+}
+
+.dk-svc__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 4px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    gap 220ms ease-out,
+    opacity 220ms ease-out;
+}
+
+.dk-svc__btn:hover,
+.dk-svc__btn:focus-visible {
+  gap: 12px;
+  color: var(--btn-fg);
+  opacity: 0.92;
+}
+
+.dk-svc__btn:focus-visible {
+  outline: 2px solid var(--svc-green);
+  outline-offset: 3px;
+}
+
+/* Mockup, right column. Absolute so the item height is driven by the copy. */
+.dk-svc__art {
+  position: absolute;
+  z-index: 1;
+  right: 9.2%;
+  top: 50%;
+  width: var(--art-w, 36.6%);
+  transform: translateY(-50%) translateX(24px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 500ms ease-out,
+    transform 500ms var(--svc-ease);
+}
+
+.dk-svc__item[data-open='true'] .dk-svc__art {
+  opacity: 1;
+  transform: translateY(-50%);
+  transition-delay: 120ms;
+  pointer-events: auto;
+}
+
+.dk-svc__art-tilt {
+  will-change: transform;
+}
+
+.dk-svc__art-card {
+  width: 100%;
+  aspect-ratio: var(--art-ar, auto);
+  border-radius: 14px;
+  overflow: hidden;
+  transform: rotate(var(--art-rot, 0deg));
+  box-shadow: 0 4px 5px 6px rgba(0, 0, 0, 0.25);
+}
+
+.dk-svc__art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.dk-svc__art-missing {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  border: 1px dashed currentColor;
+  border-radius: 12px;
+  font-size: 11px;
+  opacity: 0.4;
+  text-align: center;
+  padding: 12px;
+}
+
+/* Tablet and phone: mockup moves under the copy, nothing overlaps */
+@media (max-width: 860px) {
+  .dk-svc {
+    --svc-pad-x: clamp(20px, 5vw, 36px);
+    --svc-bar-h: 64px;
+  }
+
+  .dk-svc__item {
+    --svc-pt-px: 28px;
+    --svc-pb-px: 28px;
+    --svc-head-open: 112px;
+    --svc-open-px: 0px;
+  }
+
+  .dk-svc__intro {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 14px;
+  }
+
+  .dk-svc__heading {
+    grid-column: 1;
+    text-align: left;
+  }
+
+  .dk-svc__item[data-open='true'] .dk-svc__bar {
+    min-height: 112px;
+  }
+
+  .dk-svc__no {
+    left: var(--svc-pad-x);
+  }
+
+  .dk-svc__title {
+    left: calc(var(--svc-pad-x) + 36px);
+    font-size: 22px;
+  }
+
+  .dk-svc__item[data-open='true'] .dk-svc__title {
+    top: 58px;
+    font-size: clamp(30px, 8vw, 40px);
+  }
+
+  .dk-svc__item[data-open='true'] .dk-svc__no {
+    top: 30px;
+  }
+
+  .dk-svc__ghost {
+    right: 5%;
+    font-size: clamp(64px, 18vw, 96px);
+  }
+
+  .dk-svc__copy {
+    width: 100%;
+  }
+
+  /* In flow below the copy; only takes space while open */
+  .dk-svc__art {
+    position: relative;
+    right: auto;
+    top: auto;
+    width: min(100% - 2 * var(--svc-pad-x), 440px);
+    margin: 0 auto 0;
+    max-height: 0;
+    overflow: hidden;
+    transform: translateY(12px);
+    transition:
+      opacity 500ms ease-out,
+      transform 500ms var(--svc-ease),
+      max-height var(--svc-dur) var(--svc-ease),
+      margin var(--svc-dur) var(--svc-ease);
+  }
+
+  .dk-svc__item[data-open='true'] .dk-svc__art {
+    max-height: 420px;
+    margin-bottom: 32px;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-svc *,
+  .dk-svc *::before {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

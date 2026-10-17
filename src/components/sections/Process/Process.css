@@ -1,0 +1,62 @@
+/* Ported 1:1 from "Selected Work Gallery / How it works / Growth Dial". Every rule is scoped under .dk-proc. */
+.dk-proc a{color:#03171D}.dk-proc a:hover{color:#14282D}
+.dk-proc a:hover{color:#14282D}
+.dk-proc{font-family:'Manrope',system-ui,sans-serif;color:#03171D;background:#FFFFFF;position:relative;overflow:hidden;isolation:isolate}
+.dk-proc .serif{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
+.dk-proc .bgglow{position:absolute;z-index:-1;width:900px;height:900px;border-radius:50%;left:-260px;top:120px;background:radial-gradient(circle,rgba(129,216,112,.22),rgba(129,216,112,0) 62%);pointer-events:none}
+.dk-proc .grid{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(3,23,29,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(3,23,29,.05) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse 55% 60% at 30% 55%,#000,transparent 75%);mask-image:radial-gradient(ellipse 55% 60% at 30% 55%,#000,transparent 75%);pointer-events:none}
+.dk-proc .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(3,23,29,.68)}
+.dk-proc .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:dk-proc-pulse 2s infinite}
+@keyframes dk-proc-pulse{0%{box-shadow:0 0 0 0 rgba(129,216,112,.6)}70%{box-shadow:0 0 0 10px rgba(129,216,112,0)}100%{box-shadow:0 0 0 0 rgba(129,216,112,0)}}
+.dk-proc .h2 em{font-style:italic;background:linear-gradient(transparent 64%,var(--accent) 64%,var(--accent) 92%,transparent 92%);padding:0 6px}
+.dk-proc .stage{display:flex;flex-wrap:wrap;align-items:center;gap:56px}
+.dk-proc .dialwrap{flex:1 1 480px;display:flex;justify-content:center;padding:0 56px;box-sizing:border-box;min-width:0}
+.dk-proc .dial{position:relative;width:100%;max-width:540px;aspect-ratio:1}
+.dk-proc .dial svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.dk-proc .track{stroke:rgba(3,23,29,.1);stroke-width:2}
+.dk-proc .arc{stroke:var(--accent);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .35s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 0 8px rgba(129,216,112,.7))}
+.dk-proc .tick{stroke:rgba(3,23,29,.18);stroke-width:1}
+.dk-proc .spin{transform-box:view-box;transform-origin:270px 270px;animation:dk-proc-spin 50s linear infinite}
+.dk-proc .spin.rev{animation-direction:reverse;animation-duration:34s}
+@keyframes dk-proc-spin{to{transform:rotate(360deg)}}
+.dk-proc .dash{stroke:rgba(3,23,29,.16);stroke-width:1.2}
+.dk-proc .tip{fill:#FFFFFF;stroke:var(--accent);stroke-width:4}
+.dk-proc .tiph{fill:var(--accent);opacity:.25;transform-box:fill-box;transform-origin:center;animation:dk-proc-halo 1.8s ease-out infinite}
+@keyframes dk-proc-halo{from{transform:scale(.6);opacity:.5}to{transform:scale(2.2);opacity:0}}
+.dk-proc .core{position:absolute;inset:22%;border-radius:50%;background:#03171D;color:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;box-shadow:0 40px 90px rgba(3,23,29,.3),inset 0 0 0 1px rgba(255,255,255,.06);overflow:hidden}
+.dk-proc .core:before{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 120%,rgba(129,216,112,.35),transparent 60%)}
+.dk-proc .core .big{font-size:clamp(64px,9vw,112px);line-height:.9;position:relative}
+.dk-proc .core .lbl{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.62);position:relative}
+.dk-proc .core .ttl{font-size:26px;position:relative;color:var(--accent)}
+.dk-proc .node{position:absolute;transform:translate(-50%,-50%);height:48px;padding:0 18px 0 6px;border-radius:999px;border:1px solid rgba(3,23,29,.14);background:#FFFFFF;color:#03171D;display:inline-flex;align-items:center;gap:10px;font:700 14px 'Manrope',system-ui,sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 10px 30px rgba(3,23,29,.08);transition:background .3s,color .3s,border-color .3s,transform .3s;z-index:2}
+.dk-proc .node:hover{transform:translate(-50%,-50%) scale(1.05);border-color:#03171D}
+.dk-proc .node .n{width:36px;height:36px;border-radius:50%;background:rgba(3,23,29,.06);display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+.dk-proc .node.done .n{background:#03171D;color:#FFFFFF}
+.dk-proc .node.on{background:#03171D;color:#FFFFFF;border-color:#03171D}
+.dk-proc .node.on .n{background:var(--accent);color:#03171D}
+.dk-proc .node:focus-visible{outline:2px solid #03171D;outline-offset:3px}
+.dk-proc .card{flex:1 1 440px;min-width:0;background:#03171D;color:#FFFFFF;border-radius:30px;padding:44px;box-sizing:border-box;position:relative;overflow:hidden;box-shadow:0 40px 90px rgba(3,23,29,.18)}
+.dk-proc .card .ghost{position:absolute;right:-10px;top:-30px;font-family:'DM Serif Display',Georgia,serif;font-size:220px;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.1);pointer-events:none}
+.dk-proc .prog{display:flex;gap:6px;margin-bottom:34px}
+.dk-proc .prog span{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden}
+.dk-proc .prog span i{display:block;height:100%;background:var(--accent);transition:width .1s linear}
+.dk-proc .meta{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.dk-proc .meta:before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.dk-proc .tag{height:32px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.2);display:inline-flex;align-items:center;font-size:12px;font-weight:600;color:rgba(255,255,255,.85)}
+.dk-proc .step{display:flex;gap:14px;align-items:flex-start;font-size:15px;line-height:1.5;color:rgba(255,255,255,.78)}
+.dk-proc .step b{flex:0 0 26px;height:26px;border-radius:50%;border:1px solid rgba(129,216,112,.6);color:var(--accent);font-size:11px;display:inline-flex;align-items:center;justify-content:center;margin-top:1px}
+.dk-proc .nextbtn{display:inline-flex;align-items:center;gap:12px;height:52px;padding:0 8px 0 22px;border-radius:999px;border:0;background:var(--accent);color:#03171D;font:700 14px 'Manrope',system-ui,sans-serif;cursor:pointer;transition:gap .3s,background .3s}
+.dk-proc .nextbtn:hover{gap:18px;background:#9EE38F}
+.dk-proc .nextbtn .ar{width:36px;height:36px;border-radius:50%;background:#03171D;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center}
+.dk-proc .navbtn{width:52px;height:52px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:transparent;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s}
+.dk-proc .navbtn:hover{background:#FFFFFF;color:#03171D}
+@keyframes dk-proc-rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.dk-proc .r1{animation:dk-proc-rise .7s .05s cubic-bezier(.2,.8,.2,1) both}
+.dk-proc .r2{animation:dk-proc-rise .7s .15s cubic-bezier(.2,.8,.2,1) both}
+.dk-proc .r3{animation:dk-proc-rise .7s .25s cubic-bezier(.2,.8,.2,1) both}
+.dk-proc .r4{animation:dk-proc-rise .7s .35s cubic-bezier(.2,.8,.2,1) both}
+.dk-proc .pop{animation:dk-proc-popin .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes dk-proc-popin{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+@media (max-width:760px){.dk-proc .dialwrap{padding:0 40px}.dk-proc .node{height:40px;padding:0 12px 0 4px;font-size:12px;gap:6px}.dk-proc .node .n{width:30px;height:30px;font-size:11px}.dk-proc .node .t{display:none}.dk-proc .node{padding:0 4px}.dk-proc .card{padding:28px 22px}.dk-proc .core .ttl{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){.dk-proc *{animation:none!important;transition:none!important}}

@@ -1,5 +1,11 @@
-export const motion = {
-  duration: { micro: 0.2, section: 0.4, reveal: 0.55 },
-  ease: { out: 'power3.out', inOut: 'power2.inOut' },
-  revealDistance: 20,
-} as const
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
+
+export function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+export { gsap, ScrollTrigger, useGSAP }

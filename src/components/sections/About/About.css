@@ -1,0 +1,433 @@
+/*
+ * Layout tokens, estimated from the 1920px frame.
+ * Adjust after an overlay check against your Figma frame.
+ */
+.dk-about {
+  --dk-ink: #03171d;
+  --dk-ink-soft: #1c2e33;
+  --dk-green: #81d870;
+  --dk-green-deep: #3c9145;
+  --dk-muted: #647174;
+  --dk-border: rgba(3, 23, 29, 0.12);
+
+  --about-pad-y: clamp(64px, 8vw, 112px);
+  --about-gap-row: clamp(72px, 8vw, 112px);
+  --about-gutter: clamp(16px, 4vw, 40px);
+
+  /* Break out of any parent padding so the background spans the full viewport. */
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: clamp(32px, 4vw, 48px) 0;
+  background:
+    linear-gradient(
+      136.56deg,
+      rgba(129, 216, 112, 0.2) 6.3%,
+      rgba(255, 255, 255, 0.2) 53.29%,
+      rgba(129, 216, 112, 0.2) 100.28%
+    ),
+    #ffffff;
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: var(--dk-ink);
+}
+
+/* Wrap the About <main> with this class in App.tsx to stop any horizontal scrollbar. */
+.dk-about-wrap {
+  overflow-x: clip;
+}
+
+.dk-about__grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.dk-about__grid canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dk-about__inner {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 32px, 1148px);
+  margin-inline: auto;
+  padding-block: 96px 112px;
+}
+
+/* Intro row */
+.dk-about__intro {
+  display: grid;
+  grid-template-columns: 258px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.dk-about__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dk-ink);
+}
+
+.dk-about__label-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--dk-green);
+}
+
+.dk-about__statement {
+  margin: 0;
+  max-width: 900px;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(28px, 2.1vw, 40px);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+/* Accent words stay green. Their colour isn't animated. */
+.dk-about .dk-srt__accent {
+  color: var(--dk-green);
+}
+
+/* Hero row */
+.dk-about__hero {
+  margin-top: 112px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+}
+
+.dk-about__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(129, 216, 112, 0.14);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #3d6b3a;
+}
+
+.dk-about__badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dk-green);
+}
+
+.dk-about__headline {
+  margin: 22px 0 0;
+  max-width: 560px;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(40px, 3.1vw, 60px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.dk-about__lead {
+  margin: 24px 0 0;
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--dk-muted);
+}
+
+.dk-about__actions {
+  margin-top: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px;
+}
+
+.dk-about__actions > span {
+  display: inline-block;
+  will-change: transform;
+}
+
+.dk-about__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: var(--dk-ink);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 24px;
+  box-shadow: 0 18px 36px -20px rgba(3, 23, 29, 0.55);
+  transition: background-color 220ms ease-out;
+}
+
+.dk-about__cta:hover {
+  background: var(--dk-ink-soft);
+  color: #ffffff;
+}
+
+.dk-about__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding-bottom: 3px;
+  border-bottom: 0.67px solid var(--dk-ink);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 24px;
+  color: var(--dk-ink);
+  text-decoration: none;
+  transition: gap 220ms ease-out, color 220ms ease-out;
+}
+
+.dk-about__link:hover,
+.dk-about__link:focus-visible {
+  gap: 14px;
+  color: var(--dk-ink-soft);
+}
+
+.dk-about__cta:focus-visible,
+.dk-about__link:focus-visible {
+  outline: 2px solid var(--dk-green);
+  outline-offset: 4px;
+}
+
+/* Visual column */
+.dk-about__visual {
+  position: relative;
+  min-height: 580px;
+  width: 100%;
+  will-change: transform;
+}
+
+.dk-about__arch {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  width: min(440px, 100%);
+  aspect-ratio: 440 / 520;
+}
+
+/* Canvas is larger than the arch so the glow isn't clipped. */
+.dk-about__arch-canvas {
+  position: absolute;
+  inset: -60px;
+}
+
+.dk-about__arch-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dk-about__polaroid {
+  position: absolute;
+  left: 0;
+  bottom: 70px;
+  width: min(230px, 46%);
+  margin: 0;
+  padding: 10px 10px 12px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 24px 48px -24px rgba(3, 23, 29, 0.35);
+}
+
+.dk-about__polaroid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.dk-about__card {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(270px, 62%);
+  padding: 20px 22px 22px;
+  background: #ffffff;
+  border: 1px solid var(--dk-border);
+  border-radius: 6px;
+  box-shadow: 0 30px 60px -30px rgba(3, 23, 29, 0.3);
+}
+
+.dk-about__card-dot {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dk-green);
+}
+
+.dk-about__card-label {
+  margin: 0;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dk-muted);
+}
+
+.dk-about__card-title {
+  margin: 10px 0 0;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.dk-about__card-body {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--dk-muted);
+}
+
+/* Pillars row */
+.dk-about__pillars {
+  margin-top: 112px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dk-about__pillar {
+  position: relative;
+  padding: 36px 32px 0;
+  border-left: 1px solid var(--dk-border);
+}
+
+.dk-about__pillar:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.dk-about__rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--dk-ink);
+  opacity: 0.14;
+  transform-origin: left center;
+}
+
+.dk-about__pillar-no {
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dk-green-deep);
+}
+.dk-about__arch {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  width: min(417px, 100%);
+  aspect-ratio: 417 / 439;
+}
+
+/* The canvas extends beyond the arch so the glow has room to render. */
+.dk-about__arch-canvas {
+  position: absolute;
+  inset: -140px;
+}
+
+.dk-about__arch-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.dk-about__pillar-title {
+  margin: 14px 0 0;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(22px, 1.6vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.dk-about__pillar-body {
+  margin: 14px 0 0;
+  max-width: 300px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--dk-muted);
+}
+
+/* Tablet and below */
+@media (max-width: 960px) {
+  .dk-about__intro,
+  .dk-about__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .dk-about__intro {
+    gap: 20px;
+  }
+
+  .dk-about__inner {
+    padding-block: 72px 80px;
+  }
+
+  .dk-about__hero,
+  .dk-about__pillars {
+    margin-top: 72px;
+  }
+
+  .dk-about__visual {
+    min-height: 540px;
+  }
+
+  .dk-about__pillars {
+    grid-template-columns: 1fr;
+  }
+
+  .dk-about__pillar {
+    padding: 36px 0 0;
+    border-left: 0;
+  }
+}
+
+/* Phones */
+@media (max-width: 560px) {
+  .dk-about__statement {
+    font-size: 28px;
+  }
+
+  .dk-about__visual {
+    min-height: 480px;
+  }
+
+  .dk-about__arch {
+    right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-about__cta,
+  .dk-about__link {
+    transition: none;
+  }
+}

@@ -1,17 +1,31 @@
 import { Helmet } from 'react-helmet-async'
 
 import { AppRouter } from '@/app/router'
-
+import { Header } from '@/components/layout/Header'
+import { Hero } from '@/components/sections/Hero/Hero'
+import { AboutSection } from '@/components/sections/About/AboutSection'
+import { Footer } from '@/components/sections/Footer/Footer'
 function FoundationPage() {
   return (
-    <main className="bg-bg-canvas text-body-m text-text-primary font-sans">
-      <Helmet>
-        <title>DigiKon Solutions</title>
-        <meta name="description" content="DigiKon Solutions website." />
-      </Helmet>
-      <h1>DigiKon Solutions</h1>
-      <p>Foundation ready.</p>
-    </main>
+    <>
+      <a className="dk-skip-link" href="#main">
+        Skip to content
+      </a>
+      <div className="dk-top">
+        <Header />
+        <main className="text-body-m text-text-primary font-sans" id="main">
+          <Helmet>
+            <title>DigiKon Solutions</title>
+            <meta name="description" content="DigiKon Solutions website." />
+          </Helmet>
+          <Hero />
+            <main>
+    <AboutSection />
+  </main>
+  <Footer />
+        </main>
+      </div>
+    </>
   )
 }
 

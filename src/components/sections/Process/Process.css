@@ -8,7 +8,9 @@
 .dk-proc .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(3,23,29,.68)}
 .dk-proc .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:dk-proc-pulse 2s infinite}
 @keyframes dk-proc-pulse{0%{box-shadow:0 0 0 0 rgba(129,216,112,.6)}70%{box-shadow:0 0 0 10px rgba(129,216,112,0)}100%{box-shadow:0 0 0 0 rgba(129,216,112,0)}}
-.dk-proc .h2 em{font-style:italic;background:linear-gradient(transparent 64%,var(--accent) 64%,var(--accent) 92%,transparent 92%);padding:0 6px}
+.dk-proc__heading{margin:0;font-size:65px;line-height:84px;letter-spacing:-1.68px;color:#03171D}
+.dk-proc__heading-part{font-style:normal}
+.dk-proc__heading-part--italic{font-style:italic;background:linear-gradient(transparent 64%,var(--accent) 64%,var(--accent) 92%,transparent 92%);padding:0 6px}
 .dk-proc .stage{display:flex;flex-wrap:wrap;align-items:center;gap:56px}
 .dk-proc .dialwrap{flex:1 1 480px;display:flex;justify-content:center;padding:0 56px;box-sizing:border-box;min-width:0}
 .dk-proc .dial{position:relative;width:100%;max-width:540px;aspect-ratio:1}
@@ -57,6 +59,6 @@
 .dk-proc .r4{animation:dk-proc-rise .7s .35s cubic-bezier(.2,.8,.2,1) both}
 .dk-proc .pop{animation:dk-proc-popin .6s cubic-bezier(.2,.8,.2,1) both}
 @keyframes dk-proc-popin{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
-@media (max-width:760px){.dk-proc .dialwrap{padding:0 40px}.dk-proc .node{height:40px;padding:0 12px 0 4px;font-size:12px;gap:6px}.dk-proc .node .n{width:30px;height:30px;font-size:11px}.dk-proc .node .t{display:none}.dk-proc .node{padding:0 4px}.dk-proc .card{padding:28px 22px}.dk-proc .core .ttl{font-size:18px}
+@media (max-width:760px){.dk-proc__heading{font-size:clamp(44px,12vw,65px);line-height:1.12;letter-spacing:-.025em}.dk-proc .dialwrap{padding:0 40px}.dk-proc .node{height:40px;padding:0 12px 0 4px;font-size:12px;gap:6px}.dk-proc .node .n{width:30px;height:30px;font-size:11px}.dk-proc .node .t{display:none}.dk-proc .node{padding:0 4px}.dk-proc .card{padding:28px 22px}.dk-proc .core .ttl{font-size:18px}
 }
 @media (prefers-reduced-motion:reduce){.dk-proc *{animation:none!important;transition:none!important}}

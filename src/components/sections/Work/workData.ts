@@ -9,7 +9,7 @@ export type Project = {
   summary: string
   tags: readonly string[]
   href: string
-  /** Basename (no extension) of the image in src/assets/images/work/. */
+  /** Basename (no extension) of the visual in src/assets/images/services/. */
   art: string
 }
 
@@ -26,7 +26,7 @@ export const PROJECTS: readonly Project[] = [
     summary: '[One line on the challenge and what changed for the client.]',
     tags: ['Strategy', 'UX', 'Build'],
     href: '#contact',
-    art: 'project-1',
+    art: 'web-design',
   },
   {
     id: 'project-two',
@@ -36,7 +36,7 @@ export const PROJECTS: readonly Project[] = [
     summary: '[One line on the challenge and what changed for the client.]',
     tags: ['Strategy', 'UX', 'Build'],
     href: '#contact',
-    art: 'project-2',
+    art: 'automation-ai',
   },
   {
     id: 'project-three',
@@ -46,7 +46,7 @@ export const PROJECTS: readonly Project[] = [
     summary: '[One line on the challenge and what changed for the client.]',
     tags: ['Strategy', 'UX', 'Build'],
     href: '#contact',
-    art: 'project-3',
+    art: 'content-editorial',
   },
   {
     id: 'project-four',
@@ -56,7 +56,7 @@ export const PROJECTS: readonly Project[] = [
     summary: '[One line on the challenge and what changed for the client.]',
     tags: ['Strategy', 'UX', 'Build'],
     href: '#contact',
-    art: 'project-4',
+    art: 'analytics-reporting',
   },
   {
     id: 'project-five',
@@ -66,6 +66,6 @@ export const PROJECTS: readonly Project[] = [
     summary: '[One line on the challenge and what changed for the client.]',
     tags: ['Strategy', 'UX', 'Build'],
     href: '#contact',
-    art: 'project-5',
+    art: 'search-seo',
   },
 ]

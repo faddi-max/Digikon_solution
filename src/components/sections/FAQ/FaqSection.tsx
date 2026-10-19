@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
+import { ScrollRevealText } from '@/components/motion/ScrollRevealText'
+
 import './Faq.css'
 
 type Qa = { q: string; a: string }
@@ -102,12 +104,31 @@ export function FaqSection({ accent = '#81D870' }: { accent?: string }) {
             <span className="dot" />
             FAQs
           </div>
-          <h2
-            id="faq-title"
-            className="serif h2"
-            style={{ margin: 0, fontSize: 'clamp(44px, 6vw, 84px)', lineHeight: 1, letterSpacing: '-0.02em', color: '#03171D' }}
-          >
-            Straight <em>answers.</em>
+          <h2 id="faq-title" className="serif dk-faq__heading">
+            <ScrollRevealText
+              as="span"
+              className="dk-faq__heading-part"
+              style={{ display: 'inline' }}
+              text="Straight"
+              split="words"
+              mode="play"
+              duration={1.2}
+              stagger={0.1}
+              yOffset={20}
+              start="top 85%"
+            />{' '}
+            <ScrollRevealText
+              as="span"
+              className="dk-faq__heading-part dk-faq__heading-part--italic"
+              style={{ display: 'inline' }}
+              text="answers."
+              split="words"
+              mode="play"
+              duration={1.2}
+              stagger={0.1}
+              yOffset={20}
+              start="top 85%"
+            />
           </h2>
           <p style={{ margin: '0 0 14px', maxWidth: 420, fontSize: 16, lineHeight: 1.6, color: 'rgba(3,23,29,.68)' }}>
             Pick a question and the team answers. No sales script, just how we actually work.

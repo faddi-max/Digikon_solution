@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
+import { ScrollRevealText } from '@/components/motion/ScrollRevealText'
 import { prefersReducedMotion } from '@/lib/motion'
 
 import './Process.css'
@@ -129,12 +130,31 @@ export function ProcessSection({ accent = '#81D870', autoplay = true }: { accent
               <span className="dot" />
               How it works
             </div>
-            <h2
-              id="proc-title"
-              className="serif h2"
-              style={{ margin: 0, fontSize: 'clamp(44px, 6vw, 84px)', lineHeight: 1, letterSpacing: '-0.02em', color: '#03171D' }}
-            >
-              From first call to <em>steady growth.</em>
+            <h2 id="proc-title" className="serif dk-proc__heading">
+              <ScrollRevealText
+                as="span"
+                className="dk-proc__heading-part"
+                style={{ display: 'inline' }}
+                text="From first call to"
+                split="words"
+                mode="play"
+                duration={1.2}
+                stagger={0.1}
+                yOffset={20}
+                start="top 85%"
+              />{' '}
+              <ScrollRevealText
+                as="span"
+                className="dk-proc__heading-part dk-proc__heading-part--italic"
+                style={{ display: 'inline' }}
+                text="steady growth."
+                split="words"
+                mode="play"
+                duration={1.2}
+                stagger={0.1}
+                yOffset={20}
+                start="top 85%"
+              />
             </h2>
           </div>
           <p style={{ margin: 0, maxWidth: 340, fontSize: 16, lineHeight: 1.6, color: 'rgba(3,23,29,.68)' }}>

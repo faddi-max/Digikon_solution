@@ -12,7 +12,7 @@ import { FILTERS, PROJECTS, type Project, type WorkFilter } from './workData'
 import './Work.css'
 
 const ART = import.meta.glob(
-  '../../../assets/images/work/*.{png,webp,jpg,jpeg,avif}',
+  '../../../assets/images/services/*.{png,webp,jpg,jpeg,avif}',
   {
     eager: true,
     query: '?url',

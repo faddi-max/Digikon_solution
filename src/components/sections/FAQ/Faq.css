@@ -6,7 +6,9 @@
 .dk-faq .glow{position:absolute;z-index:-1;width:760px;height:760px;border-radius:50%;right:-200px;top:40px;background:radial-gradient(circle,rgba(129,216,112,.2),rgba(129,216,112,0) 62%);pointer-events:none}
 .dk-faq .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(3,23,29,.68)}
 .dk-faq .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
-.dk-faq .h2 em{font-style:italic;background:linear-gradient(transparent 64%,var(--accent) 64%,var(--accent) 92%,transparent 92%);padding:0 6px}
+.dk-faq__heading{margin:0;font-size:65px;line-height:84px;letter-spacing:-1.68px;color:#03171D}
+.dk-faq__heading-part{font-style:normal}
+.dk-faq__heading-part--italic{font-style:italic;background:linear-gradient(transparent 64%,var(--accent) 64%,var(--accent) 92%,transparent 92%);padding:0 6px}
 .dk-faq .q{width:100%;min-height:64px;display:flex;align-items:center;gap:16px;padding:12px 12px 12px 18px;border-radius:18px;border:1px solid rgba(3,23,29,.1);background:#FFFFFF;color:#03171D;font:600 16px/1.35 'Manrope',system-ui,sans-serif;text-align:left;cursor:pointer;transition:background .3s,color .3s,border-color .3s,transform .3s;box-sizing:border-box}
 .dk-faq .q:hover{border-color:#03171D;transform:translateX(6px)}
 .dk-faq .q .n{flex:0 0 auto;font-size:12px;font-weight:700;color:rgba(3,23,29,.55);letter-spacing:.06em}
@@ -43,6 +45,6 @@
 .dk-faq .cta{display:inline-flex;align-items:center;gap:12px;height:52px;padding:0 8px 0 22px;border-radius:999px;background:var(--accent);color:#03171D;font-weight:700;font-size:14px;text-decoration:none;transition:gap .3s,background .3s}
 .dk-faq .cta:hover{gap:18px;color:#03171D;background:#9EE38F}
 .dk-faq .cta .ar{width:36px;height:36px;border-radius:50%;background:#03171D;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center}
-@media (max-width:760px){.dk-faq .cbody{min-height:400px;padding:18px}.dk-faq .me{max-width:90%}.dk-faq .them{max-width:100%}.dk-faq .sugs{padding-left:0}.dk-faq .q:hover,
+@media (max-width:760px){.dk-faq__heading{font-size:clamp(44px,12vw,65px);line-height:1.12;letter-spacing:-.025em}.dk-faq .cbody{min-height:400px;padding:18px}.dk-faq .me{max-width:90%}.dk-faq .them{max-width:100%}.dk-faq .sugs{padding-left:0}.dk-faq .q:hover,
 .dk-faq .q.on{transform:none}}
 @media (prefers-reduced-motion:reduce){.dk-faq *{animation:none!important;transition:none!important}}

@@ -227,7 +227,12 @@ function OrbitNodeDisc({ node, index, k, meshes, doms }: DiscProps) {
       <planeGeometry args={[art.width, art.height]} />
       <meshBasicMaterial map={art.tex} transparent depthWrite={false} />
 
-      <Html center zIndexRange={[10, 0]}>
+      {/*
+       * Keep labels/icons above the WebGL canvas. With a zero lower bound,
+       * whichever disc is furthest away while the ring tilts can receive a
+       * z-index of 0 and disappear behind the canvas, leaving an empty disc.
+       */}
+      <Html center zIndexRange={[100, 1]}>
         <div
           ref={(el) => {
             doms.current[index] = el
@@ -273,7 +278,7 @@ function CenterDisc({ k }: { k: number }) {
     <mesh position={[0, 0, CENTER_NODE.z]} renderOrder={2}>
       <planeGeometry args={[art.width, art.height]} />
       <meshBasicMaterial map={art.tex} transparent depthWrite={false} />
-      <Html center zIndexRange={[20, 10]}>
+      <Html center zIndexRange={[200, 101]}>
         <div className="dk-orbit-center" style={{ width: DISC_W * k, height: DISC_H * k }}>
           <img src={dkMark} alt="" className="dk-orbit-center__mark" draggable={false} />
         </div>

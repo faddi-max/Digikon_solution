@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 
 import logo from '@/assets/images/logo.svg'
 import { NAV_LINKS, PRIMARY_CTA } from '@/lib/navigation'
@@ -82,15 +83,15 @@ export function Header() {
   return (
     <header className="dk-header">
       <div className="container-page dk-header__inner">
-        <a className="dk-header__brand" href="/">
+        <Link className="dk-header__brand" to="/">
           <img src={logo} alt="DigiKon Solutions home" />
-        </a>
+        </Link>
 
         <nav className="dk-desktop-nav" aria-label="Primary">
           {NAV_LINKS.map(({ href, label }) => (
-            <a className="dk-desktop-nav__link" href={href} key={href}>
+            <NavLink className="dk-desktop-nav__link" to={href} key={href}>
               {label}
-            </a>
+            </NavLink>
           ))}
         </nav>
 

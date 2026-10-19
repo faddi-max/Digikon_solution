@@ -1,17 +1,13 @@
-import type { ReactElement } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import type { ReactNode } from 'react'
+import { BrowserRouter } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 
-type AppRouterProps = { element: ReactElement }
+type AppRouterProps = { children: ReactNode }
 
-export function AppRouter({ element }: AppRouterProps) {
+export function AppRouter({ children }: AppRouterProps) {
   return (
     <HelmetProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={element} />
-        </Routes>
-      </BrowserRouter>
+      <BrowserRouter>{children}</BrowserRouter>
     </HelmetProvider>
   )
 }

@@ -38,9 +38,11 @@
   transition: transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
+.dk-orbit-node__icon img,
 .dk-orbit-node__icon svg {
   width: 100%;
   height: 100%;
+  object-fit: contain;
   overflow: visible;
 }
 

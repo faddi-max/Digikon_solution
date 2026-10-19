@@ -1,17 +1,25 @@
 /* Shared shell: header + hero sit on one background, exactly as the 1920 frame. */
 .dk-top {
   background:
-    radial-gradient(45% 50% at 0% 100%, rgba(200, 240, 190, 0.55) 0%, rgba(200, 240, 190, 0) 70%),
-    radial-gradient(55% 55% at 88% 22%, rgba(129, 216, 112, 0.3) 0%, rgba(129, 216, 112, 0) 70%),
+    radial-gradient(
+      45% 50% at 0% 100%,
+      rgba(200, 240, 190, 0.55) 0%,
+      rgba(200, 240, 190, 0) 70%
+    ),
+    radial-gradient(
+      55% 55% at 88% 22%,
+      rgba(129, 216, 112, 0.3) 0%,
+      rgba(129, 216, 112, 0) 70%
+    ),
     linear-gradient(0deg, #ffffff, #ffffff);
 }
 
 @media (min-width: 1280px) {
   .dk-top {
     box-sizing: border-box;
-    height: 870px;
+    min-height: min(760px, 100svh);
     gap: 10px;
-    padding-bottom: 80px;
+    padding-bottom: 32px;
     padding-inline: 80px;
     display: flex;
     flex-direction: column;
@@ -159,7 +167,9 @@
   font-weight: 600;
   line-height: 24px;
   box-shadow: 0 18px 36px -20px rgba(3, 23, 29, 0.55);
-  transition: background-color 220ms ease-out, transform 220ms ease-out;
+  transition:
+    background-color 220ms ease-out,
+    transform 220ms ease-out;
 }
 
 .dk-hero__cta:hover {
@@ -180,7 +190,9 @@
   line-height: 24px;
   color: var(--dk-teal-900);
   text-decoration: none;
-  transition: gap 220ms ease-out, color 220ms ease-out;
+  transition:
+    gap 220ms ease-out,
+    color 220ms ease-out;
 }
 
 .dk-hero__link:hover,
@@ -244,6 +256,6 @@
     transition: none;
   }
   .dk-hero__content {
-  max-width: 560px;
-}
+    max-width: 560px;
+  }
 }

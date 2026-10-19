@@ -17,17 +17,26 @@ import { ToolArt } from './ToolArt'
 import './Products.css'
 
 /** Exported screenshots are picked up by filename. A missing file falls back to the built-in illustration. */
-const ART = import.meta.glob('../../../assets/images/products/*.{png,webp,jpg,jpeg,avif}', {
-  eager: true,
-  query: '?url',
-  import: 'default',
-}) as Record<string, string>
+const ART = import.meta.glob(
+  '../../../assets/images/products/*.{png,webp,jpg,jpeg,avif}',
+  {
+    eager: true,
+    query: '?url',
+    import: 'default',
+  },
+) as Record<string, string>
 
 function artFor(name: string): string | undefined {
-  const hit = Object.keys(ART).find((p) => p.split('/').pop()?.replace(/\.[^.]+$/, '') === name)
+  const hit = Object.keys(ART).find(
+    (p) =>
+      p
+        .split('/')
+        .pop()
+        ?.replace(/\.[^.]+$/, '') === name,
+  )
   return hit ? ART[hit] : undefined
 }
- 
+
 /** Fan geometry. Index 0 is the leftmost card; the arc is symmetric around the middle. */
 function fanVars(i: number, n: number): CSSProperties {
   const mid = (n - 1) / 2
@@ -72,11 +81,25 @@ type CardProps = {
   onClick: (e: ReactMouseEvent<HTMLAnchorElement>) => void
 }
 
-function ToolCard({ tool, index, total, state, linkRef, onEnter, onFocus, onClick }: CardProps) {
+function ToolCard({
+  tool,
+  index,
+  total,
+  state,
+  linkRef,
+  onEnter,
+  onFocus,
+  onClick,
+}: CardProps) {
   const art = artFor(tool.art)
 
   return (
-    <li className="dk-prod__item" data-state={state} style={fanVars(index, total)} onPointerEnter={onEnter}>
+    <li
+      className="dk-prod__item"
+      data-state={state}
+      style={fanVars(index, total)}
+      onPointerEnter={onEnter}
+    >
       <a
         ref={linkRef}
         className="dk-prod__card"
@@ -86,7 +109,13 @@ function ToolCard({ tool, index, total, state, linkRef, onEnter, onFocus, onClic
       >
         <span className="dk-prod__art" aria-hidden="true">
           {art ? (
-            <img src={art} alt="" draggable={false} loading="lazy" decoding="async" />
+            <img
+              src={art}
+              alt=""
+              draggable={false}
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <ToolArt kind={tool.kind} />
           )}
@@ -122,7 +151,7 @@ export function ProductsSection() {
     coarse.current = window.matchMedia('(hover: none)').matches
   }, [])
 
-  // Entrance fires once, when the panel is a fifth in view.
+  // Replay the fan entrance whenever the panel comes back into view.
   useEffect(() => {
     if (reduced) {
       setEntered(true)
@@ -131,17 +160,25 @@ export function ProductsSection() {
     }
     const el = panelRef.current
     if (!el) return
+    let frame = 0
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setEntered(true)
-          io.disconnect()
+          setReady(false)
+          setEntered(false)
+          frame = window.requestAnimationFrame(() => setEntered(true))
+        } else {
+          setReady(false)
+          setEntered(false)
         }
       },
       { threshold: 0.2 },
     )
     io.observe(el)
-    return () => io.disconnect()
+    return () => {
+      window.cancelAnimationFrame(frame)
+      io.disconnect()
+    }
   }, [reduced])
 
   // After the fan has settled, drop the stagger delays so hover reacts instantly.
@@ -168,7 +205,13 @@ export function ProductsSection() {
       root.style.setProperty('--my', p.my.toFixed(1))
     }
     const to = (vars: Partial<typeof p>) =>
-      gsap.to(p, { ...vars, duration: 0.9, ease: 'power3.out', overwrite: 'auto', onUpdate: apply })
+      gsap.to(p, {
+        ...vars,
+        duration: 0.9,
+        ease: 'power3.out',
+        overwrite: 'auto',
+        onUpdate: apply,
+      })
 
     const onMove = (e: PointerEvent) => {
       if (e.pointerType === 'touch') return
@@ -210,26 +253,37 @@ export function ProductsSection() {
   }, [active])
 
   const stateOf = (i: number) =>
-    active === null ? 'idle' : i === active ? 'active' : i < active ? 'before' : 'after'
+    active === null
+      ? 'idle'
+      : i === active
+        ? 'active'
+        : i < active
+          ? 'before'
+          : 'after'
 
-  const onClickCard = (i: number) => (e: ReactMouseEvent<HTMLAnchorElement>) => {
-    const railMode = window.matchMedia('(max-width: 600px)').matches
-    if (coarse.current && !railMode && active !== i) {
-      e.preventDefault()
-      setActive(i)
+  const onClickCard =
+    (i: number) => (e: ReactMouseEvent<HTMLAnchorElement>) => {
+      const railMode = window.matchMedia('(max-width: 600px)').matches
+      if (coarse.current && !railMode && active !== i) {
+        e.preventDefault()
+        setActive(i)
+      }
     }
-  }
 
   const onKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
     const cur = links.current.findIndex((el) => el === document.activeElement)
     if (cur < 0) return
     const last = TOOLS.length - 1
     const target =
-      e.key === 'ArrowRight' || e.key === 'ArrowDown' ? Math.min(cur + 1, last)
-      : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? Math.max(cur - 1, 0)
-      : e.key === 'Home' ? 0
-      : e.key === 'End' ? last
-      : -1
+      e.key === 'ArrowRight' || e.key === 'ArrowDown'
+        ? Math.min(cur + 1, last)
+        : e.key === 'ArrowLeft' || e.key === 'ArrowUp'
+          ? Math.max(cur - 1, 0)
+          : e.key === 'Home'
+            ? 0
+            : e.key === 'End'
+              ? last
+              : -1
     if (target < 0) return
     e.preventDefault()
     links.current[target]?.focus()
@@ -288,8 +342,8 @@ export function ProductsSection() {
               start="top 85%"
             />
             <p className="dk-prod__lead">
-              Explore the tools we use and build to keep search, content, data and delivery
-              connected, from reporting to automation.
+              Explore the tools we use and build to keep search, content, data
+              and delivery connected, from reporting to automation.
             </p>
             <a className="dk-prod__link" href={PRODUCTS_HREF}>
               <span>Show all tools</span>
@@ -306,7 +360,8 @@ export function ProductsSection() {
                 if (e.pointerType !== 'touch') setActive(null)
               }}
               onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setActive(null)
+                if (!e.currentTarget.contains(e.relatedTarget as Node | null))
+                  setActive(null)
               }}
               onKeyDown={onKeyDown}
             >

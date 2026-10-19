@@ -1,6 +1,11 @@
 import { useMemo, useRef, type CSSProperties, type ElementType } from 'react'
 
-import { gsap, prefersReducedMotion, ScrollTrigger, useGSAP } from '@/lib/motion'
+import {
+  gsap,
+  prefersReducedMotion,
+  ScrollTrigger,
+  useGSAP,
+} from '@/lib/motion'
 
 type ScrollRevealTextProps = {
   text: string
@@ -8,7 +13,7 @@ type ScrollRevealTextProps = {
   /** Animate per character or per word. Accent colours work in word mode. */
   split?: 'chars' | 'words'
   /**
-   * 'play': runs once when the element enters view, at a fixed pace. Smoothest for reading.
+   * 'play': runs each time the element enters view, at a fixed pace.
    * 'scrub': ties the reveal to scroll position.
    */
   mode?: 'play' | 'scrub'
@@ -71,7 +76,10 @@ export function ScrollRevealText({
     () => {
       if (prefersReducedMotion() || !root.current) return
 
-      const units = gsap.utils.toArray<HTMLElement>('.dk-srt__unit', root.current)
+      const units = gsap.utils.toArray<HTMLElement>(
+        '.dk-srt__unit',
+        root.current,
+      )
       if (units.length === 0) return
 
       const from: gsap.TweenVars = {
@@ -106,8 +114,9 @@ export function ScrollRevealText({
         ScrollTrigger.create({
           trigger: root.current,
           start,
-          once: true,
-          onEnter: () => timeline.play(),
+          onEnter: () => timeline.restart(),
+          onEnterBack: () => timeline.restart(),
+          onLeaveBack: () => timeline.pause(0),
         })
         return
       }
@@ -152,7 +161,12 @@ export function ScrollRevealText({
   }
 
   return (
-    <Tag ref={root} className={className} style={{ display: 'block', ...style }} aria-label={text}>
+    <Tag
+      ref={root}
+      className={className}
+      style={{ display: 'block', ...style }}
+      aria-label={text}
+    >
       {tokens.map((token, i) => {
         // Plain whitespace keeps lines breakable.
         if (/^\s+$/.test(token)) return token
@@ -163,7 +177,11 @@ export function ScrollRevealText({
           return (
             <span key={i} style={{ whiteSpace: 'nowrap' }} aria-hidden="true">
               <span className="dk-srt__unit" style={unitStyle}>
-                {isAccent ? <span className="dk-srt__accent">{token}</span> : token}
+                {isAccent ? (
+                  <span className="dk-srt__accent">{token}</span>
+                ) : (
+                  token
+                )}
               </span>
             </span>
           )

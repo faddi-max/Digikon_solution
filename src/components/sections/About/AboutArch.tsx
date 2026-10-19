@@ -1,4 +1,11 @@
-import { Suspense, useEffect, useMemo, useRef, type MutableRefObject, type RefObject } from 'react'
+import {
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  type MutableRefObject,
+  type RefObject,
+} from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import {
@@ -13,7 +20,12 @@ import {
   Vector2,
 } from 'three'
 
-import { gsap, prefersReducedMotion, ScrollTrigger, useGSAP } from '@/lib/motion'
+import {
+  gsap,
+  prefersReducedMotion,
+  ScrollTrigger,
+  useGSAP,
+} from '@/lib/motion'
 import { useInView } from '@/lib/useInView'
 
 /** Figma frame for the photo: 417 × 439. */
@@ -26,14 +38,26 @@ const ARCH_R_BOTTOM = 7
 const ARCH_ROTATION = (-2 * Math.PI) / 180
 
 /** Figma box-shadow: 0 28px 70px 28px #81D870C7 (C7 ≈ 78% alpha). */
-const GLOW = { offsetY: 28, blur: 70, spread: 28, rgb: '129, 216, 112', alpha: 0.78 }
+const GLOW = {
+  offsetY: 28,
+  blur: 70,
+  spread: 28,
+  rgb: '129, 216, 112',
+  alpha: 0.78,
+}
 /** Space around the arch for the glow. The canvas is the arch box plus this on every side. */
 export const GLOW_INSET = 140
 
 type Pt = { x: number; y: number }
 
 /** Outline of the arch in y-up centred coordinates, sampled along each corner. */
-function outlinePoints(w: number, h: number, rTop: number, rBottom: number, seg = 40): Vector2[] {
+function outlinePoints(
+  w: number,
+  h: number,
+  rTop: number,
+  rBottom: number,
+  seg = 40,
+): Vector2[] {
   const hw = w / 2
   const hh = h / 2
   const rt = Math.min(rTop, hw, hh)
@@ -71,7 +95,12 @@ function archGeometry(pts: Vector2[], w: number, h: number) {
  * Draws the box-shadow with the same offset, blur and spread as the CSS.
  * The shape is drawn off-canvas and only its shadow lands on the visible area.
  */
-function createGlowTexture(w: number, h: number, rTop: number, rBottom: number) {
+function createGlowTexture(
+  w: number,
+  h: number,
+  rTop: number,
+  rBottom: number,
+) {
   const pad = GLOW_INSET
   const S = 2
   const canvas = document.createElement('canvas')
@@ -141,7 +170,11 @@ function ArchScene({ src, tilt, motion, triggerRef }: ArchSceneProps) {
 
   const { geometry, glowTex } = useMemo(
     () => ({
-      geometry: archGeometry(outlinePoints(archW, archH, rTop, rBottom), archW, archH),
+      geometry: archGeometry(
+        outlinePoints(archW, archH, rTop, rBottom),
+        archW,
+        archH,
+      ),
       glowTex: createGlowTexture(archW, archH, rTop, rBottom),
     }),
     [archW, archH, rTop, rBottom],
@@ -187,16 +220,27 @@ function ArchScene({ src, tilt, motion, triggerRef }: ArchSceneProps) {
     const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } })
     tl.eventCallback('onUpdate', invalidate)
     tl.fromTo(g.scale, { x: 0.94, y: 0.94 }, { x: 1, y: 1, duration: 2.2 }, 0)
-      .fromTo(img, { opacity: 0 }, { opacity: 1, duration: 1.4, ease: 'power2.out' }, 0)
-      .fromTo(glow, { opacity: 0 }, { opacity: 1, duration: 2.2, ease: 'power2.out' }, 0.2)
+      .fromTo(
+        img,
+        { opacity: 0 },
+        { opacity: 1, duration: 1.4, ease: 'power2.out' },
+        0,
+      )
+      .fromTo(
+        glow,
+        { opacity: 0 },
+        { opacity: 1, duration: 2.2, ease: 'power2.out' },
+        0.2,
+      )
 
     const trigger = triggerRef.current
     const st = trigger
       ? ScrollTrigger.create({
           trigger,
           start: 'top 80%',
-          once: true,
-          onEnter: () => tl.play(),
+          onEnter: () => tl.restart(),
+          onEnterBack: () => tl.restart(),
+          onLeaveBack: () => tl.pause(0),
         })
       : null
     if (!trigger) tl.play()
@@ -222,8 +266,16 @@ function ArchScene({ src, tilt, motion, triggerRef }: ArchSceneProps) {
     <group ref={group}>
       {/* Glow sits behind the photo. Its texture already carries the shadow shape and alpha. */}
       <mesh position={[0, 0, -3]}>
-        <planeGeometry args={[archW + GLOW_INSET * 2, archH + GLOW_INSET * 2]} />
-        <meshBasicMaterial ref={glowMat} map={glowTex} transparent opacity={0} depthWrite={false} />
+        <planeGeometry
+          args={[archW + GLOW_INSET * 2, archH + GLOW_INSET * 2]}
+        />
+        <meshBasicMaterial
+          ref={glowMat}
+          map={glowTex}
+          transparent
+          opacity={0}
+          depthWrite={false}
+        />
       </mesh>
 
       <mesh geometry={geometry}>
@@ -243,8 +295,14 @@ export function AboutArch({ src }: { src: string }) {
       const el = wrapRef.current
       if (!el || !motion) return
 
-      const xTo = gsap.quickTo(tilt.current, 'x', { duration: 0.9, ease: 'power3.out' })
-      const yTo = gsap.quickTo(tilt.current, 'y', { duration: 0.9, ease: 'power3.out' })
+      const xTo = gsap.quickTo(tilt.current, 'x', {
+        duration: 0.9,
+        ease: 'power3.out',
+      })
+      const yTo = gsap.quickTo(tilt.current, 'y', {
+        duration: 0.9,
+        ease: 'power3.out',
+      })
 
       const onMove = (e: PointerEvent) => {
         const r = el.getBoundingClientRect()
@@ -277,7 +335,12 @@ export function AboutArch({ src }: { src: string }) {
           camera={{ position: [0, 0, 10], zoom: 1 }}
         >
           <Suspense fallback={null}>
-            <ArchScene src={src} tilt={tilt} motion={motion} triggerRef={wrapRef} />
+            <ArchScene
+              src={src}
+              tilt={tilt}
+              motion={motion}
+              triggerRef={wrapRef}
+            />
           </Suspense>
         </Canvas>
       </div>

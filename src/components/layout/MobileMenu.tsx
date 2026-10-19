@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom'
+import { Link } from 'react-router-dom'
 
 import { NAV_LINKS, PRIMARY_CTA } from '@/lib/navigation'
 
@@ -52,8 +53,8 @@ export function MobileMenu({ open, onNavigate }: MobileMenuProps) {
           <ul className="dk-mobile-menu__list">
             {NAV_LINKS.map((link, index) => (
               <li key={link.href} className="dk-mobile-menu__item">
-                <a
-                  href={link.href}
+                <Link
+                  to={link.href}
                   onClick={onNavigate}
                   className="focus-ring dk-mobile-menu__link"
                   style={{ '--i': index } as React.CSSProperties}
@@ -65,7 +66,7 @@ export function MobileMenu({ open, onNavigate }: MobileMenuProps) {
                   <span className="dk-mobile-menu__arrow" aria-hidden="true">
                     <ArrowIcon />
                   </span>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -76,7 +77,11 @@ export function MobileMenu({ open, onNavigate }: MobileMenuProps) {
             Attention, turned into <em>revenue.</em>
           </p>
           <div className="dk-mobile-menu__cta-wrap">
-            <CtaButton href={PRIMARY_CTA.href} onClick={onNavigate} className="dk-mobile-menu__cta">
+            <CtaButton
+              href={PRIMARY_CTA.href}
+              onClick={onNavigate}
+              className="dk-mobile-menu__cta"
+            >
               {PRIMARY_CTA.label}
             </CtaButton>
           </div>

@@ -2,7 +2,7 @@ import aiIcon from '@/assets/images/AI.svg?url'
 import automationIcon from '@/assets/images/Automation.svg?url'
 import contentIcon from '@/assets/images/Content.svg?url'
 import dataIcon from '@/assets/images/DATA.svg?url'
-import seoIcon from '@/assets/images/Seo.svg'
+import seoIcon from '@/assets/images/seo.svg?url'
 import webIcon from '@/assets/images/Web.svg?url'
 
 /** Cluster design width in CSS px. The stage scales everything from this. */
@@ -154,10 +154,12 @@ export const CENTER_NODE = {
   h: DISC_H,
 }
 
-export const ORBIT_NODES: OrbitNode[] = DRAFT_NODES.map(({ angle, ...node }) => ({
-  ...node,
-  ...polar(angle, ORBIT_RADIUS),
-  z: 0,
-  w: DISC_W,
-  h: DISC_H,
-}))
+export const ORBIT_NODES: OrbitNode[] = DRAFT_NODES.map(
+  ({ angle, ...node }) => ({
+    ...node,
+    ...polar(angle, ORBIT_RADIUS),
+    z: 0,
+    w: DISC_W,
+    h: DISC_H,
+  }),
+)

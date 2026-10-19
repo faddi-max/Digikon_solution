@@ -1,18 +1,33 @@
-import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+} from 'react'
 
 import { ScrollTrigger } from '@/lib/motion'
 
 import { FILTERS, PROJECTS, type Project, type WorkFilter } from './workData'
 import './Work.css'
 
-const ART = import.meta.glob('../../../assets/images/work/*.{png,webp,jpg,jpeg,avif}', {
-  eager: true,
-  query: '?url',
-  import: 'default',
-}) as Record<string, string>
+const ART = import.meta.glob(
+  '../../../assets/images/work/*.{png,webp,jpg,jpeg,avif}',
+  {
+    eager: true,
+    query: '?url',
+    import: 'default',
+  },
+) as Record<string, string>
 
 function artFor(name: string): string | undefined {
-  const hit = Object.keys(ART).find((p) => p.split('/').pop()?.replace(/\.[^.]+$/, '') === name)
+  const hit = Object.keys(ART).find(
+    (p) =>
+      p
+        .split('/')
+        .pop()
+        ?.replace(/\.[^.]+$/, '') === name,
+  )
   return hit ? ART[hit] : undefined
 }
 
@@ -21,8 +36,17 @@ const MARQUEE = ['Platforms', 'Product', 'Editorial', 'Analytics', 'Mobile']
 
 function Icon({ d, size = 14 }: { d: string; size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
       <path d={d} />
     </svg>
   )
@@ -68,10 +92,19 @@ function WorkCard({ project, index, total, active, onSelect }: CardProps) {
       </button>
 
       {/* Expanded face. Fixed width so text never reflows while the card animates. */}
-      <div className="dk-work__body" {...({ inert: active ? undefined : '' } as object)}>
+      <div
+        className="dk-work__body"
+        {...({ inert: active ? undefined : '' } as object)}
+      >
         <div className="dk-work__media">
           {art ? (
-            <img src={art} alt="" draggable={false} loading="lazy" decoding="async" />
+            <img
+              src={art}
+              alt=""
+              draggable={false}
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <span className="dk-work__media-empty" aria-hidden="true" />
           )}
@@ -92,7 +125,9 @@ function WorkCard({ project, index, total, active, onSelect }: CardProps) {
             </ul>
             <a className="dk-work__cta" href={project.href}>
               View client story
-              <span className="dk-work__cta-ic"><Icon d={ARROW_UR} size={13} /></span>
+              <span className="dk-work__cta-ic">
+                <Icon d={ARROW_UR} size={13} />
+              </span>
             </a>
           </div>
         </div>
@@ -108,8 +143,14 @@ export function WorkSection() {
   const [inView, setInView] = useState(false)
   const [marqueeOn, setMarqueeOn] = useState(false)
 
-  const list = filter === 'All work' ? PROJECTS : PROJECTS.filter((p) => p.category === filter)
-  const activeIndex = Math.max(0, list.findIndex((p) => p.id === activeId))
+  const list =
+    filter === 'All work'
+      ? PROJECTS
+      : PROJECTS.filter((p) => p.category === filter)
+  const activeIndex = Math.max(
+    0,
+    list.findIndex((p) => p.id === activeId),
+  )
   const active = list[activeIndex]
 
   // Start entrances when the section scrolls in, and run the marquee only while it is visible.
@@ -118,7 +159,7 @@ export function WorkSection() {
     if (!el) return
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) setInView(true)
+        setInView(e.isIntersecting)
         setMarqueeOn(e.isIntersecting)
       },
       { threshold: 0.12 },
@@ -141,7 +182,8 @@ export function WorkSection() {
   const pickFilter = (f: WorkFilter) => {
     if (f === filter) return
     setFilter(f)
-    const next = f === 'All work' ? PROJECTS : PROJECTS.filter((p) => p.category === f)
+    const next =
+      f === 'All work' ? PROJECTS : PROJECTS.filter((p) => p.category === f)
     if (!next.some((p) => p.id === activeId)) setActiveId(next[0].id)
   }
 
@@ -182,21 +224,37 @@ export function WorkSection() {
 
           <div className="dk-work__counter">
             <p className="dk-work__count" aria-live="polite" aria-atomic="true">
-              <span key={active.id} className="dk-work__count-now">{pad(activeIndex + 1)}</span>
+              <span key={active.id} className="dk-work__count-now">
+                {pad(activeIndex + 1)}
+              </span>
               <span className="dk-work__count-total">/ {pad(list.length)}</span>
             </p>
             <div className="dk-work__nav">
-              <button type="button" className="dk-work__nav-btn" aria-label="Previous project" onClick={() => go(activeIndex - 1)}>
+              <button
+                type="button"
+                className="dk-work__nav-btn"
+                aria-label="Previous project"
+                onClick={() => go(activeIndex - 1)}
+              >
                 <Icon d={ARROW_L} />
               </button>
-              <button type="button" className="dk-work__nav-btn" aria-label="Next project" onClick={() => go(activeIndex + 1)}>
+              <button
+                type="button"
+                className="dk-work__nav-btn"
+                aria-label="Next project"
+                onClick={() => go(activeIndex + 1)}
+              >
                 <Icon d={ARROW_R} />
               </button>
             </div>
           </div>
         </header>
 
-        <div className="dk-work__filters" role="group" aria-label="Filter projects">
+        <div
+          className="dk-work__filters"
+          role="group"
+          aria-label="Filter projects"
+        >
           {FILTERS.map((f) => (
             <button
               key={f}
@@ -228,7 +286,11 @@ export function WorkSection() {
           ))}
         </div>
 
-        <div className="dk-work__progress" role="group" aria-label="Project progress">
+        <div
+          className="dk-work__progress"
+          role="group"
+          aria-label="Project progress"
+        >
           {list.map((p, i) => (
             <button
               key={p.id}

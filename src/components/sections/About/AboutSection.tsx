@@ -62,24 +62,71 @@ export function AboutSection() {
       if (prefersReducedMotion()) return
 
       const intro = gsap.timeline({
-        scrollTrigger: { trigger: root.current, start: 'top 72%', once: true },
+        scrollTrigger: {
+          trigger: root.current,
+          start: 'top 72%',
+          toggleActions: 'restart none restart reset',
+        },
       })
 
       intro
-        .from('[data-about="label"]', { autoAlpha: 0, x: -16, duration: 1, ease: 'power3.out' })
-        .from('[data-about="badge"]', { autoAlpha: 0, y: 14, duration: 1, ease: 'power3.out' }, '-=0.6')
-        .from('[data-about="lead"]', { autoAlpha: 0, y: 24, duration: 1.3, ease: 'power3.out' }, '-=0.7')
+        .from('[data-about="label"]', {
+          autoAlpha: 0,
+          x: -16,
+          duration: 1,
+          ease: 'power3.out',
+        })
+        .from(
+          '[data-about="badge"]',
+          { autoAlpha: 0, y: 14, duration: 1, ease: 'power3.out' },
+          '-=0.6',
+        )
+        .from(
+          '[data-about="lead"]',
+          { autoAlpha: 0, y: 24, duration: 1.3, ease: 'power3.out' },
+          '-=0.7',
+        )
         .from(
           '[data-about="action"]',
-          { autoAlpha: 0, y: 18, duration: 1.1, stagger: 0.14, ease: 'power3.out' },
+          {
+            autoAlpha: 0,
+            y: 18,
+            duration: 1.1,
+            stagger: 0.14,
+            ease: 'power3.out',
+          },
           '-=1.0',
         )
-        .from(polaroid.current, { autoAlpha: 0, y: 60, duration: 1.6, ease: 'power3.out' }, 0.5)
-        .from(card.current, { autoAlpha: 0, y: 44, scale: 0.96, duration: 1.4, ease: 'power3.out' }, 0.9)
-        .from('[data-about="rule"]', { scaleX: 0, duration: 1.4, stagger: 0.14, ease: 'power3.inOut' }, 0.6)
+        .from(
+          polaroid.current,
+          { autoAlpha: 0, y: 60, duration: 1.6, ease: 'power3.out' },
+          0.5,
+        )
+        .from(
+          card.current,
+          {
+            autoAlpha: 0,
+            y: 44,
+            scale: 0.96,
+            duration: 1.4,
+            ease: 'power3.out',
+          },
+          0.9,
+        )
+        .from(
+          '[data-about="rule"]',
+          { scaleX: 0, duration: 1.4, stagger: 0.14, ease: 'power3.inOut' },
+          0.6,
+        )
         .from(
           '[data-about="pillar"]',
-          { autoAlpha: 0, y: 30, duration: 1.2, stagger: 0.14, ease: 'power3.out' },
+          {
+            autoAlpha: 0,
+            y: 30,
+            duration: 1.2,
+            stagger: 0.14,
+            ease: 'power3.out',
+          },
           0.9,
         )
 
@@ -107,7 +154,12 @@ export function AboutSection() {
         gsap.to(visual.current, {
           yPercent: -6,
           ease: 'none',
-          scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: true },
+          scrollTrigger: {
+            trigger: root.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
         })
       }
     },
@@ -117,11 +169,22 @@ export function AboutSection() {
   // Card tilts toward the pointer on fine pointers.
   useEffect(() => {
     const el = card.current
-    if (!el || prefersReducedMotion() || !window.matchMedia('(pointer: fine)').matches) return
+    if (
+      !el ||
+      prefersReducedMotion() ||
+      !window.matchMedia('(pointer: fine)').matches
+    )
+      return
 
     gsap.set(el, { transformPerspective: 900 })
-    const rx = gsap.quickTo(el, 'rotationX', { duration: 0.6, ease: 'power3.out' })
-    const ry = gsap.quickTo(el, 'rotationY', { duration: 0.6, ease: 'power3.out' })
+    const rx = gsap.quickTo(el, 'rotationX', {
+      duration: 0.6,
+      ease: 'power3.out',
+    })
+    const ry = gsap.quickTo(el, 'rotationY', {
+      duration: 0.6,
+      ease: 'power3.out',
+    })
 
     const onMove = (e: PointerEvent) => {
       const r = el.getBoundingClientRect()
@@ -144,7 +207,12 @@ export function AboutSection() {
   }, [])
 
   return (
-    <section ref={root} className="dk-about" aria-label="About DigiKon">
+    <section
+      ref={root}
+      id="about"
+      className="dk-about"
+      aria-label="About DigiKon"
+    >
       <AboutGridBackground />
 
       <div className="dk-about__inner">
@@ -153,18 +221,18 @@ export function AboutSection() {
             <span className="dk-about__label-dot" aria-hidden="true" />
             About us
           </p>
-<ScrollRevealText
-  as="h2"
-  className="dk-about__statement"
-  text="We build digital systems where search, design and data work as one, so growth stops being a guess."
-  split="words"
-  mode="play"
-  accent={['growth', 'stops']}
-  duration={2.2}
-  stagger={0.16}
-  yOffset={20}
-  start="top 85%"
-/>
+          <ScrollRevealText
+            as="h2"
+            className="dk-about__statement"
+            text="We build digital systems where search, design and data work as one, so growth stops being a guess."
+            split="words"
+            mode="play"
+            accent={['growth', 'stops']}
+            duration={2.2}
+            stagger={0.16}
+            yOffset={20}
+            start="top 85%"
+          />
         </header>
 
         <div className="dk-about__hero">
@@ -174,22 +242,22 @@ export function AboutSection() {
               Search · Design · Data
             </p>
 
-<ScrollRevealText
-  as="h2"
-  className="dk-about__headline"
-  text="Digital should feel connected. And work harder."
-  split="words"
-  mode="play"
-  accent={['connected.']}
-  duration={2}
-  stagger={0.14}
-  yOffset={18}
-  start="top 85%"
-/>
+            <ScrollRevealText
+              as="h2"
+              className="dk-about__headline"
+              text="Digital should feel connected. And work harder."
+              split="words"
+              mode="play"
+              accent={['connected.']}
+              duration={2}
+              stagger={0.14}
+              yOffset={18}
+              start="top 85%"
+            />
             <p data-about="lead" className="dk-about__lead">
-              We connect strategy, creative thinking and technology to create clearer digital
-              experiences where every decision has a purpose and every improvement contributes
-              to meaningful progress.
+              We connect strategy, creative thinking and technology to create
+              clearer digital experiences where every decision has a purpose and
+              every improvement contributes to meaningful progress.
             </p>
 
             <div className="dk-about__actions">
@@ -220,7 +288,9 @@ export function AboutSection() {
             <article ref={card} className="dk-about__card" data-about="card">
               <span className="dk-about__card-dot" aria-hidden="true" />
               <p className="dk-about__card-label">Our mindset</p>
-              <h3 className="dk-about__card-title">One system. Shared momentum.</h3>
+              <h3 className="dk-about__card-title">
+                One system. Shared momentum.
+              </h3>
               <p className="dk-about__card-body">
                 Connected thinking, with a clear purpose behind every detail.
               </p>
@@ -230,8 +300,16 @@ export function AboutSection() {
 
         <div className="dk-about__pillars">
           {PILLARS.map((pillar) => (
-            <article key={pillar.title} className="dk-about__pillar" data-about="pillar">
-              <span className="dk-about__rule" data-about="rule" aria-hidden="true" />
+            <article
+              key={pillar.title}
+              className="dk-about__pillar"
+              data-about="pillar"
+            >
+              <span
+                className="dk-about__rule"
+                data-about="rule"
+                aria-hidden="true"
+              />
               <p className="dk-about__pillar-no">{pillar.no}</p>
               <h3 className="dk-about__pillar-title">{pillar.title}</h3>
               <p className="dk-about__pillar-body">{pillar.body}</p>

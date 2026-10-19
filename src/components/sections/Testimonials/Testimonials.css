@@ -1,0 +1,353 @@
+/*
+ * Testimonials. Measured from the 1920 frame (about 865px tall); values marked ~ are
+ * estimated from a low-resolution screenshot and should be nudged after an overlay check.
+ *   quote ~50px DM Serif on a 60px line, starts 196px in from the content edge (386px)
+ *   eyebrow sits on the vertical centre of the section
+ *   active avatar 218px, neighbours 48px, arc centred on the section's vertical middle
+ */
+.dk-tm {
+  --tm-ink: #03171d;
+  --tm-green: #81d870;
+  --tm-canvas: #f7f8f5;
+  --tm-muted: rgba(247, 248, 245, 0.62);
+  --tm-chart-opacity: 0.32; /* ~ the chart is dim in the design */
+
+  --tm-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --tm-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  min-height: clamp(620px, 45vw, 900px);
+  padding-block: clamp(64px, 6vw, 112px);
+  /* Radial sits on top so the green glow shows, as in the design. */
+  background:
+    radial-gradient(60% 80% at 90% 0%, rgba(129, 216, 112, 0.28) 0%, rgba(129, 216, 112, 0) 70%),
+    linear-gradient(160deg, #03171d 8.49%, #1c2e33 91.51%);
+  color: var(--tm-canvas);
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+
+/* Growth chart: draws in from the left when the section enters */
+.dk-tm__chart {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  opacity: var(--tm-chart-opacity);
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 2200ms cubic-bezier(0.65, 0, 0.35, 1) 300ms;
+}
+
+.dk-tm[data-in='true'] .dk-tm__chart {
+  clip-path: inset(0 0 0 0);
+}
+
+.dk-tm__chart img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+
+.dk-tm__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.dk-tm__inner {
+  width: min(100% - 32px, 1148px);
+  margin-inline: auto;
+}
+
+/* Eyebrow column, then quote column */
+.dk-tm__layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 196px minmax(0, 1fr);
+  align-items: center;
+}
+
+.dk-tm__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--tm-canvas);
+}
+
+.dk-tm__eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--tm-green);
+}
+
+/* Quote stack: every quote shares one grid cell, so the block never changes height */
+.dk-tm__stage {
+  display: grid;
+  touch-action: pan-y;
+}
+
+.dk-tm__item {
+  grid-area: 1 / 1;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 250ms ease-out,
+    visibility 0s linear 250ms;
+}
+
+.dk-tm__item[data-active='true'] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 300ms ease-out 80ms;
+}
+
+.dk-tm__quote {
+  max-width: 13em;
+  margin: 0;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(30px, 2.6vw, 50px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--tm-canvas);
+}
+
+.dk-tm__quote p {
+  margin: 0;
+  text-wrap: inherit;
+}
+
+.dk-tm__w {
+  display: inline-block;
+}
+
+.dk-tm__who {
+  margin-top: 24px;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--tm-muted);
+}
+
+/* Words and client line wait for the entrance, then GSAP takes over */
+.dk-tm:not([data-in='true']) .dk-tm__w,
+.dk-tm:not([data-in='true']) .dk-tm__who {
+  opacity: 0;
+}
+
+/* Controls */
+.dk-tm__controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: clamp(56px, 7vw, 134px); /* ~ */
+}
+
+.dk-tm__eyebrow,
+.dk-tm__controls {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 600ms ease-out var(--d, 0ms),
+    transform 600ms var(--tm-ease-out) var(--d, 0ms);
+}
+
+.dk-tm__eyebrow { --d: 100ms; }
+.dk-tm__controls { --d: 700ms; }
+
+.dk-tm[data-in='true'] .dk-tm__eyebrow,
+.dk-tm[data-in='true'] .dk-tm__controls {
+  opacity: 1;
+  transform: none;
+}
+
+.dk-tm__btn {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(247, 248, 245, 0.28);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--tm-canvas);
+  cursor: pointer;
+  transition:
+    background-color 200ms ease-out,
+    border-color 200ms ease-out,
+    color 200ms ease-out,
+    transform 200ms ease-out;
+}
+
+.dk-tm__btn:hover {
+  background: var(--tm-green);
+  border-color: var(--tm-green);
+  color: var(--tm-ink);
+}
+
+.dk-tm__btn:active {
+  transform: scale(0.94);
+}
+
+.dk-tm__btn:focus-visible {
+  outline: 2px solid var(--tm-green);
+  outline-offset: 3px;
+}
+
+.dk-tm__count {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 0 8px;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--tm-muted);
+}
+
+.dk-tm__count-now {
+  color: var(--tm-canvas);
+  animation: dk-tm-num 450ms var(--tm-ease) both;
+}
+
+@keyframes dk-tm-num {
+  from { opacity: 0; transform: translateY(60%); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Avatar wheel. JS writes each avatar's transform, opacity and stacking. */
+.dk-tm__wheel {
+  --dA: 218px;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.dk-tm__av {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--dA);
+  height: var(--dA);
+  margin: calc(var(--dA) / -2) 0 0 calc(var(--dA) / -2);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dk-tm__face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: var(--bw, 2px) solid rgba(247, 248, 245, 0.92);
+  border-radius: 50%;
+  background: #14292d;
+  filter: brightness(calc(0.82 + var(--act, 0) * 0.18));
+  transition: filter 200ms ease-out;
+}
+
+.dk-tm__av:hover .dk-tm__face {
+  filter: brightness(1.08);
+}
+
+.dk-tm__face img,
+.dk-tm__face svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+/* Green halo that fades in as an avatar becomes the active one */
+.dk-tm__glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  opacity: var(--act, 0);
+  box-shadow:
+    0 0 0 5px rgba(129, 216, 112, 0.5),
+    0 0 70px 8px rgba(129, 216, 112, 0.38);
+}
+
+/* Tablet and phone: quote on top, avatars in a row beneath */
+@media (max-width: 1099px) {
+  .dk-tm {
+    min-height: 0;
+    padding-block: 72px 32px;
+  }
+
+  .dk-tm__layout {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    row-gap: 28px;
+  }
+
+  .dk-tm__quote {
+    max-width: none;
+    font-size: clamp(28px, 5.2vw, 44px);
+  }
+
+  .dk-tm__controls {
+    margin-top: 36px;
+  }
+
+  .dk-tm__wheel {
+    position: relative;
+    inset: auto;
+    height: 220px;
+    margin-top: 16px;
+  }
+
+  .dk-tm__chart {
+    left: auto;
+    right: 0;
+    width: max(100%, 720px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-tm *,
+  .dk-tm *::before {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+
+  .dk-tm__chart {
+    clip-path: none;
+  }
+
+  .dk-tm__eyebrow,
+  .dk-tm__controls {
+    opacity: 1;
+    transform: none;
+  }
+}

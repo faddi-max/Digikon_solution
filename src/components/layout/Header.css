@@ -131,7 +131,8 @@
 }
 
 .dk-desktop-nav__link:hover,
-.dk-desktop-nav__link:focus-visible {
+.dk-desktop-nav__link:focus-visible,
+.dk-desktop-nav__link[aria-current='page'] {
   background: var(--header-nav-hover);
 }
 
@@ -191,7 +192,8 @@
     padding-inline: var(--header-nav-item-padding-inline);
     position: relative;
     text-decoration: none;
-    transition: background-color var(--motion-duration-micro) var(--motion-ease-out);
+    transition: background-color var(--motion-duration-micro)
+      var(--motion-ease-out);
     white-space: nowrap;
   }
 

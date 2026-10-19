@@ -10,7 +10,12 @@ type RevealProps = {
   className?: string
 }
 
-export function Reveal({ children, stagger = false, delay = 0, className }: RevealProps) {
+export function Reveal({
+  children,
+  stagger = false,
+  delay = 0,
+  className,
+}: RevealProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useGSAP(
@@ -25,7 +30,11 @@ export function Reveal({ children, stagger = false, delay = 0, className }: Reve
         delay,
         ease: 'expo.out',
         stagger: stagger ? 0.1 : 0,
-        scrollTrigger: { trigger: ref.current, start: 'top 85%', once: true },
+        scrollTrigger: {
+          trigger: ref.current,
+          start: 'top 85%',
+          toggleActions: 'restart none restart reset',
+        },
       })
     },
     { scope: ref },

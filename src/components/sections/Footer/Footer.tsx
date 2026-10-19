@@ -1,20 +1,20 @@
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 
 import footerBgLogo from '@/assets/images/footer-bg-logo.png'
 import { ScrollRevealText } from '@/components/motion/ScrollRevealText'
 import { gsap, prefersReducedMotion, useGSAP } from '@/lib/motion'
 
 const EXPLORE = [
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Projects', href: '#work' },
-  { label: 'Products', href: '#products' },
+  { label: 'About', href: '/about' },
+  { label: 'Services', href: '/services' },
+  { label: 'Projects', href: '/work' },
+  { label: 'Products', href: '/products' },
 ]
 
 const MORE = [
-  { label: 'Process', href: '#how-it-works' },
-  { label: 'Testimonials', href: '#testimonials' },
-  { label: 'FAQs', href: '#faqs' },
+  { label: 'Process', href: '/how-it-works' },
+  { label: 'FAQs', href: '/faqs' },
 ]
 
 const titleCls =
@@ -69,7 +69,13 @@ export function Footer() {
       if (!root.current || prefersReducedMotion()) return
 
       gsap
-        .timeline({ scrollTrigger: { trigger: root.current, start: 'top 85%', once: true } })
+        .timeline({
+          scrollTrigger: {
+            trigger: root.current,
+            start: 'top 85%',
+            toggleActions: 'restart none restart reset',
+          },
+        })
         .from('[data-foot="col"]', {
           autoAlpha: 0,
           y: 24,
@@ -77,11 +83,21 @@ export function Footer() {
           stagger: 0.12,
           ease: 'power3.out',
         })
-        .from('[data-foot="bottom"]', { autoAlpha: 0, y: 12, duration: 1.2, ease: 'power3.out' }, 0.5)
+        .from(
+          '[data-foot="bottom"]',
+          { autoAlpha: 0, y: 12, duration: 1.2, ease: 'power3.out' },
+          0.5,
+        )
 
       // Very slow drift on the background logo so it never feels static.
       if (logo.current) {
-        gsap.to(logo.current, { y: 14, duration: 12, ease: 'sine.inOut', yoyo: true, repeat: -1 })
+        gsap.to(logo.current, {
+          y: 14,
+          duration: 12,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+        })
       }
     },
     { scope: root },
@@ -91,24 +107,27 @@ export function Footer() {
     <footer
       ref={root}
       id="contact"
-      className="relative isolate w-full overflow-hidden bg-teal-900 font-sans text-canvas-50"
+      className="text-canvas-50 relative isolate w-full overflow-hidden bg-teal-900 font-sans"
     >
       {/* Background logo. The PNG already has its own alpha: teal D, green K. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
         <img
           ref={logo}
           src={footerBgLogo}
           alt=""
           draggable={false}
-          className="absolute -left-[40%] -top-[30%] w-[180%] max-w-none select-none md:-left-[20%] md:w-[140%] lg:-left-[14%] lg:-top-[67%] lg:w-[110%]"
+          className="absolute -top-[30%] -left-[40%] w-[180%] max-w-none select-none md:-left-[20%] md:w-[140%] lg:-top-[67%] lg:-left-[14%] lg:w-[110%]"
         />
       </div>
 
-      <div className="px-6 pb-8 pt-[72px] sm:px-[6vw] sm:pt-24 lg:px-[8vw] xl:pb-[clamp(28px,2vw,40px)] xl:pl-[19.6%] xl:pr-[17%] xl:pt-[clamp(96px,6.7vw,130px)]">
+      <div className="px-6 pt-[72px] pb-8 sm:px-[6vw] sm:pt-24 lg:px-[8vw] xl:pt-[clamp(96px,6.7vw,130px)] xl:pr-[17%] xl:pb-[clamp(28px,2vw,40px)] xl:pl-[19.6%]">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_43%] lg:items-start lg:gap-0">
           <ScrollRevealText
             as="h2"
-            className="m-0 max-w-none text-wrap font-display text-[clamp(40px,4.2vw,84px)] font-normal leading-[1.06] tracking-[-0.02em] text-canvas-50 [font-synthesis:none]"
+            className="font-display text-canvas-50 m-0 max-w-none text-[clamp(40px,4.2vw,84px)] leading-[1.06] font-normal tracking-[-0.02em] text-wrap [font-synthesis:none]"
             text="Let's build change together."
             split="words"
             mode="play"
@@ -124,9 +143,9 @@ export function Footer() {
               <ul className={listCls}>
                 {EXPLORE.map((l) => (
                   <li key={l.label}>
-                    <a className={linkCls} href={l.href}>
+                    <Link className={linkCls} to={l.href}>
                       {l.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -137,9 +156,9 @@ export function Footer() {
               <ul className={listCls}>
                 {MORE.map((l) => (
                   <li key={l.label}>
-                    <a className={linkCls} href={l.href}>
+                    <Link className={linkCls} to={l.href}>
                       {l.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -154,14 +173,14 @@ export function Footer() {
                   </a>
                 </li>
                 <li>
-                  <a className={chipCls} href="#contact">
+                  <Link className={chipCls} to="/contact">
                     Placeholder
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a className={linkCls} href="#top">
+                  <Link className={linkCls} to="/">
                     Back to top ↑
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -175,10 +194,10 @@ export function Footer() {
           <div className="flex flex-none items-center">
             <FooterMark />
           </div>
-          <p className="m-0 text-[13px] leading-[1.4] tracking-[0.01em] text-canvas-50/50">
+          <p className="text-canvas-50/50 m-0 text-[13px] leading-[1.4] tracking-[0.01em]">
             Intelligent system. Real revenue.
           </p>
-          <p className="m-0 text-[13px] leading-[1.4] tracking-[0.01em] text-canvas-50/50">
+          <p className="text-canvas-50/50 m-0 text-[13px] leading-[1.4] tracking-[0.01em]">
             © 2026 DigiKon Solutions · Contact details are placeholders
           </p>
         </div>

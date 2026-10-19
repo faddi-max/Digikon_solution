@@ -1,0 +1,334 @@
+/*
+ * Search mockup. Every number is in design pixels: a 640 x 580 box measured from the 1920px
+ * design. SearchMock.tsx scales the box as a whole, so none of this changes with the viewport.
+ */
+.dk-sm {
+  --s: 1;
+
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 640 / 580;
+  font-family: var(--font-sans, 'Manrope', system-ui, sans-serif);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dk-sm__scale {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 580px;
+  transform: scale(var(--s));
+  transform-origin: 0 0;
+}
+
+.dk-sm__tilt,
+.dk-sm__layer,
+.dk-sm__enter {
+  position: absolute;
+  inset: 0;
+}
+
+.dk-sm__tilt {
+  transform-style: preserve-3d;
+}
+
+/* The window ---------------------------------------------------------------------------- */
+
+.dk-sm__panel {
+  position: absolute;
+  top: 45.2px;
+  left: 38.5px;
+  width: 554px;
+  height: 501px;
+  border: 1px solid rgb(255 255 255 / 0.06);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #19292f 0%, #1f3238 100%);
+  box-shadow:
+    0 46px 60px -24px rgb(3 23 29 / 0.34),
+    0 18px 28px -14px rgb(3 23 29 / 0.22);
+  transform: rotate(-4.75deg);
+}
+
+.dk-sm__titlebar {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 59px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.07);
+  border-radius: 15px 15px 0 0;
+  background: rgb(0 0 0 / 0.16);
+}
+
+.dk-sm__light {
+  position: absolute;
+  top: 25px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dk-sm__light--r {
+  left: 17px;
+  background: #ff5f57;
+}
+.dk-sm__light--y {
+  left: 33px;
+  background: #febc2e;
+}
+.dk-sm__light--g {
+  left: 49px;
+  background: #28c840;
+}
+
+.dk-sm__url {
+  position: absolute;
+  top: 15px;
+  left: 77px;
+  width: 462px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.07);
+}
+
+.dk-sm__url-text {
+  display: block;
+  padding-left: 17px;
+  color: rgb(255 255 255 / 0.4);
+  font-size: 10.5px;
+  line-height: 30px;
+  white-space: nowrap;
+}
+
+/* Search field --------------------------------------------------------------------------- */
+
+.dk-sm__search {
+  position: absolute;
+  top: 109px;
+  left: 51px;
+  width: 456px;
+  height: 52px;
+  border: 1.5px solid rgb(255 255 255 / 0.28);
+  border-radius: 26px;
+  background: rgb(255 255 255 / 0.04);
+}
+
+.dk-sm__lens {
+  position: absolute;
+  top: 11px;
+  left: 24px;
+  width: 28px;
+  height: 28px;
+  color: rgb(255 255 255 / 0.6);
+}
+
+.dk-sm__bar {
+  position: absolute;
+  display: block;
+  height: 10px;
+  border-radius: 5px;
+  background: rgb(255 255 255 / 0.38);
+}
+
+.dk-sm__bar--query {
+  top: 19.5px;
+  left: 76px;
+  width: 183px;
+}
+
+/* Results -------------------------------------------------------------------------------- */
+
+.dk-sm__result {
+  position: absolute;
+  left: 51px;
+  width: 459px;
+  border: 1.5px solid rgb(255 255 255 / 0.15);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.035);
+}
+
+.dk-sm__result--top {
+  top: 184px;
+  height: 96.5px;
+  border: 2px solid #81d870;
+  background: rgb(129 216 112 / 0.13);
+}
+
+.dk-sm__result--two {
+  top: 299px;
+  height: 70px;
+}
+
+.dk-sm__result--three {
+  top: 384px;
+  height: 70px;
+}
+
+.dk-sm__result--top .dk-sm__bar--title {
+  top: 19.5px;
+  left: 78px;
+  width: 227px;
+  height: 15px;
+  border-radius: 8px;
+  background: #81d870;
+}
+.dk-sm__bar--l1 {
+  top: 38px;
+  left: 79px;
+  width: 318px;
+  background: rgb(255 255 255 / 0.4);
+}
+.dk-sm__bar--l2 {
+  top: 58px;
+  left: 79px;
+  width: 248px;
+  background: rgb(255 255 255 / 0.33);
+}
+
+.dk-sm__bar--a {
+  top: 20.5px;
+  left: 27.5px;
+  width: 179px;
+  background: rgb(255 255 255 / 0.4);
+}
+.dk-sm__bar--b {
+  top: 38.5px;
+  left: 28.5px;
+  width: 317px;
+  background: rgb(255 255 255 / 0.28);
+}
+.dk-sm__bar--c {
+  top: 12px;
+  left: 27.5px;
+  width: 144.5px;
+  background: rgb(255 255 255 / 0.4);
+}
+.dk-sm__bar--d {
+  top: 38px;
+  left: 28.5px;
+  width: 271px;
+  background: rgb(255 255 255 / 0.28);
+}
+
+.dk-sm__trend {
+  position: absolute;
+  top: 18px;
+  left: 398px;
+  width: 56px;
+  height: 40px;
+  color: #81d870;
+}
+
+.dk-sm__no {
+  position: absolute;
+  top: 28.6px;
+  left: 19.2px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #81d870;
+  color: #0c2523;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dk-sm__pill {
+  --glow: 0.6;
+
+  position: absolute;
+  top: 202.6px;
+  left: -18.3px;
+  display: grid;
+  place-items: center;
+  width: 89.4px;
+  height: 35px;
+  border-radius: 18px;
+  background: #81d870;
+  box-shadow: 0 6px 28px rgb(129 216 112 / calc(0.4 + var(--glow) * 0.3));
+  color: #0c2523;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Growth card ---------------------------------------------------------------------------- */
+
+.dk-sm__growth {
+  position: absolute;
+  top: 403.6px;
+  left: 416.9px;
+  width: 218px;
+  height: 145px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow:
+    0 24px 40px -14px rgb(3 23 29 / 0.3),
+    0 2px 6px rgb(3 23 29 / 0.08);
+  transform: rotate(-4.75deg);
+}
+
+.dk-sm__growth p {
+  position: absolute;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.dk-sm__g-label {
+  top: 13px;
+  left: 23.5px;
+  color: #5f6f67;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+
+.dk-sm__g-value {
+  top: 36px;
+  left: 23px;
+  color: #2e7d32;
+  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
+  font-size: 32px;
+  line-height: 38px;
+}
+
+.dk-sm__g-caption {
+  top: 80px;
+  left: 22px;
+  color: #6b7872;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.dk-sm__g-bar {
+  position: absolute;
+  top: 115px;
+  height: 19px;
+  border-radius: 4px;
+}
+.dk-sm__g-bar--1 {
+  left: 23px;
+  width: 28px;
+  background: #c8f0be;
+}
+.dk-sm__g-bar--2 {
+  left: 55px;
+  width: 40px;
+  background: #81d870;
+}
+.dk-sm__g-bar--3 {
+  left: 101px;
+  width: 54px;
+  background: #2e7d32;
+}
+.dk-sm__g-bar--4 {
+  left: 160px;
+  width: 36px;
+  background: #a8e89c;
+}

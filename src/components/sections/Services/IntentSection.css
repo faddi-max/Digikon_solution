@@ -1,0 +1,194 @@
+/*
+ * "Connecting intent to value" section: background texture, scaled stage, CSS fallback.
+ *
+ * The stage is a fixed design frame (1200 x 556, or a 760 wide crop below 900px) scaled to
+ * the available width by --s, which IntentSection.tsx sets from a ResizeObserver. Everything
+ * inside is placed in design pixels from the sphere centre.
+ */
+
+/* Grid mesh: 164px pitch, 1px lines, dark squares at the crossings. Shown at 20% and faded
+   out away from the top-left glow. */
+.dk-io__mesh {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='164' height='164'%3E%3Cg fill='%2303171D'%3E%3Crect width='1' height='164' fill-opacity='.5'/%3E%3Crect width='164' height='1' fill-opacity='.5'/%3E%3Crect width='7' height='7' fill-opacity='.7'/%3E%3Crect x='157' width='7' height='7' fill-opacity='.7'/%3E%3Crect y='157' width='7' height='7' fill-opacity='.7'/%3E%3Crect x='157' y='157' width='7' height='7' fill-opacity='.7'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 164px 164px;
+  background-position: 63px 91px;
+  -webkit-mask-image: radial-gradient(ellipse 1100px 1200px at 0 0, #000 0%, transparent 100%);
+  mask-image: radial-gradient(ellipse 1100px 1200px at 0 0, #000 0%, transparent 100%);
+}
+
+.dk-io {
+  --s: 1;
+  --dwn: 1200;
+  position: relative;
+  width: 100%;
+  max-width: calc(var(--dwn) * 1px);
+  margin-inline: auto;
+}
+
+.dk-io__visual {
+  position: relative;
+  width: 100%;
+  height: calc(556px * var(--s));
+}
+
+/* Unscaled layer for the WebGL canvas (its camera does the scaling). */
+.dk-io__canvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* Scaled design frame for HTML parts. */
+.dk-io__design {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--dwn) * 1px);
+  height: 556px;
+  transform: scale(var(--s));
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+/* Dark band behind the sphere. */
+.dk-io__shadow {
+  position: absolute;
+  left: calc(50% - 181px);
+  top: calc(278px - 55px);
+  width: 363px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(3, 23, 29, 0.85) 0%,
+    rgba(3, 23, 29, 0.6) 62%,
+    rgba(3, 23, 29, 0) 100%
+  );
+  filter: blur(5px);
+}
+
+/* ---- Chips ---------------------------------------------------------------------------- */
+
+.dk-io__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.dk-io__chip {
+  display: inline-flex;
+}
+
+.dk-io__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 16px;
+  border-radius: 9999px;
+  border: 1px solid rgba(129, 216, 112, 0.18);
+  background: #092a2b;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    border-color 0.2s ease-out,
+    background-color 0.2s ease-out,
+    transform 0.2s ease-out;
+}
+
+.dk-io__pill::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #81d870;
+  box-shadow: 0 0 8px rgba(129, 216, 112, 0.7);
+}
+
+.dk-io__pill:hover {
+  border-color: rgba(129, 216, 112, 0.55);
+  background: #0c3536;
+  transform: translateY(-2px);
+}
+
+/* Phones and small tablets: the chips become a readable row under the picture. */
+@media (max-width: 899.98px) {
+  .dk-io__pill {
+    height: 40px;
+    font-size: 13px;
+  }
+}
+
+/* From 900px the chips sit in the picture, placed from the sphere centre by --x / --y. */
+@media (min-width: 900px) {
+  .dk-io__chips {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(556px * var(--s));
+    margin: 0;
+    pointer-events: none;
+  }
+  .dk-io__chip {
+    position: absolute;
+    left: calc(50% + var(--x) * var(--s) * 1px);
+    top: calc((278 + var(--y)) * var(--s) * 1px);
+    transform: translate(-50%, -50%) scale(var(--s));
+    pointer-events: auto;
+  }
+}
+
+/* ---- CSS fallback (no WebGL or scene error): same picture, drawn with borders ---------- */
+
+.dk-io__fb-ring,
+.dk-io__fb-pill {
+  position: absolute;
+  border: 1px solid rgba(129, 216, 112, 0.24);
+}
+.dk-io__fb-ring {
+  left: calc(50% - 266px);
+  top: calc(278px - 266px);
+  width: 532px;
+  height: 532px;
+  border-radius: 50%;
+}
+.dk-io__fb-pill {
+  left: calc(50% - 468px);
+  top: calc(278px - 111.5px);
+  width: 936px;
+  height: 223px;
+  border-radius: 9999px;
+  transform: rotate(-20deg);
+}
+.dk-io__fb-sphere {
+  position: absolute;
+  left: calc(50% - 144px);
+  top: calc(278px - 144px);
+  width: 288px;
+  height: 288px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 38%,
+    #d1fbc9 0%,
+    #6fcb62 6%,
+    #357a3a 34%,
+    #12402a 72%,
+    #0b2a1e 100%
+  );
+}
+.dk-io__fb-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  background: #81d870;
+  box-shadow: 0 0 16px 2px rgba(129, 216, 112, 0.6);
+}

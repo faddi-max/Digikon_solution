@@ -69,7 +69,7 @@ function ServiceItem({ service, open, onSelect, onKeyDown, registerBar }: ItemPr
   }, [open])
 
   return (
-    <article id={service.id} className="dk-svc__item" data-theme={service.theme} data-open={open}>
+    <article className="dk-svc__item" data-theme={service.theme} data-open={open}>
       <h3 className="dk-svc__head">
         <button
           ref={registerBar}
@@ -94,7 +94,7 @@ function ServiceItem({ service, open, onSelect, onKeyDown, registerBar }: ItemPr
         aria-labelledby={`svc-${service.id}-bar`}
         className="dk-svc__panel"
         // Closed panels are removed from the tab order and the accessibility tree.
-        {...({ inert: open ? undefined : '' } as object)}
+        inert={!open}
       >
         <div className="dk-svc__panel-inner">
           <div className="dk-svc__copy">

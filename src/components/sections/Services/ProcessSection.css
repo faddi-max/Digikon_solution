@@ -1,0 +1,9 @@
+/* Grid mesh behind the top of the "How we work" section: faint green lines on a 137 x 91px
+   pitch with a soft dot at each crossing, fading out downward. */
+.dk-pr__mesh {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='137' height='91'%3E%3Cg fill='%2381D870'%3E%3Crect width='1' height='91' fill-opacity='.18'/%3E%3Crect width='137' height='1' fill-opacity='.18'/%3E%3Ccircle cx='0.5' cy='0.5' r='5' fill-opacity='.16'/%3E%3Ccircle cx='136.5' cy='0.5' r='5' fill-opacity='.16'/%3E%3Ccircle cx='0.5' cy='90.5' r='5' fill-opacity='.16'/%3E%3Ccircle cx='136.5' cy='90.5' r='5' fill-opacity='.16'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 137px 91px;
+  background-position: 79px 62px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 16%, transparent 38%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 16%, transparent 38%);
+}

@@ -1,3 +1,4 @@
+
 .dk-header {
   background: var(--color-surface-0);
   inset-inline: 0;
@@ -68,7 +69,9 @@
   border-radius: var(--header-radius-pill);
   display: block;
   inline-size: 1.125rem;
-  transition: transform var(--motion-duration-micro) var(--motion-ease-out);
+  transition:
+    transform var(--motion-duration-micro)
+    var(--motion-ease-out);
 }
 
 .dk-menu-toggle__icon {
@@ -117,23 +120,21 @@
   padding-inline: var(--header-control-padding-inline);
   text-decoration: none;
   transition:
-    background-color var(--motion-duration-micro) var(--motion-ease-out),
-    color var(--motion-duration-micro) var(--motion-ease-out);
+    background-color var(--motion-duration-micro)
+    var(--motion-ease-out),
+    color var(--motion-duration-micro)
+    var(--motion-ease-out);
 }
+
 .dk-top > main {
   display: block;
   flex: 1;
   min-height: 0;
 }
+
 .dk-cta:hover {
   background: var(--color-action-accent-fill);
   color: var(--color-text-primary);
-}
-
-.dk-desktop-nav__link:hover,
-.dk-desktop-nav__link:focus-visible,
-.dk-desktop-nav__link[aria-current='page'] {
-  background: var(--header-nav-hover);
 }
 
 @media (min-width: 64rem) {
@@ -142,6 +143,7 @@
   }
 
   .dk-header__inner {
+    align-items: center;
     display: flex;
     gap: clamp(3rem, 17.825vw, var(--header-desktop-gap));
     height: var(--header-desktop-height);
@@ -182,17 +184,27 @@
 
   .dk-desktop-nav__link {
     align-items: center;
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: var(--header-radius-pill);
+    box-sizing: border-box;
     color: var(--color-text-inverse);
     display: inline-flex;
+    flex: 0 0 auto;
     font-size: 0.6875rem;
     font-weight: 400;
     height: var(--header-nav-item-height);
+    justify-content: center;
     line-height: 1.55;
     padding-inline: var(--header-nav-item-padding-inline);
     position: relative;
     text-decoration: none;
-    transition: background-color var(--motion-duration-micro)
+    transition:
+      background-color var(--motion-duration-micro)
+      var(--motion-ease-out),
+      border-color var(--motion-duration-micro)
+      var(--motion-ease-out),
+      box-shadow var(--motion-duration-micro)
       var(--motion-ease-out);
     white-space: nowrap;
   }
@@ -204,18 +216,110 @@
     position: absolute;
   }
 
+  .dk-desktop-nav__link[aria-current='page'],
+  .dk-desktop-nav__link[aria-current='true'] {
+    background:
+      radial-gradient(
+        90% 140% at 50% 115%,
+        rgb(129 216 112 / 22%) 0%,
+        rgb(129 216 112 / 7%) 48%,
+        transparent 100%
+      ),
+      rgb(255 255 255 / 5%);
+    border-color: rgb(255 255 255 / 14%);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 5%),
+      0 2px 8px rgb(0 0 0 / 8%);
+  }
+
+  .dk-desktop-nav__link:hover:not([aria-current='page']),
+  .dk-desktop-nav__link:focus-visible:not([aria-current='page']) {
+    background: var(--header-nav-hover);
+  }
+
+  .dk-desktop-nav__link[aria-current='page']:hover,
+  .dk-desktop-nav__link[aria-current='true']:hover {
+    background:
+      radial-gradient(
+        90% 140% at 50% 115%,
+        rgb(129 216 112 / 25%) 0%,
+        rgb(129 216 112 / 8%) 48%,
+        transparent 100%
+      ),
+      rgb(255 255 255 / 6%);
+  }
+
   .dk-service-menu {
     align-self: stretch;
     display: flex;
+    flex: 0 0 auto;
     position: relative;
   }
 
   .dk-service-menu__toggle {
     appearance: none;
+    align-items: center;
     background: transparent;
-    border: 0;
+    border: 1px solid transparent;
+    border-radius: var(--header-radius-pill);
+    box-sizing: border-box;
+    color: var(--color-text-inverse);
     cursor: pointer;
-    font: inherit;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 400;
+    height: var(--header-nav-item-height);
+    justify-content: center;
+    line-height: 1.55;
+    padding-inline: var(--header-nav-item-padding-inline);
+    position: relative;
+    transition:
+      background-color var(--motion-duration-micro)
+      var(--motion-ease-out),
+      border-color var(--motion-duration-micro)
+      var(--motion-ease-out),
+      box-shadow var(--motion-duration-micro)
+      var(--motion-ease-out);
+    white-space: nowrap;
+  }
+
+  .dk-service-menu__toggle:hover,
+  .dk-service-menu__toggle:focus-visible {
+    background: var(--header-nav-hover);
+  }
+
+  .dk-service-menu[data-active='true'] .dk-service-menu__toggle,
+  .dk-service-menu[data-open='true'] .dk-service-menu__toggle {
+    background:
+      radial-gradient(
+        90% 140% at 50% 115%,
+        rgb(129 216 112 / 22%) 0%,
+        rgb(129 216 112 / 7%) 48%,
+        transparent 100%
+      ),
+      rgb(255 255 255 / 5%);
+    border-color: rgb(255 255 255 / 14%);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 5%),
+      0 2px 8px rgb(0 0 0 / 8%);
+  }
+
+  .dk-service-menu[data-active='true'] .dk-service-menu__toggle:hover,
+  .dk-service-menu[data-open='true'] .dk-service-menu__toggle:hover {
+    background:
+      radial-gradient(
+        90% 140% at 50% 115%,
+        rgb(129 216 112 / 25%) 0%,
+        rgb(129 216 112 / 8%) 48%,
+        transparent 100%
+      ),
+      rgb(255 255 255 / 6%);
   }
 
   .dk-service-menu__panel {
@@ -304,7 +408,8 @@
     min-height: 3.125rem;
     padding: 0.125rem 0.25rem;
     text-decoration: none;
-    transition: background-color var(--motion-duration-micro)
+    transition:
+      background-color var(--motion-duration-micro)
       var(--motion-ease-out);
   }
 
@@ -322,7 +427,8 @@
     display: flex;
     height: 2rem;
     justify-content: center;
-    transition: background-color var(--motion-duration-micro)
+    transition:
+      background-color var(--motion-duration-micro)
       var(--motion-ease-out);
     width: 2rem;
   }
@@ -348,6 +454,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .dk-desktop-nav__link,
+  .dk-service-menu__toggle,
   .dk-service-menu__panel,
   .dk-service-menu__link,
   .dk-service-menu__icon,

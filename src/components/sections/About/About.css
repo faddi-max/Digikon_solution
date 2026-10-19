@@ -14,12 +14,12 @@
   --about-gap-row: clamp(72px, 8vw, 112px);
   --about-gutter: clamp(16px, 4vw, 40px);
 
-  /* Break out of any parent padding so the background spans the full viewport. */
+  /* Full width of the parent. Not 100vw: that includes the scrollbar and makes the page
+     scroll sideways on Home, where the About section sits directly in the page flow. */
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
   padding: clamp(32px, 4vw, 48px) 0;
   background:
     linear-gradient(

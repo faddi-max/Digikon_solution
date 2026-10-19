@@ -94,7 +94,7 @@ function WorkCard({ project, index, total, active, onSelect }: CardProps) {
       {/* Expanded face. Fixed width so text never reflows while the card animates. */}
       <div
         className="dk-work__body"
-        {...({ inert: active ? undefined : '' } as object)}
+        inert={!active}
       >
         <div className="dk-work__media">
           {art ? (

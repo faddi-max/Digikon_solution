@@ -233,6 +233,12 @@
   .dk-hero__inner {
     grid-template-columns: 1fr;
   }
+
+  /* One column: centre the orbit under the copy at the same width the stage uses. */
+  .dk-hero__orbit {
+    justify-self: center;
+    width: min(100%, 520px);
+  }
 }
 
 /* Phones */

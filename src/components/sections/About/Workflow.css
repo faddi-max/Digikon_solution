@@ -1,0 +1,340 @@
+/*
+ * How we work. Spec frame: 1920 x 722.77, padding 100px top and bottom.
+ * Background radial gradient from the spec; grid at 20% opacity starting 5% in from the left.
+ * Horizontal placement follows the shared page frame (.dk-container), so it lines up with
+ * every other section.
+ */
+.dk-flow {
+  --fl-ink: #03171d;
+  --fl-green: #81d870;
+  --fl-canvas: #f7f8f5;
+  --fl-muted: rgba(247, 248, 245, 0.62);
+  --fl-line: rgba(129, 216, 112, 0.5);
+  --fl-divider: rgba(247, 248, 245, 0.09);
+  --fl-node: clamp(48px, 3.4vw, 64px);
+  --fl-pad: clamp(16px, 1.5vw, 28px);
+  /* Page frame. Uses the shared tokens from index.css when present, with the same values as fallback. */
+  --fl-gutter: var(--page-gutter, clamp(16px, 4.5vw, 36px));
+  --fl-max: var(--page-max, 1280px);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  box-sizing: border-box;
+  /* 722.77 / 1920 = 37.6vw */
+  min-height: clamp(520px, 37.6vw, 723px);
+  padding-block: clamp(64px, 5.2vw, 100px);
+  background: radial-gradient(
+    ellipse 285.81% 377.98% at 112.81% 79.82%,
+    #1c2e33 0%,
+    #03171d 60.18%,
+    #81d870 140%
+  );
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: var(--fl-canvas);
+}
+
+/* Background layers */
+.dk-flow__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.dk-flow__grid,
+.dk-flow__glow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 5%;
+  width: 95%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.dk-flow__grid {
+  opacity: 0.2;
+}
+
+.dk-flow__glow {
+  opacity: 0.32;
+  mix-blend-mode: screen;
+}
+
+.dk-flow__inner {
+  display: flex;
+  flex-direction: column;
+  width: min(100% - 2 * var(--fl-gutter), var(--fl-max));
+  margin-inline: auto;
+}
+
+@media (min-width: 64rem) {
+  .dk-flow {
+    --fl-gutter: var(--page-gutter, clamp(48px, 5vw, 80px));
+  }
+}
+
+/* Header: eyebrow, then the headline */
+.dk-flow__head {
+  display: grid;
+  grid-template-columns: clamp(120px, 20%, 257.28px) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+}
+
+.dk-flow__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fl-canvas);
+}
+
+.dk-flow__eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--fl-green);
+}
+
+.dk-flow__heading {
+  margin: 0;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(30px, 2.9vw, 56px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--fl-canvas);
+}
+
+.dk-flow .dk-srt__accent {
+  color: var(--fl-green);
+}
+
+/* Timeline */
+.dk-flow__steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(48px, 5.2vw, 100px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dk-flow__step {
+  position: relative;
+  min-width: 0;
+  padding: 0 clamp(8px, 1.2vw, 24px) 0 var(--fl-pad);
+  border-left: 1px solid var(--fl-divider);
+}
+
+.dk-flow__step:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+/* Line through the node row. Sits behind the node, which has a solid fill. */
+.dk-flow__line {
+  position: absolute;
+  top: calc(var(--fl-node) / 2);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--fl-line), rgba(129, 216, 112, 0.22));
+  transform-origin: left center;
+}
+
+.dk-flow__step:first-child .dk-flow__line {
+  left: calc(var(--fl-node) / 2);
+}
+
+.dk-flow__node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--fl-node);
+  height: var(--fl-node);
+  padding: 0;
+  border: 1px solid rgba(129, 216, 112, 0.28);
+  border-radius: 50%;
+  background: var(--fl-ink);
+  box-shadow: inset 0 0 0 5px #072228;
+  color: var(--fl-green);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 220ms ease-out,
+    border-color 220ms ease-out,
+    box-shadow 220ms ease-out,
+    color 220ms ease-out;
+}
+
+.dk-flow__no {
+  font-size: clamp(11px, 0.7vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.dk-flow__step[data-active='true'] .dk-flow__node {
+  background: var(--fl-green);
+  border-color: var(--fl-green);
+  box-shadow:
+    0 0 0 clamp(5px, 0.4vw, 8px) rgba(129, 216, 112, 0.2),
+    0 0 40px 4px rgba(129, 216, 112, 0.4);
+  color: var(--fl-ink);
+}
+
+.dk-flow__node:focus-visible {
+  outline: 2px solid var(--fl-canvas);
+  outline-offset: 5px;
+}
+
+.dk-flow__copy {
+  margin-top: clamp(20px, 1.8vw, 32px);
+}
+
+.dk-flow__title {
+  margin: 0;
+  max-width: 11em;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(20px, 1.4vw, 26px);
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  color: var(--fl-canvas);
+}
+
+.dk-flow__body {
+  margin: 12px 0 0;
+  max-width: 24ch;
+  font-size: clamp(13px, 0.8vw, 15px);
+  line-height: 1.6;
+  color: var(--fl-muted);
+}
+
+.dk-flow__base {
+  display: block;
+  height: 1px;
+  margin-top: clamp(40px, 3.8vw, 72px);
+  background: linear-gradient(90deg, var(--fl-line), rgba(129, 216, 112, 0));
+  transform-origin: left center;
+}
+
+/* Tablet: two columns, two rows. Each row keeps its own connecting line. */
+@media (max-width: 1023px) {
+  .dk-flow {
+    min-height: 0;
+    --fl-node: 52px;
+  }
+
+  .dk-flow__head {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 20px;
+    align-items: start;
+  }
+
+  .dk-flow__steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 48px;
+  }
+
+  .dk-flow__step:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .dk-flow__step:nth-child(odd) .dk-flow__line {
+    left: calc(var(--fl-node) / 2);
+  }
+
+  .dk-flow__step:nth-child(even) {
+    padding-left: clamp(20px, 4vw, 32px);
+  }
+
+  .dk-flow__title {
+    font-size: clamp(20px, 3vw, 24px);
+  }
+
+  .dk-flow__body {
+    font-size: 14px;
+  }
+}
+
+/* Phone: one vertical timeline. The line runs down the node column. */
+@media (max-width: 639px) {
+  .dk-flow {
+    --fl-node: 44px;
+    padding-block: 64px;
+  }
+
+  .dk-flow__steps {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+    margin-top: 40px;
+  }
+
+  .dk-flow__step,
+  .dk-flow__step:nth-child(even),
+  .dk-flow__step:nth-child(odd) {
+    display: grid;
+    grid-template-columns: var(--fl-node) minmax(0, 1fr);
+    column-gap: 18px;
+    align-items: start;
+    padding: 0 0 36px;
+    border-left: 0;
+  }
+
+  .dk-flow__step:last-child {
+    padding-bottom: 0;
+  }
+
+  .dk-flow__line,
+  .dk-flow__step:first-child .dk-flow__line,
+  .dk-flow__step:nth-child(odd) .dk-flow__line {
+    top: var(--fl-node);
+    bottom: 0;
+    left: calc(var(--fl-node) / 2);
+    right: auto;
+    width: 1px;
+    height: auto;
+    background: linear-gradient(180deg, var(--fl-line), rgba(129, 216, 112, 0.18));
+    transform-origin: top center;
+  }
+
+  .dk-flow__step:last-child .dk-flow__line {
+    display: none;
+  }
+
+  .dk-flow__copy {
+    margin-top: 0;
+    padding-top: 4px;
+  }
+
+  .dk-flow__title {
+    max-width: none;
+    font-size: 22px;
+  }
+
+  .dk-flow__body {
+    max-width: 34ch;
+  }
+
+  .dk-flow__base {
+    margin-top: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-flow *,
+  .dk-flow *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -22,7 +22,7 @@ function hash(x: number, y: number) {
   return s - Math.floor(s)
 }
 
-function GridField({ motion }: { motion: boolean }) {
+export function GridField({ motion }: { motion: boolean }) {
   const { size, gl, camera } = useThree()
 
   const cell = Math.max(MIN_CELL, CELL_AT_1920 * (size.width / 1920))

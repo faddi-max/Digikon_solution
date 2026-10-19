@@ -69,7 +69,7 @@ function ServiceItem({ service, open, onSelect, onKeyDown, registerBar }: ItemPr
   }, [open])
 
   return (
-    <article className="dk-svc__item" data-theme={service.theme} data-open={open}>
+    <article id={service.id} className="dk-svc__item" data-theme={service.theme} data-open={open}>
       <h3 className="dk-svc__head">
         <button
           ref={registerBar}

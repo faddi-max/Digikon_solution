@@ -1,0 +1,181 @@
+/*
+ * Our Mission. Spec frame: 1920 x 670, padding 40px 10px, grid at 25% opacity, 1px green rule.
+ * Horizontal placement follows the shared page frame (--page-gutter / --page-max), so the
+ * eyebrow and copy start on the same edge as every other section. The 257.28px offset and
+ * 200px rule padding from the spec are kept as proportions of that frame.
+ */
+.dk-mission {
+  --ms-ink: #03171d;
+  --ms-green: #81d870;
+  --ms-green-deep: #3c9145;
+  --ms-muted: #647174;
+  --ms-gutter: var(--page-gutter, clamp(16px, 4.5vw, 36px));
+  --ms-max: var(--page-max, 1280px);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  box-sizing: border-box;
+  /* 670 / 1920 = 34.9vw */
+  min-height: clamp(420px, 34.9vw, 670px);
+  padding: 40px 10px;
+  background: linear-gradient(
+    136.56deg,
+    rgba(129, 216, 112, 0.2) 6.3%,
+    rgba(255, 255, 255, 0.2) 53.29%,
+    rgba(129, 216, 112, 0.2) 100.28%
+  );
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: var(--ms-ink);
+}
+
+.dk-mission__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.25;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (min-width: 64rem) {
+  .dk-mission {
+    --ms-gutter: var(--page-gutter, clamp(48px, 5vw, 80px));
+  }
+}
+
+/* Content edge. Eyebrow sits in the first column, the copy block starts 257.28px in. */
+.dk-mission__inner {
+  display: grid;
+  grid-template-columns: clamp(120px, 15.6%, 200px) minmax(0, 1fr);
+  align-items: center;
+  width: min(100% - 2 * var(--ms-gutter), var(--ms-max));
+  margin-inline: auto;
+}
+
+.dk-mission__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ms-ink);
+}
+
+.dk-mission__eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--ms-green);
+}
+
+.dk-mission__block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  min-width: 0;
+  padding-left: clamp(32px, 6.25vw, 120px);
+}
+
+.dk-mission__rule {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: var(--ms-green);
+  transform-origin: top center;
+}
+
+.dk-mission__headline {
+  margin: 0;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(38px, 4.6vw, 92px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--ms-ink);
+}
+
+.dk-mission__line {
+  display: block;
+}
+
+/* Accent words are large display text, so the brand green holds its contrast. */
+.dk-mission .dk-srt__accent {
+  color: var(--ms-green);
+}
+
+.dk-mission__lead,
+.dk-mission__closing {
+  margin: 0;
+  max-width: 46ch;
+  font-size: clamp(16px, 1.45vw, 28px);
+  line-height: 1.65;
+}
+
+.dk-mission__tone--strong {
+  font-weight: 700;
+  color: var(--ms-ink);
+}
+
+.dk-mission__tone--muted,
+.dk-mission__closing {
+  font-weight: 400;
+  color: var(--ms-muted);
+}
+
+/* Deeper green keeps the small phrase readable on the light gradient. */
+.dk-mission__tone--accent {
+  font-weight: 500;
+  color: var(--ms-green-deep);
+}
+
+/* The two copy paragraphs read as one block, so the gap between them is tighter. */
+.dk-mission__lead {
+  margin-top: 0;
+}
+
+.dk-mission__closing {
+  margin-top: -25px;
+}
+
+/* Tablet and phone: eyebrow stacks above the block; the rule stays as a left edge. */
+@media (max-width: 899px) {
+  .dk-mission {
+    min-height: 0;
+    padding-block: clamp(56px, 10vw, 88px);
+  }
+
+  .dk-mission__inner {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 24px;
+    align-items: start;
+  }
+
+  .dk-mission__block {
+    padding-left: clamp(20px, 5vw, 40px);
+  }
+
+  .dk-mission__headline {
+    font-size: clamp(38px, 9.5vw, 72px);
+  }
+
+  .dk-mission__lead,
+  .dk-mission__closing {
+    font-size: clamp(16px, 2.4vw, 20px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-mission *,
+  .dk-mission *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}

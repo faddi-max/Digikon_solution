@@ -11,30 +11,29 @@ import { ScrollRevealText } from '@/components/motion/ScrollRevealText'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { gsap } from '@/lib/motion'
 import { useInView } from '@/lib/useInView'
+import analyticsReportingArt from '@/assets/images/products/analytics-reporting.jpg'
+import clientPortalArt from '@/assets/images/products/client-portal.jpg'
+import contentStudioArt from '@/assets/images/products/content-studio.png'
+import marketingAutomationArt from '@/assets/images/products/marketing-automation.jpg'
+import performanceHubArt from '@/assets/images/products/performance-hub.jpg'
+import seoWorkspaceArt from '@/assets/images/products/seo-workspace.png'
 
 import { PRODUCTS_HREF, TOOLS, type Tool } from './productsData'
 import { ToolArt } from './ToolArt'
 import './Products.css'
 
-/** Exported screenshots are picked up by filename. A missing file falls back to the built-in illustration. */
-const ART = import.meta.glob(
-  '../../../assets/images/products/*.{png,webp,jpg,jpeg,avif}',
-  {
-    eager: true,
-    query: '?url',
-    import: 'default',
-  },
-) as Record<string, string>
+/** Explicit imports guarantee every product image is included in the application bundle. */
+const ART: Record<string, string> = {
+  'analytics-reporting': analyticsReportingArt,
+  'marketing-automation': marketingAutomationArt,
+  'seo-workspace': seoWorkspaceArt,
+  'client-portal': clientPortalArt,
+  'content-studio': contentStudioArt,
+  'performance-hub': performanceHubArt,
+}
 
 function artFor(name: string): string | undefined {
-  const hit = Object.keys(ART).find(
-    (p) =>
-      p
-        .split('/')
-        .pop()
-        ?.replace(/\.[^.]+$/, '') === name,
-  )
-  return hit ? ART[hit] : undefined
+  return ART[name]
 }
 
 /** Fan geometry. Index 0 is the leftmost card; the arc is symmetric around the middle. */

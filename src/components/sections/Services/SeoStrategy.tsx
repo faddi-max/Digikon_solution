@@ -2,16 +2,19 @@ import { useRef } from 'react'
 
 import searchArt from '@/assets/images/services/search-seo.png?url'
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/motion'
+import type { ServiceStrategyData } from './servicesDetailData'
 
-/** Copy read from the Figma "Strategy & value" frame. */
-const LABEL = 'Strategy & value'
-const LINES = ['More than rankings.', 'Real'] as const
-const ACCENT = 'opportunities.'
-const PARAGRAPHS = [
+export type { ServiceStrategyData }
+
+/** Default copy read from the Figma "Strategy & value" frame. */
+const DEFAULT_LABEL = 'Strategy & value'
+const DEFAULT_LINES = ['More than rankings.', 'Real'] as const
+const DEFAULT_ACCENT = 'opportunities.'
+const DEFAULT_PARAGRAPHS = [
   'SEO is not about chasing algorithms. It is about helping the right people discover your business — and creating the conditions for meaningful engagement and conversions.',
   'When search works well, it connects audience intent with relevant content. Every improvement compounds over time, building a channel that generates qualified traffic, enquiries, and revenue without ongoing advertising spend.',
 ] as const
-const TAGS = [
+const DEFAULT_TAGS = [
   'Search visibility',
   'Qualified traffic',
   'Intent mapping',
@@ -19,29 +22,22 @@ const TAGS = [
   'Sustainable growth',
 ] as const
 
-/**
- * The figure in the card is part of the supplied design. It is a placeholder until a
- * source is attached: do not publish a statistic without one.
- */
-const STAT = {
+const DEFAULT_STAT = {
   kicker: 'Search opportunity',
   value: 73,
   text: 'of online experiences begin with a search engine',
 }
 
-/**
- * "More than rankings. Real opportunities." section, styled with Tailwind utilities only.
- *
- * Layout: one column on phones (card, then copy); from 1024px two columns, a 386px card
- * beside the copy, centred on it. Type scales with the viewport.
- *
- * Motion (GSAP, every time the section is 70% into view, from either scroll direction): the card rises and its figure
- * counts up, the label and heading lines slide out of masks, the copy and tags follow in
- * sequence. The backdrop drifts slowly against the scroll and the glow behind the card
- * breathes while the section is on screen. Reduced motion gets the finished layout.
- */
-export function SeoStrategy() {
+export function SeoStrategy({ data }: { data?: ServiceStrategyData } = {}) {
   const root = useRef<HTMLElement>(null)
+
+  const label = data?.label ?? DEFAULT_LABEL
+  const lines = data?.lines ?? DEFAULT_LINES
+  const accent = data?.accent ?? DEFAULT_ACCENT
+  const paragraphs = data?.paragraphs ?? DEFAULT_PARAGRAPHS
+  const tags = data?.tags ?? DEFAULT_TAGS
+  const stat = data?.stat ?? DEFAULT_STAT
+  const art = data?.art ?? searchArt
 
   useGSAP(
     () => {
@@ -145,7 +141,7 @@ export function SeoStrategy() {
         }
       })
     },
-    { scope: root },
+    { scope: root, dependencies: [data] },
   )
 
   return (
@@ -154,10 +150,10 @@ export function SeoStrategy() {
       aria-labelledby="seo-strategy-title"
       className="relative isolate z-10 overflow-clip bg-[linear-gradient(136.24deg,#C8F0BE_-19.97%,#03171D_37.3%,rgba(46,125,50,0.8)_100%)] bg-teal-900 px-[clamp(1rem,0.32rem+2.86vw,5rem)] py-[clamp(4rem,5.8vw,7rem)] font-sans text-white shadow-[0_-24px_60px_0_#03171D1F]"
     >
-      {/* Backdrop: the SEO dashboard art, tinted and pushed back by the gradient. */}
+      {/* Backdrop: the service dashboard art, tinted and pushed back by the gradient. */}
       <img
         data-st="art"
-        src={searchArt}
+        src={art}
         alt=""
         aria-hidden="true"
         decoding="async"
@@ -182,20 +178,20 @@ export function SeoStrategy() {
               className="flex items-center gap-2 text-[11px] leading-none font-semibold tracking-[0.12em] text-[#2E7D32] uppercase"
             >
               <span aria-hidden="true" className="size-[5px] bg-[#2E7D32]" />
-              {STAT.kicker}
+              {stat.kicker}
             </p>
             <p
               data-st="value"
-              data-target={STAT.value}
+              data-target={stat.value}
               className="mt-5 font-display text-[clamp(3.5rem,2rem+3vw,4.25rem)] leading-none text-[#2E7D32]"
             >
-              {STAT.value}%
+              {stat.value}%
             </p>
             <p
               data-st="text"
               className="mt-3 max-w-[16ch] text-[clamp(1.125rem,0.9rem+0.4vw,1.375rem)] leading-[1.45] text-ink-muted"
             >
-              {STAT.text}
+              {stat.text}
             </p>
           </div>
         </div>
@@ -207,24 +203,24 @@ export function SeoStrategy() {
             className="flex items-center gap-2.5 text-[13px] leading-[18px] font-medium text-green-500"
           >
             <span aria-hidden="true" className="size-2 bg-green-500" />
-            {LABEL}
+            {label}
           </p>
 
           <h2
             id="seo-strategy-title"
             className="mt-4 font-display text-[clamp(2rem,1.2rem+2.1vw,3.25rem)] leading-[1.15] font-normal"
           >
-            {LINES.map((line, i) => (
+            {lines.map((line, i) => (
               <span
                 key={line}
                 className="-mx-[0.1em] block overflow-clip px-[0.1em] pb-[0.2em] -mb-[0.2em]"
               >
                 <span data-st="line" className="block">
                   {line}
-                  {i === LINES.length - 1 && (
+                  {i === lines.length - 1 && (
                     <>
                       {' '}
-                      <em className="text-green-500 italic">{ACCENT}</em>
+                      <em className="text-green-500 italic">{accent}</em>
                     </>
                   )}
                 </span>
@@ -233,7 +229,7 @@ export function SeoStrategy() {
           </h2>
 
           <div className="mt-6 max-w-[600px] space-y-5 text-base leading-[1.8] text-white/85">
-            {PARAGRAPHS.map((p) => (
+            {paragraphs.map((p) => (
               <p key={p} data-st="para">
                 {p}
               </p>
@@ -241,7 +237,7 @@ export function SeoStrategy() {
           </div>
 
           <ul role="list" className="mt-7 flex flex-wrap gap-2">
-            {TAGS.map((tag) => (
+            {tags.map((tag) => (
               <li
                 key={tag}
                 data-st="tag"

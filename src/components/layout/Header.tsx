@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 
 import logo from '@/assets/images/logo.svg'
 import { NAV_LINKS, PRIMARY_CTA } from '@/lib/navigation'
@@ -7,6 +7,7 @@ import { NAV_LINKS, PRIMARY_CTA } from '@/lib/navigation'
 import './Header.css'
 import { MobileMenu } from './MobileMenu'
 import { CtaButton } from '../ui/CtaButton'
+import { useContactOverlay } from '../sections/contact/ContactOverlayContext'
 
 const focusableSelector = 'a[href], button:not([disabled])'
 
@@ -92,6 +93,9 @@ export function Header() {
   const toggleRef = useRef<HTMLButtonElement>(null)
   const servicesMenuRef = useRef<HTMLDivElement>(null)
   const returnFocusRef = useRef(false)
+  const contact = useContactOverlay()
+  const { pathname } = useLocation()
+  const isServicesRoute = pathname.startsWith('/services')
 
   const closeMenu = (returnFocus = false) => {
     returnFocusRef.current = returnFocus
@@ -185,12 +189,13 @@ export function Header() {
           <img src={logo} alt="DigiKon Solutions home" />
         </Link>
 
-        <nav className="dk-desktop-nav">
+        <nav className="dk-desktop-nav" aria-label="Primary">
           {NAV_LINKS.map(({ href, label }) =>
             label === 'Services' ? (
               <div
                 ref={servicesMenuRef}
                 className="dk-service-menu"
+                data-active={isServicesRoute}
                 data-open={isServicesOpen}
                 key={href}
               >
@@ -203,10 +208,7 @@ export function Header() {
                 >
                   {label}
                 </button>
-                <div
-                  id="services-menu"
-                  className="dk-service-menu__panel"
-                >
+                <div id="services-menu" className="dk-service-menu__panel">
                   <div className="dk-service-menu__content">
                     <div className="dk-service-menu__heading">
                       <span>Explore services</span>
@@ -238,6 +240,18 @@ export function Header() {
               </NavLink>
             ),
           )}
+
+          <button
+            type="button"
+            className="dk-desktop-nav__link dk-desktop-nav__contact"
+            aria-haspopup="dialog"
+            onClick={() => {
+              setIsServicesOpen(false)
+              contact.open()
+            }}
+          >
+            Contact Us
+          </button>
         </nav>
 
         <CtaButton className="dk-desktop-cta" href={PRIMARY_CTA.href}>

@@ -88,3 +88,117 @@ export function createNodeTexture(
 
   return { tex, width: W, height: H }
 }
+
+/* ------------------------------------------------------------------ */
+/* Glyph layer: icon + label drawn into a texture, no DOM overlay.     */
+/* ------------------------------------------------------------------ */
+
+export function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.decoding = 'async'
+    img.onload = () => resolve(img)
+    img.onerror = () => reject(new Error(`Failed to load image: ${src}`))
+    img.src = src
+  })
+}
+
+/** Resolves once Manrope is available for canvas text. Never rejects. */
+export async function loadOrbitFonts() {
+  try {
+    if (!document.fonts) return
+    await Promise.all([
+      document.fonts.load("700 11px 'Manrope'"),
+      document.fonts.load("700 28px 'Manrope'"),
+    ])
+  } catch {
+    /* fall back to the system font stack */
+  }
+}
+
+type GlyphOptions = {
+  /** Disc box in design px. The glyph texture covers exactly this box. */
+  w: number
+  h: number
+  image: HTMLImageElement | null
+  /** Icon box in design px. The image is scaled to fit inside it (contain). */
+  iconW: number
+  iconH: number
+  label?: string
+  ink: string
+  /** Drawn in the icon box when the image is missing or failed to load. */
+  fallback?: string
+}
+
+const FONT_STACK = "'Manrope', system-ui, sans-serif"
+const LABEL_SIZE = 11
+const LABEL_SPACING = 0.14 * LABEL_SIZE
+const LABEL_GAP = 0.35 * LABEL_SIZE
+
+/** Letter-spaced text centred on cx. Manual spacing works in every browser. */
+function drawSpaced(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  cx: number,
+  cy: number,
+  spacing: number,
+) {
+  const chars = Array.from(text)
+  const widths = chars.map((c) => ctx.measureText(c).width)
+  const total = widths.reduce((a, b) => a + b, 0) + spacing * (chars.length - 1)
+  let x = cx - total / 2
+  ctx.textAlign = 'left'
+  chars.forEach((c, i) => {
+    ctx.fillText(c, x, cy)
+    x += widths[i] + spacing
+  })
+}
+
+export function createGlyphTexture(o: GlyphOptions) {
+  const res = 3
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.ceil(o.w * res)
+  canvas.height = Math.ceil(o.h * res)
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('2D canvas unavailable for orbit glyph')
+
+  ctx.scale(res, res)
+  ctx.imageSmoothingQuality = 'high'
+
+  // Icon and label are centred together as one column, like the old flex layout.
+  const labelBlock = o.label ? LABEL_GAP + LABEL_SIZE : 0
+  const top = (o.h - (o.iconH + labelBlock)) / 2
+  const boxX = (o.w - o.iconW) / 2
+
+  const img = o.image
+  if (img && img.naturalWidth > 0 && img.naturalHeight > 0) {
+    const s = Math.min(o.iconW / img.naturalWidth, o.iconH / img.naturalHeight)
+    const dw = img.naturalWidth * s
+    const dh = img.naturalHeight * s
+    ctx.drawImage(img, boxX + (o.iconW - dw) / 2, top + (o.iconH - dh) / 2, dw, dh)
+  } else if (o.fallback) {
+    ctx.fillStyle = o.ink
+    ctx.font = `700 28px ${FONT_STACK}`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(o.fallback, o.w / 2, top + o.iconH / 2)
+  }
+
+  if (o.label) {
+    ctx.fillStyle = o.ink
+    ctx.font = `700 ${LABEL_SIZE}px ${FONT_STACK}`
+    ctx.textBaseline = 'middle'
+    drawSpaced(
+      ctx,
+      o.label.toUpperCase(),
+      o.w / 2,
+      top + o.iconH + LABEL_GAP + LABEL_SIZE / 2,
+      LABEL_SPACING,
+    )
+  }
+
+  const tex = new CanvasTexture(canvas)
+  tex.colorSpace = SRGBColorSpace
+  tex.anisotropy = 4
+  return tex
+}

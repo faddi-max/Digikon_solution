@@ -1,7 +1,20 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type MutableRefObject } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type MutableRefObject,
+} from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Html } from '@react-three/drei'
-import { MathUtils, Vector3, type Group, type Mesh, type PerspectiveCamera } from 'three'
+import {
+  CanvasTexture,
+  MathUtils,
+  Vector3,
+  type Group,
+  type Mesh,
+  type PerspectiveCamera,
+} from 'three'
 
 import dkMark from '@/assets/images/dk-mark.svg?url'
 import { gsap } from '@/lib/motion'
@@ -15,7 +28,12 @@ import {
   ORBIT_NODES,
   type OrbitNode,
 } from './orbitData'
-import { createNodeTexture } from './orbitTexture'
+import {
+  createGlyphTexture,
+  createNodeTexture,
+  loadImage,
+  loadOrbitFonts,
+} from './orbitTexture'
 
 /** Spin speed in radians per second. Set to 0 to freeze the layout for comparison with Figma. */
 const SPIN_SPEED = 0.2
@@ -26,12 +44,18 @@ const TILT_RANGE = 0.04
 /** Hover lift in z and scale. The centre disc sits at z 40, so lift stays below it. */
 const HOVER_LIFT = 16
 const HOVER_SCALE = 1.06
+/** Extra lift for the icon layer on hover, in design px. */
+const GLYPH_LIFT = 2
+const GLYPH_SCALE = 1.04
 /** Hit-test growth with hysteresis, so the disc edge doesn't flicker. */
 const HIT_IN = 0.96
 const HIT_OUT = 1.12
 
-
 const FIT = 0.9
+
+/** DK mark is drawn at 56% of the disc width, as before. */
+const CENTER_MARK_W = DISC_W * 0.56
+const CENTER_MARK_H = CENTER_MARK_W * (84 / 112)
 
 type Pt = { x: number; y: number }
 
@@ -46,15 +70,87 @@ const TMP_POS = new Vector3()
 const TMP_SCALE = new Vector3()
 const TMP_PROJ = new Vector3()
 
+/**
+ * Builds a texture asynchronously and disposes it on cleanup. Safe under
+ * StrictMode: a build that finishes after unmount is disposed, not applied.
+ */
+function useAsyncTexture(make: () => Promise<CanvasTexture>) {
+  const { invalidate } = useThree()
+  const [tex, setTex] = useState<CanvasTexture | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    let made: CanvasTexture | null = null
+
+    make()
+      .then((t) => {
+        if (!alive) {
+          t.dispose()
+          return
+        }
+        made = t
+        setTex(t)
+        invalidate()
+      })
+      .catch((err) => console.warn('[orbit] glyph texture failed', err))
+
+    return () => {
+      alive = false
+      made?.dispose()
+      setTex(null)
+    }
+  }, [make, invalidate])
+
+  return tex
+}
+
+async function buildNodeGlyph(node: OrbitNode) {
+  await loadOrbitFonts()
+  let image: HTMLImageElement | null = null
+  try {
+    image = await loadImage(node.iconSrc)
+  } catch (err) {
+    console.warn(`[orbit] icon failed to load: ${node.label} (${node.iconSrc})`, err)
+  }
+  return createGlyphTexture({
+    w: DISC_W,
+    h: DISC_H,
+    image,
+    iconW: ICON_SIZE,
+    iconH: ICON_SIZE,
+    label: node.hideLabel ? undefined : node.label,
+    ink: node.ink,
+    fallback: node.label.slice(0, 2),
+  })
+}
+
+async function buildCenterGlyph() {
+  let image: HTMLImageElement | null = null
+  try {
+    image = await loadImage(dkMark)
+  } catch (err) {
+    console.warn('[orbit] DK mark failed to load', err)
+  }
+  return createGlyphTexture({
+    w: DISC_W,
+    h: DISC_H,
+    image,
+    iconW: CENTER_MARK_W,
+    iconH: CENTER_MARK_H,
+    ink: '#F7F8F5',
+    fallback: 'DK',
+  })
+}
+
 export function OrbitStage({ hoverRef, pointerRef, tiltRef, motion }: OrbitStageProps) {
   const { camera, size, invalidate } = useThree()
   const tiltGroup = useRef<Group>(null)
   const ring = useRef<Group>(null)
   const meshes = useRef<(Mesh | null)[]>([])
-  const doms = useRef<(HTMLElement | null)[]>([])
+  const glyphs = useRef<(Mesh | null)[]>([])
   const spin = useRef({ v: motion ? 1 : 0 })
 
-  /** Pixels per design unit. Scales the scene and every DOM label together. */
+  /** Pixels per design unit. Scales the whole scene. */
   const k = (size.width / DESIGN_SIZE) * FIT
 
   useEffect(() => {
@@ -118,7 +214,18 @@ export function OrbitStage({ hoverRef, pointerRef, tiltRef, motion }: OrbitStage
         ease: 'expo.out',
         overwrite: 'auto',
       })
-      doms.current[i]?.classList.toggle('is-hover', on)
+
+      const glyph = glyphs.current[i]
+      if (glyph) {
+        gsap.to(glyph.position, { y: on ? GLYPH_LIFT : 0, duration: 0.5, ease: 'expo.out', overwrite: 'auto' })
+        gsap.to(glyph.scale, {
+          x: on ? GLYPH_SCALE : 1,
+          y: on ? GLYPH_SCALE : 1,
+          duration: 0.5,
+          ease: 'expo.out',
+          overwrite: 'auto',
+        })
+      }
     })
 
     // Ease the spin down to a slow drift while a disc is hovered, not to a dead stop.
@@ -147,6 +254,7 @@ export function OrbitStage({ hoverRef, pointerRef, tiltRef, motion }: OrbitStage
     }
 
     // Counter-rotate so each gradient and icon stays upright while the ring spins.
+    // The glyph is a child of the disc, so it follows.
     meshes.current.forEach((m) => {
       if (m) m.rotation.z = -r.rotation.z
     })
@@ -157,65 +265,32 @@ export function OrbitStage({ hoverRef, pointerRef, tiltRef, motion }: OrbitStage
       <group ref={tiltGroup}>
         <group ref={ring}>
           {ORBIT_NODES.map((node, i) => (
-            <OrbitNodeDisc
-              key={node.id}
-              node={node}
-              index={i}
-              k={k}
-              meshes={meshes}
-              doms={doms}
-            />
+            <OrbitNodeDisc key={node.id} node={node} index={i} meshes={meshes} glyphs={glyphs} />
           ))}
         </group>
       </group>
 
-      <CenterDisc k={k} />
+      <CenterDisc />
     </group>
-  )
-}
-
-/**
- * Renders the exported SVG. If the file is missing or fails to load, it shows a
- * monogram in the same box, so the disc is never empty.
- */
-function OrbitIcon({ src, label }: { src: string; label: string }) {
-  const [failed, setFailed] = useState(!src)
-
-  if (failed) {
-    return (
-      <span className="dk-orbit-node__fallback" aria-hidden="true">
-        {label.slice(0, 2)}
-      </span>
-    )
-  }
-
-  return (
-    <img
-      src={src}
-      alt=""
-      draggable={false}
-      onError={() => {
-        console.warn(`[orbit] icon failed to load: ${label} (${src})`)
-        setFailed(true)
-      }}
-    />
   )
 }
 
 type DiscProps = {
   node: OrbitNode
   index: number
-  k: number
   meshes: MutableRefObject<(Mesh | null)[]>
-  doms: MutableRefObject<(HTMLElement | null)[]>
+  glyphs: MutableRefObject<(Mesh | null)[]>
 }
 
-function OrbitNodeDisc({ node, index, k, meshes, doms }: DiscProps) {
+function OrbitNodeDisc({ node, index, meshes, glyphs }: DiscProps) {
   const art = useMemo(
     () => createNodeTexture(node.w, node.h, node.gradientAngle, node.stops, node.radius),
     [node],
   )
   useEffect(() => () => art.tex.dispose(), [art])
+
+  const make = useCallback(() => buildNodeGlyph(node), [node])
+  const glyphTex = useAsyncTexture(make)
 
   return (
     <mesh
@@ -223,44 +298,28 @@ function OrbitNodeDisc({ node, index, k, meshes, doms }: DiscProps) {
         meshes.current[index] = el
       }}
       position={[node.x, node.y, node.z]}
+      renderOrder={0}
     >
       <planeGeometry args={[art.width, art.height]} />
       <meshBasicMaterial map={art.tex} transparent depthWrite={false} />
 
-      {/*
-       * Keep labels/icons above the WebGL canvas. With a zero lower bound,
-       * whichever disc is furthest away while the ring tilts can receive a
-       * z-index of 0 and disappear behind the canvas, leaving an empty disc.
-       */}
-      <Html center zIndexRange={[100, 1]}>
-        <div
+      {glyphTex && (
+        <mesh
           ref={(el) => {
-            doms.current[index] = el
+            glyphs.current[index] = el
           }}
-          className="dk-orbit-node"
-          data-orbit-node={node.id}
-          style={
-            {
-              // The HTML layer is not inside the scaled group, so it uses the same k.
-              width: node.w * k,
-              height: node.h * k,
-              '--ink': node.ink,
-              '--icon-size': `${ICON_SIZE * k}px`,
-              '--label-size': `${11 * k}px`,
-            } as CSSProperties
-          }
+          position={[0, 0, 1]}
+          renderOrder={1}
         >
-          <span className="dk-orbit-node__icon">
-            <OrbitIcon src={node.iconSrc} label={node.label} />
-          </span>
-          {!node.hideLabel && <span className="dk-orbit-node__label">{node.label}</span>}
-        </div>
-      </Html>
+          <planeGeometry args={[node.w, node.h]} />
+          <meshBasicMaterial map={glyphTex} transparent depthWrite={false} />
+        </mesh>
+      )}
     </mesh>
   )
 }
 
-function CenterDisc({ k }: { k: number }) {
+function CenterDisc() {
   const art = useMemo(
     () =>
       createNodeTexture(
@@ -274,15 +333,19 @@ function CenterDisc({ k }: { k: number }) {
   )
   useEffect(() => () => art.tex.dispose(), [art])
 
+  const glyphTex = useAsyncTexture(buildCenterGlyph)
+
   return (
     <mesh position={[0, 0, CENTER_NODE.z]} renderOrder={2}>
       <planeGeometry args={[art.width, art.height]} />
       <meshBasicMaterial map={art.tex} transparent depthWrite={false} />
-      <Html center zIndexRange={[200, 101]}>
-        <div className="dk-orbit-center" style={{ width: DISC_W * k, height: DISC_H * k }}>
-          <img src={dkMark} alt="" className="dk-orbit-center__mark" draggable={false} />
-        </div>
-      </Html>
+
+      {glyphTex && (
+        <mesh position={[0, 0, 1]} renderOrder={3}>
+          <planeGeometry args={[DISC_W, DISC_H]} />
+          <meshBasicMaterial map={glyphTex} transparent depthWrite={false} />
+        </mesh>
+      )}
     </mesh>
   )
 }

@@ -1,70 +1,163 @@
 import { useRef, type ReactNode } from 'react'
 
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/motion'
+import type { ServiceOutcomeItem, ServiceOutcomesData } from './servicesDetailData'
 
-/** Copy read from the Figma "Outcomes" frame. */
-const LABEL = 'Outcomes'
-const TITLE = 'What meaningful SEO delivers.'
-const INTRO =
+export type { ServiceOutcomeItem, ServiceOutcomesData }
+
+/** Default copy read from the Figma "Outcomes" frame. */
+const DEFAULT_LABEL = 'Outcomes'
+const DEFAULT_TITLE = 'What meaningful SEO delivers.'
+const DEFAULT_INTRO =
   'When search is done well, improvement compounds. Each stage of progress creates the conditions for the next — building a channel that sustains itself over time.'
-const ITEMS = [
+const DEFAULT_ITEMS: readonly ServiceOutcomeItem[] = [
   {
     title: 'Visibility',
     text: 'Your pages appear where your audience is actively searching.',
-    icon: (
-      <>
-        <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
-        <circle cx="12" cy="12" r="3" />
-      </>
-    ),
+    iconType: 'visibility',
   },
   {
     title: 'Qualified traffic',
     text: 'The right visitors arrive with genuine intent to engage.',
-    icon: (
-      <>
-        <circle cx="9" cy="8" r="3.2" />
-        <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
-        <path d="M16 4.6a3.2 3.2 0 0 1 0 6.2M18 14.3c1.8.8 3 2.6 3 4.7" />
-      </>
-    ),
+    iconType: 'traffic',
   },
   {
     title: 'Leads',
     text: 'Visitors convert to enquiries and meaningful interactions.',
-    icon: (
-      <>
-        <rect x="3" y="5" width="18" height="14" rx="2.5" />
-        <path d="M3.5 7l8.5 6 8.5-6" />
-      </>
-    ),
+    iconType: 'leads',
   },
   {
     title: 'Business growth',
     text: 'Search becomes a reliable, compounding channel for revenue.',
-    icon: (
-      <>
-        <path d="M3 17l6-6 4 4 8-8" />
-        <path d="M15 7h6v6" />
-      </>
-    ),
+    iconType: 'growth',
   },
-] as const
+]
 
-/**
- * "What meaningful SEO delivers." section, styled with Tailwind utilities only.
- *
- * Layout: a 1240px column. From 1024px the header has the label on the left and the heading
- * and intro on the right, over four centred columns separated by green arrows. From 640px
- * the columns become 2 x 2; below that a single column. Type scales with the viewport.
- *
- * Motion (GSAP, replayed every time the section is entered from either direction): label and
- * heading lines slide out of masks, the intro follows, then each column rises in turn with its
- * icon popping and the separator dots appearing. Icons lift and glow on hover. A green glow
- * in the corner breathes while the section is on screen. Reduced motion shows the final layout.
- */
-export function OutcomesSection() {
+function OutcomeIcon({ iconType, index }: { iconType?: string; index: number }) {
+  const type = iconType || (index === 0 ? 'visibility' : index === 1 ? 'traffic' : index === 2 ? 'leads' : 'growth')
+
+  switch (type) {
+    case 'visibility':
+      return (
+        <>
+          <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+          <circle cx="12" cy="12" r="3" />
+        </>
+      )
+    case 'traffic':
+      return (
+        <>
+          <circle cx="9" cy="8" r="3.2" />
+          <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+          <path d="M16 4.6a3.2 3.2 0 0 1 0 6.2M18 14.3c1.8.8 3 2.6 3 4.7" />
+        </>
+      )
+    case 'leads':
+      return (
+        <>
+          <rect x="3" y="5" width="18" height="14" rx="2.5" />
+          <path d="M3.5 7l8.5 6 8.5-6" />
+        </>
+      )
+    case 'growth':
+      return (
+        <>
+          <path d="M3 17l6-6 4 4 8-8" />
+          <path d="M15 7h6v6" />
+        </>
+      )
+    case 'design':
+      return (
+        <>
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <path d="M3 9h18M9 21V9" />
+        </>
+      )
+    case 'speed':
+      return <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z" />
+    case 'conversion':
+      return (
+        <>
+          <circle cx="12" cy="12" r="10" />
+          <circle cx="12" cy="12" r="6" />
+          <circle cx="12" cy="12" r="2" />
+        </>
+      )
+    case 'scale':
+      return (
+        <>
+          <polygon points="12 2 2 7 12 12 22 7 12 2" />
+          <polyline points="2 17 12 22 22 17" />
+          <polyline points="2 12 12 17 22 12" />
+        </>
+      )
+    case 'voice':
+      return (
+        <>
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+          <line x1="12" y1="19" x2="12" y2="22" />
+        </>
+      )
+    case 'reach':
+      return (
+        <>
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </>
+      )
+    case 'cadence':
+      return (
+        <>
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </>
+      )
+    case 'accuracy':
+      return (
+        <>
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="m9 12 2 2 4-4" />
+        </>
+      )
+    case 'roi':
+      return (
+        <>
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </>
+      )
+    case 'insights':
+      return (
+        <>
+          <path d="M9 18h6" />
+          <path d="M10 22h4" />
+          <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
+        </>
+      )
+    case 'data':
+    default:
+      return (
+        <>
+          <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+          <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+          <line x1="6" y1="6" x2="6.01" y2="6" />
+          <line x1="6" y1="18" x2="6.01" y2="18" />
+        </>
+      )
+  }
+}
+
+export function OutcomesSection({ data }: { data?: ServiceOutcomesData } = {}) {
   const root = useRef<HTMLElement>(null)
+
+  const label = data?.label ?? DEFAULT_LABEL
+  const title = data?.title ?? DEFAULT_TITLE
+  const intro = data?.intro ?? DEFAULT_INTRO
+  const items = data?.items ?? DEFAULT_ITEMS
 
   useGSAP(
     () => {
@@ -126,7 +219,7 @@ export function OutcomesSection() {
         }
       })
     },
-    { scope: root },
+    { scope: root, dependencies: [data] },
   )
 
   return (
@@ -151,7 +244,7 @@ export function OutcomesSection() {
           >
             <span className="-mx-[0.1em] block overflow-clip px-[0.1em] pb-[0.2em] -mb-[0.2em]">
               <span data-oc="line" className="block">
-                {TITLE}
+                {title}
               </span>
             </span>
           </h2>
@@ -160,13 +253,13 @@ export function OutcomesSection() {
             className="flex items-center gap-2.5 text-[13px] leading-[18px] font-medium text-green-500 lg:col-start-1 lg:row-start-2 lg:mt-[3px]"
           >
             <span aria-hidden="true" className="size-2 bg-green-500" />
-            {LABEL}
+            {label}
           </p>
           <p
             data-oc="intro"
             className="max-w-[560px] text-base leading-[1.875] text-white/70 lg:col-start-2 lg:row-start-2"
           >
-            {INTRO}
+            {intro}
           </p>
         </div>
 
@@ -175,7 +268,7 @@ export function OutcomesSection() {
           role="list"
           className="mx-auto mt-[clamp(3rem,6.98vw,8.4rem)] grid max-w-[1280px] gap-x-0 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0"
         >
-          {ITEMS.map((item, i) => (
+          {items.map((item, i) => (
             <li key={item.title} data-oc="item" className="group relative px-3 text-center">
               <span
                 data-oc="icon"
@@ -192,7 +285,9 @@ export function OutcomesSection() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  {item.icon as ReactNode}
+                  {(item as { icon?: ReactNode }).icon ?? (
+                    <OutcomeIcon iconType={item.iconType} index={i} />
+                  )}
                 </svg>
               </span>
               <h3 className="mt-[clamp(1.25rem,1.5625vw,1.875rem)] font-display text-[clamp(1.25rem,1.25vw,1.5rem)] leading-[1.25] font-normal">
@@ -201,7 +296,7 @@ export function OutcomesSection() {
               <p className="mx-auto mt-[clamp(0.75rem,0.9375vw,1.125rem)] max-w-[195px] text-[13px] leading-[1.85] text-white/60 lg:text-xs lg:leading-[1.9]">
                 {item.text}
               </p>
-              {i < ITEMS.length - 1 && (
+              {i < items.length - 1 && (
                 <svg
                   data-oc="sep"
                   aria-hidden="true"

@@ -6,19 +6,17 @@ import { gsap, ScrollTrigger, useGSAP } from '@/lib/motion'
 
 import { createOrbitState, IntentOrbitScene } from './IntentOrbitScene'
 import './IntentSection.css'
+import type { ServiceIntentData } from './servicesDetailData'
 
-/** Copy read from the Figma "Connecting intent to value" frame. */
-const LABEL = 'Connecting intent to value'
-const LINES = ['Discover the opportunities', 'hiding in every search.'] as const
-const BODY =
+export type { ServiceIntentData }
+
+/** Default copy read from the Figma "Connecting intent to value" frame. */
+const DEFAULT_LABEL = 'Connecting intent to value'
+const DEFAULT_LINES = ['Discover the opportunities', 'hiding in every search.'] as const
+const DEFAULT_BODY =
   'Behind every search query is a person with intent. Some are researching. Some are comparing. Some are ready to act. We help you understand these signals and position your business to meet people at each stage of their journey — with the right content, on the right pages, at the right time.'
 
-/**
- * Chip labels. Three are legible in the reference; the fourth is read as "Qualified traffic",
- * matching the tag used in the section above. Change it here if the design says otherwise.
- * x / y are design pixels from the sphere centre (y down).
- */
-const CHIPS = [
+const DEFAULT_CHIPS = [
   { label: 'Visibility', x: -315, y: -117, depth: 14 },
   { label: 'Qualified traffic', x: 402, y: -80, depth: 10 },
   { label: 'Leads', x: -359, y: 118, depth: 12 },
@@ -35,30 +33,18 @@ const FALLBACK_DOTS = [
 const DESIGN_WIDE = 1200
 const DESIGN_NARROW = 760
 
-/**
- * "Connecting intent to value" section: a glossy sphere with two orbits and four labels, then
- * the heading and copy.
- *
- * Layout: one centred 812px column. The picture is a fixed design frame scaled to the width
- * (1200px frame from 900px up; below that a 760px crop around the sphere, with the labels as
- * a readable row underneath instead of floating in the picture).
- *
- * Three.js (react-three-fiber, see IntentOrbitScene): sphere, orbit lines and travelling dots
- * in an orthographic scene. Falls back to a CSS drawing without WebGL; reduced motion draws the
- * finished picture once.
- *
- * Motion (GSAP), replayed every time the section is entered from either direction: the scene
- * builds up, label and heading lines slide out of masks, the copy and chips follow. While on
- * screen the chips drift and the stage reacts to the pointer; the grid moves slower than the
- * page.
- */
-export function IntentSection() {
+export function IntentSection({ data }: { data?: ServiceIntentData } = {}) {
   const root = useRef<HTMLElement>(null)
   const stage = useRef<HTMLDivElement>(null)
   const wide = useMediaQuery('(min-width: 900px)')
   const motion = useMediaQuery('(prefers-reduced-motion: no-preference)')
   const [gl, setGl] = useState<'pending' | 'ok' | 'fail'>('pending')
   const designWidth = wide ? DESIGN_WIDE : DESIGN_NARROW
+
+  const label = data?.label ?? DEFAULT_LABEL
+  const lines = data?.lines ?? DEFAULT_LINES
+  const body = data?.body ?? DEFAULT_BODY
+  const chips = data?.chips ?? DEFAULT_CHIPS
 
   // Shared with the scene; created once. Reduced motion starts at the finished state.
   const orbit = useMemo(() => createOrbitState(motion ? 0 : 1), [motion])
@@ -199,7 +185,7 @@ export function IntentSection() {
         }
       })
     },
-    { scope: root, dependencies: [orbit] },
+    { scope: root, dependencies: [orbit, data] },
   )
 
   return (
@@ -251,8 +237,8 @@ export function IntentSection() {
           />
         </div>
 
-        <ul role="list" className="dk-io__chips" aria-label="What search brings you">
-          {CHIPS.map((c) => (
+        <ul role="list" className="dk-io__chips" aria-label="Service core value drivers">
+          {chips.map((c) => (
             <li
               key={c.label}
               className="dk-io__chip"
@@ -276,14 +262,14 @@ export function IntentSection() {
           className="flex items-center gap-2.5 text-[13px] leading-[18px] font-medium text-green-500"
         >
           <span aria-hidden="true" className="size-2 bg-green-500" />
-          {LABEL}
+          {label}
         </p>
 
         <h2
           id="intent-title"
           className="mt-[clamp(1.25rem,2.4vw,2.4rem)] font-display text-[clamp(2rem,1.2rem+2.1vw,3.25rem)] leading-[1.135] font-normal"
         >
-          {LINES.map((line) => (
+          {lines.map((line) => (
             <span
               key={line}
               className="-mx-[0.1em] block overflow-clip px-[0.1em] pb-[0.2em] -mb-[0.2em]"
@@ -299,7 +285,7 @@ export function IntentSection() {
           data-io="body"
           className="mt-[clamp(1.25rem,2vw,1.9rem)] max-w-[770px] text-base leading-[1.8] text-white/75"
         >
-          {BODY}
+          {body}
         </p>
       </div>
     </section>

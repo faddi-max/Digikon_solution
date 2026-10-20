@@ -14,19 +14,24 @@
 
 /* Canvas and DOM labels are visual only. Let pointer events reach the wrapper,
    which does the hit testing. */
-.dk-orbit * {
-  pointer-events: none;
+
+.dk-orbit {
+  position: relative;
+  width: min(100%, 640px);
+  aspect-ratio: 1 / 1;
+  justify-self: end;
 }
 
-.dk-orbit-node {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35em;
-  color: var(--ink);
-  user-select: none;
-  -webkit-user-select: none;
+@media (max-width: 960px) {
+  .dk-orbit {
+    justify-self: center;
+    width: min(100%, 520px);
+  }
+}
+
+/* The canvas is visual only. Pointer events reach the wrapper, which does the hit testing. */
+.dk-orbit * {
+  pointer-events: none;
 }
 
 .dk-orbit-node__icon {

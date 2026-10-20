@@ -3,13 +3,16 @@ import { useRef, useState } from 'react'
 import { gsap, useGSAP } from '@/lib/motion'
 
 import './ProcessSection.css'
+import type { ServiceProcessData } from './servicesDetailData'
 
-/** Copy read from the Figma "How we work" frame. */
-const LABEL = 'How we work'
-const TITLE = 'A clear, measured process.'
-const INTRO =
+export type { ServiceProcessData }
+
+/** Default copy read from the Figma "How we work" frame. */
+const DEFAULT_LABEL = 'How we work'
+const DEFAULT_TITLE = 'A clear, measured process.'
+const DEFAULT_INTRO =
   'Every engagement follows four stages. Each one builds on the last, creating a cycle of continuous improvement driven by evidence rather than assumption.'
-const STEPS = [
+const DEFAULT_STEPS = [
   {
     title: 'Discover',
     text: 'Understand the business, audience, search intent, and opportunities. Audit the current site and competitive landscape to find where value is being left on the table.',
@@ -28,25 +31,14 @@ const STEPS = [
   },
 ] as const
 
-/**
- * "A clear, measured process." section, styled with Tailwind utilities (plus one CSS file for
- * the grid mesh).
- *
- * Layout: from 1024px a header (label under the heading's left edge, heading and intro on the
- * right) over a four-column timeline; below that a single column with a vertical timeline.
- * Type scales with the viewport.
- *
- * Interaction: step one is active by default; hovering a step (or tapping it) moves the
- * highlight and the green progress along the line to it.
- *
- * Motion (GSAP, replayed every time the section is entered from either direction): heading
- * lines slide out of masks, the line draws, dots pop in, then each step's number, title and
- * text rise in turn. The grid moves slower than the page. Reduced motion shows the final
- * layout.
- */
-export function ProcessSection() {
+export function ProcessSection({ data }: { data?: ServiceProcessData } = {}) {
   const root = useRef<HTMLElement>(null)
   const [active, setActive] = useState(0)
+
+  const label = data?.label ?? DEFAULT_LABEL
+  const title = data?.title ?? DEFAULT_TITLE
+  const intro = data?.intro ?? DEFAULT_INTRO
+  const steps = data?.steps ?? DEFAULT_STEPS
 
   useGSAP(
     () => {
@@ -122,7 +114,7 @@ export function ProcessSection() {
         }
       })
     },
-    { scope: root },
+    { scope: root, dependencies: [data] },
   )
 
   return (
@@ -146,7 +138,7 @@ export function ProcessSection() {
           >
             <span className="-mx-[0.1em] block overflow-clip px-[0.1em] pb-[0.2em] -mb-[0.2em]">
               <span data-pr="line" className="block">
-                {TITLE}
+                {title}
               </span>
             </span>
           </h2>
@@ -155,22 +147,22 @@ export function ProcessSection() {
             className="flex items-center gap-2.5 text-[13px] leading-[18px] font-medium text-teal-900 lg:col-start-1 lg:row-start-2 lg:mt-[5px]"
           >
             <span aria-hidden="true" className="size-2 bg-green-500" />
-            {LABEL}
+            {label}
           </p>
           <p
             data-pr="intro"
             className="max-w-[530px] text-base leading-[1.8] text-ink-muted lg:col-start-2 lg:row-start-2"
           >
-            {INTRO}
+            {intro}
           </p>
         </div>
 
         {/* Timeline */}
         <ol role="list" className="mt-[clamp(3rem,5.2vw,6.25rem)] grid gap-0 lg:grid-cols-4">
-          {STEPS.map((step, i) => {
+          {steps.map((step, i) => {
             const done = i <= active
             const filled = i < active
-            const last = i === STEPS.length - 1
+            const last = i === steps.length - 1
             return (
               <li
                 key={step.title}

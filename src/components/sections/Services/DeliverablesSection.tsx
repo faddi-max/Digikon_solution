@@ -1,19 +1,16 @@
 import { useRef } from 'react'
 
 import { gsap, useGSAP } from '@/lib/motion'
+import type { ServiceDeliverableItem, ServiceDeliverablesData } from './servicesDetailData'
 
-/**
- * Copy for the "Clear, actionable deliverables." section.
- *
- * The supplied screenshot is too small to read the label, the intro and the five descriptions,
- * so those seven pieces of text are written here to fit the layout. The heading and the five
- * titles are as read from the design. Replace them with the Figma copy; nothing else changes.
- */
-const LABEL = 'What you receive'
-const TITLE = 'Clear, actionable deliverables.'
-const INTRO =
+export type { ServiceDeliverableItem, ServiceDeliverablesData }
+
+/** Default copy for the "Clear, actionable deliverables." section. */
+const DEFAULT_LABEL = 'What you receive'
+const DEFAULT_TITLE = 'Clear, actionable deliverables.'
+const DEFAULT_INTRO =
   'Every engagement produces work you can read, question and act on. Each deliverable is written in plain language and tied to a decision it helps you make.'
-const ITEMS = [
+const DEFAULT_ITEMS: readonly ServiceDeliverableItem[] = [
   {
     title: 'Search opportunity mapping',
     text: 'A clear view of where demand exists, what your audience is searching for, and which opportunities are worth pursuing first.',
@@ -34,7 +31,7 @@ const ITEMS = [
     title: 'Performance measurement & reporting',
     text: 'Regular reporting on search performance, what changed, and what we will do next.',
   },
-] as const
+]
 
 function Check() {
   return (
@@ -49,29 +46,18 @@ function Check() {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path d="M5 12.5l4.5 4.5L19 7.5" />
+      <path d="M20 6 9 17l-5-5" />
     </svg>
   )
 }
 
-/**
- * "Clear, actionable deliverables." section, styled with Tailwind utilities only.
- *
- * Layout: a 1240px column. From 1024px the header has the label on the left and the heading and
- * intro on the right, over a list of five rows (tick, title, description in a right-hand column)
- * divided by hairlines. Below 1024px each row stacks the description under the title.
- *
- * Note on the design: in the reference the tick sits at the bottom-left of each row, away from
- * the title. It is aligned with the title here, which reads as the intended pairing; move the
- * `lg:mt-*` on the tick if the Figma position is wanted.
- *
- * Motion (GSAP, replayed every time the section is entered from either direction): heading
- * lines slide out of masks, the intro follows, then each divider draws and its row rises in
- * turn with the tick popping. Rows respond to hover: the title shifts, the tick fills green and
- * the divider darkens. Reduced motion shows the final layout.
- */
-export function DeliverablesSection() {
+export function DeliverablesSection({ data }: { data?: ServiceDeliverablesData } = {}) {
   const root = useRef<HTMLElement>(null)
+
+  const label = data?.label ?? DEFAULT_LABEL
+  const title = data?.title ?? DEFAULT_TITLE
+  const intro = data?.intro ?? DEFAULT_INTRO
+  const items = data?.items ?? DEFAULT_ITEMS
 
   useGSAP(
     () => {
@@ -112,7 +98,7 @@ export function DeliverablesSection() {
         tl.to(ticks, { scale: 1, duration: 0.45, stagger: 0.12, ease: 'back.out(2.2)' }, 0.95)
       })
     },
-    { scope: root },
+    { scope: root, dependencies: [data] },
   )
 
   return (
@@ -130,7 +116,7 @@ export function DeliverablesSection() {
           >
             <span className="-mx-[0.1em] block overflow-clip px-[0.1em] pb-[0.2em] -mb-[0.2em]">
               <span data-dl="line" className="block">
-                {TITLE}
+                {title}
               </span>
             </span>
           </h2>
@@ -139,19 +125,19 @@ export function DeliverablesSection() {
             className="flex items-center gap-2.5 text-[13px] leading-[18px] font-medium text-teal-900 lg:col-start-1 lg:row-start-2 lg:mt-[5px]"
           >
             <span aria-hidden="true" className="size-2 bg-green-500" />
-            {LABEL}
+            {label}
           </p>
           <p
             data-dl="intro"
             className="max-w-[535px] text-base leading-[1.8] text-ink-muted lg:col-start-2 lg:row-start-2"
           >
-            {INTRO}
+            {intro}
           </p>
         </div>
 
         {/* Deliverables */}
         <ul role="list" className="mt-[clamp(3rem,5.4vw,6.5rem)]">
-          {ITEMS.map((item) => (
+          {items.map((item) => (
             <li key={item.title} className="group relative">
               <span
                 data-dl="rule"

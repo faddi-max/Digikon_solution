@@ -51,7 +51,16 @@ function ArrowUpRight() {
   )
 }
 
-export function FaqSection({ accent = '#81D870' }: { accent?: string }) {
+export type FaqItem = { q: string; a: string }
+
+export function FaqSection({
+  accent = '#81D870',
+  items,
+}: {
+  accent?: string
+  items?: readonly FaqItem[]
+} = {}) {
+  const qs = items && items.length > 0 ? items : QS
   const [history, setHistory] = useState<number[]>([0])
   const [typing, setTyping] = useState(false)
   const [seen, setSeen] = useState<Record<number, true>>({ 0: true })
@@ -73,7 +82,7 @@ export function FaqSection({ accent = '#81D870' }: { accent?: string }) {
     const isLast = k === arr.length - 1
     return { qi, typing: isLast && typing, old: !isLast }
   })
-  const sugs = QS.map((x, i) => ({ q: x.q, i })).filter((x) => !seen[x.i]).slice(0, 2)
+  const sugs = qs.map((x, i) => ({ q: x.q, i })).filter((x) => !seen[x.i]).slice(0, 2)
   const showSugs = !typing && sugs.length > 0
   const seenCount = Object.keys(seen).length
 
@@ -135,7 +144,7 @@ export function FaqSection({ accent = '#81D870' }: { accent?: string }) {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }} role="group" aria-label="Questions">
-            {QS.map((x, i) => {
+            {qs.map((x, i) => {
               const on = i === current
               return (
                 <button
@@ -167,7 +176,7 @@ export function FaqSection({ accent = '#81D870' }: { accent?: string }) {
               </span>
             </div>
             <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '.1em', color: 'rgba(255,255,255,.62)' }}>
-              {pad(seenCount)} / {pad(QS.length)} READ
+              {pad(seenCount)} / {pad(qs.length)} READ
             </span>
           </div>
 
@@ -178,7 +187,7 @@ export function FaqSection({ accent = '#81D870' }: { accent?: string }) {
                 className={m.old ? 'old' : ''}
                 style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
               >
-                <div className="me">{QS[m.qi].q}</div>
+                <div className="me">{qs[m.qi]?.q ?? ''}</div>
                 {m.typing ? (
                   <div className="them">
                     <span className="av sm" aria-hidden="true">DK</span>
@@ -187,7 +196,7 @@ export function FaqSection({ accent = '#81D870' }: { accent?: string }) {
                 ) : (
                   <div className="them">
                     <span className="av sm" aria-hidden="true">DK</span>
-                    <div className="bub">{QS[m.qi].a}</div>
+                    <div className="bub">{qs[m.qi]?.a ?? ''}</div>
                   </div>
                 )}
               </div>

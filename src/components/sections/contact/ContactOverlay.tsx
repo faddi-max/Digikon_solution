@@ -2,10 +2,10 @@ import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 
 import { createPortal } from 'react-dom'
 
 import dkMark from '@/assets/images/dk-mark.svg?url'
+import './ContactOverlay.css'
+
 const glowSrc = ''
 const meshSrc = ''
-
-import './ContactOverlay.css'
 
 /** PLACEHOLDERS from the design. Replace with approved contact details before launch. */
 const INFO = {

@@ -216,3 +216,64 @@ p {
 @utility section-anchor-target {
   scroll-margin-top: var(--header-content-clearance);
 }
+/*
+ * Design-pixel utilities, for artwork drawn at a fixed design width.
+ *
+ * A wrapper sets `--u` to one design pixel, e.g. `[--u:calc(100cqw/1332)]` inside a size
+ * container. Then `u-w-158` is 158 design px wide at any width, so a layout measured from the
+ * 1920px design stays pixel-true at 1332px and scales as a unit below. Decimals work
+ * (`u-text-[11.2]` when it is not a multiple of 0.25). `u-text-*` also honours a floor in `--tf`, so small type never goes
+ * unreadable: add `[--tf:14px]` on the element.
+ */
+@utility u-w-* {
+  width: calc(--value(number, [number]) * var(--u));
+}
+@utility u-h-* {
+  height: calc(--value(number, [number]) * var(--u));
+}
+@utility u-min-h-* {
+  min-height: calc(--value(number, [number]) * var(--u));
+}
+@utility u-size-* {
+  width: calc(--value(number, [number]) * var(--u));
+  height: calc(--value(number, [number]) * var(--u));
+}
+@utility u-top-* {
+  top: calc(--value(number, [number]) * var(--u));
+}
+@utility u-left-* {
+  left: calc(--value(number, [number]) * var(--u));
+}
+@utility u-pt-* {
+  padding-top: calc(--value(number, [number]) * var(--u));
+}
+@utility u-pl-* {
+  padding-left: calc(--value(number, [number]) * var(--u));
+}
+@utility u-pr-* {
+  padding-right: calc(--value(number, [number]) * var(--u));
+}
+@utility u-px-* {
+  padding-inline: calc(--value(number, [number]) * var(--u));
+}
+@utility u-mt-* {
+  margin-top: calc(--value(number, [number]) * var(--u));
+}
+@utility u-ml-* {
+  margin-left: calc(--value(number, [number]) * var(--u));
+}
+@utility u-gap-* {
+  gap: calc(--value(number, [number]) * var(--u));
+}
+@utility u-rounded-* {
+  border-radius: calc(--value(number, [number]) * var(--u));
+}
+@utility u-text-* {
+  font-size: max(var(--tf, 0px), calc(--value(number, [number]) * var(--u)));
+}
+@utility u-leading-* {
+  line-height: calc(--value(number, [number]) * var(--u));
+}
+@utility u-tracking-* {
+  letter-spacing: calc(--value(number, [number]) * var(--u));
+}

@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
@@ -52,6 +53,7 @@ function ServiceMenuIcon({
           <path d="m14 14 4 4" {...iconProps} />
         </>
       )}
+
       {icon === 'web' && (
         <>
           <rect
@@ -65,18 +67,28 @@ function ServiceMenuIcon({
           <path d="M4.5 9h15" {...iconProps} />
         </>
       )}
+
       {icon === 'sparkle' && (
         <path
           d="M12 3.5 13.8 10.2 20.5 12l-6.7 1.8L12 20.5l-1.8-6.7L3.5 12l6.7-1.8L12 3.5Z"
           {...iconProps}
         />
       )}
+
       {icon === 'analytics' && (
         <>
-          <rect x="7.5" y="3.5" width="9" height="17" rx="1.5" {...iconProps} />
+          <rect
+            x="7.5"
+            y="3.5"
+            width="9"
+            height="17"
+            rx="1.5"
+            {...iconProps}
+          />
           <path d="M10.5 17.5h3" {...iconProps} />
         </>
       )}
+
       {icon === 'automation' && (
         <>
           <path d="m12 3.5 7 4v9l-7 4-7-4v-9l7-4Z" {...iconProps} />
@@ -90,11 +102,15 @@ function ServiceMenuIcon({
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isServicesOpen, setIsServicesOpen] = useState(false)
+  const [isContactOpen, setIsContactOpen] = useState(false)
+
   const toggleRef = useRef<HTMLButtonElement>(null)
   const servicesMenuRef = useRef<HTMLDivElement>(null)
   const returnFocusRef = useRef(false)
+
   const contact = useContactOverlay()
   const { pathname } = useLocation()
+
   const isServicesRoute = pathname.startsWith('/services')
 
   const closeMenu = (returnFocus = false) => {
@@ -107,7 +123,19 @@ export function Header() {
       closeMenu(true)
       return
     }
+
     setIsMenuOpen(true)
+  }
+
+  const handleContactClick = () => {
+    if (isContactOpen) {
+      setIsContactOpen(false)
+      return
+    }
+
+    setIsServicesOpen(false)
+    setIsContactOpen(true)
+    contact.open()
   }
 
   useEffect(() => {
@@ -116,11 +144,14 @@ export function Header() {
         toggleRef.current?.focus()
         returnFocusRef.current = false
       }
+
       return
     }
 
     const previousOverflow = document.body.style.overflow
+
     document.body.style.overflow = 'hidden'
+
     const focusFirstMenuItem = window.setTimeout(() => {
       document
         .getElementById('mobile-menu')
@@ -134,6 +165,7 @@ export function Header() {
         closeMenu(true)
         return
       }
+
       if (event.key !== 'Tab') return
 
       const focusableElements = Array.from(
@@ -141,20 +173,26 @@ export function Header() {
           .getElementById('mobile-menu')
           ?.querySelectorAll<HTMLElement>(focusableSelector) ?? [],
       )
+
       if (focusableElements.length === 0) return
 
       const firstElement = focusableElements[0]
       const lastElement = focusableElements[focusableElements.length - 1]
+
       if (event.shiftKey && document.activeElement === firstElement) {
         event.preventDefault()
         lastElement.focus()
-      } else if (!event.shiftKey && document.activeElement === lastElement) {
+      } else if (
+        !event.shiftKey &&
+        document.activeElement === lastElement
+      ) {
         event.preventDefault()
         firstElement.focus()
       }
     }
 
     document.addEventListener('keydown', handleKeyDown)
+
     return () => {
       window.clearTimeout(focusFirstMenuItem)
       document.body.style.overflow = previousOverflow
@@ -170,17 +208,26 @@ export function Header() {
         setIsServicesOpen(false)
       }
     }
+
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsServicesOpen(false)
+      if (event.key === 'Escape') {
+        setIsServicesOpen(false)
+      }
     }
 
     document.addEventListener('pointerdown', closeOnOutsidePointer)
     document.addEventListener('keydown', closeOnEscape)
+
     return () => {
       document.removeEventListener('pointerdown', closeOnOutsidePointer)
       document.removeEventListener('keydown', closeOnEscape)
     }
   }, [isServicesOpen])
+
+  useEffect(() => {
+    setIsServicesOpen(false)
+    setIsContactOpen(false)
+  }, [pathname])
 
   return (
     <header className="dk-header">
@@ -204,19 +251,32 @@ export function Header() {
                   type="button"
                   aria-expanded={isServicesOpen}
                   aria-controls="services-menu"
-                  onClick={() => setIsServicesOpen((open) => !open)}
+                  aria-current={isServicesRoute ? 'page' : undefined}
+                  onClick={() => {
+                    setIsContactOpen(false)
+                    setIsServicesOpen((open) => !open)
+                  }}
                 >
                   {label}
                 </button>
-                <div id="services-menu" className="dk-service-menu__panel">
+
+                <div
+                  id="services-menu"
+                  className="dk-service-menu__panel"
+                >
                   <div className="dk-service-menu__content">
                     <div className="dk-service-menu__heading">
                       <span>Explore services</span>
                       <i aria-hidden="true" />
                     </div>
+
                     <div className="dk-service-menu__links">
                       {SERVICE_MENU.map(
-                        ({ href: serviceHref, icon, label: serviceLabel }) => (
+                        ({
+                          href: serviceHref,
+                          icon,
+                          label: serviceLabel,
+                        }) => (
                           <Link
                             className="dk-service-menu__link"
                             to={serviceHref}
@@ -226,6 +286,7 @@ export function Header() {
                             <span className="dk-service-menu__icon">
                               <ServiceMenuIcon icon={icon} />
                             </span>
+
                             <span>{serviceLabel}</span>
                           </Link>
                         ),
@@ -235,7 +296,15 @@ export function Header() {
                 </div>
               </div>
             ) : (
-              <NavLink className="dk-desktop-nav__link" to={href} key={href}>
+              <NavLink
+                className="dk-desktop-nav__link"
+                to={href}
+                key={href}
+                onClick={() => {
+                  setIsServicesOpen(false)
+                  setIsContactOpen(false)
+                }}
+              >
                 {label}
               </NavLink>
             ),
@@ -245,21 +314,26 @@ export function Header() {
             type="button"
             className="dk-desktop-nav__link dk-desktop-nav__contact"
             aria-haspopup="dialog"
-            onClick={() => {
-              setIsServicesOpen(false)
-              contact.open()
-            }}
+            aria-expanded={isContactOpen}
+            data-active={isContactOpen}
+            onClick={handleContactClick}
           >
             Contact Us
           </button>
         </nav>
 
-        <CtaButton className="dk-desktop-cta" href={PRIMARY_CTA.href}>
+        <CtaButton
+          className="dk-desktop-cta"
+          href={PRIMARY_CTA.href}
+        >
           {PRIMARY_CTA.label}
         </CtaButton>
 
         <div className="dk-header__controls">
-          <CtaButton className="dk-mobile-cta" href={PRIMARY_CTA.href}>
+          <CtaButton
+            className="dk-mobile-cta"
+            href={PRIMARY_CTA.href}
+          >
             {PRIMARY_CTA.label}
           </CtaButton>
 
@@ -277,7 +351,10 @@ export function Header() {
         </div>
       </div>
 
-      <MobileMenu open={isMenuOpen} onNavigate={() => closeMenu(true)} />
+      <MobileMenu
+        open={isMenuOpen}
+        onNavigate={() => closeMenu(true)}
+      />
     </header>
   )
 }

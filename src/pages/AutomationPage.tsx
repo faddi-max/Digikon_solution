@@ -1,6 +1,16 @@
 import { PageMeta } from './PageMeta'
+import { AutomationHero } from '@/components/sections/Automation/AutomationHero'
+
+
 import { FaqSection } from '@/components/sections/FAQ/FaqSection'
 import { CtaSection } from '@/components/sections/CtaSection'
+import { OpportunitySection } from '@/components/sections/Automation/Automation/OpportunitySection'
+import { InvisibleWorkSection } from '@/components/sections/Automation/InvisibleWorkSection'
+import { AutomationShowcase } from '@/components/sections/Automation/Automation/AutomationShowcase'
+import { ProcessSection } from '@/components/sections/Automation/Automation/ProcessSection'
+import { CapabilitiesSection } from '@/components/sections/Automation/Automation/CapabilitiesSection'
+import { UnlockSection } from '@/components/sections/Automation/Automation/UnlockSection'
+import { CostEstimatorSection } from '@/components/sections/CostEstimatorSection'
 
 const AUTOMATION_FAQS = [
   {
@@ -29,6 +39,16 @@ export function AutomationPage() {
   return (
     <>
       <PageMeta title="Automation & AI | DigiKon Solutions" />
+      <AutomationHero />
+      <OpportunitySection />
+      <InvisibleWorkSection />
+      <section className="bg-white">
+        <AutomationShowcase fill />
+      </section>
+        <ProcessSection />
+           <CapabilitiesSection />
+            <UnlockSection />
+              <CostEstimatorSection />
       <FaqSection items={AUTOMATION_FAQS} />
       <CtaSection />
     </>

@@ -1,0 +1,277 @@
+/*
+ * FAQ page hero.
+ *
+ * Built to the 1920px design: content 1200px wide and centred, copy column 532px, visual
+ * column 640px, about 640px tall below the header. Headline 64px DM Serif Display with the
+ * second line italic over a long green marker. Below 1920 type scales with the viewport;
+ * under 900px the layout is one column with the illustration under the copy.
+ *
+ * Tailwind v4 drops theme variables nothing references, so each token has a fallback.
+ */
+.dk-fh {
+  --fh-ink: var(--color-teal-900, #03171d);
+  --fh-green: var(--color-green-500, #81d870);
+  --fh-green-soft: var(--color-green-300, #b2ee9e);
+  --fh-muted: var(--color-ink-muted, #647174);
+  --fh-gutter: clamp(1rem, 0.32rem + 2.86vw, 5rem);
+
+  position: relative;
+  isolation: isolate;
+  /* Intentional: the washes and the canvas run to the screen edges. */
+  overflow: clip;
+  /* The header is fixed, so the hero slides under it and the background reaches the top. */
+  margin-top: calc(-1 * var(--header-content-clearance));
+  padding: calc(var(--header-content-clearance) + clamp(0.5rem, 2vw, 2.0625rem))
+    var(--fh-gutter) clamp(2.5rem, 5vw, 5rem);
+  color: var(--fh-ink);
+  font-family: var(--font-sans, 'Manrope', system-ui, sans-serif);
+  /*
+   * Sampled from the design: a wash from the top-left corner that fades out by about a
+   * third of the width (further at the top than the bottom), a band down the right edge
+   * peaking a third of the way down, and a faint pool along the bottom right.
+   */
+  background-color: #fff;
+  background-image:
+    radial-gradient(
+      ellipse 48% 115% at 0% 15%,
+      #bdeab3 0%,
+      #d3f1cd 26%,
+      #e9f8e6 52%,
+      rgb(255 255 255 / 0) 86%
+    ),
+    radial-gradient(
+      ellipse 26% 82% at 100% 36%,
+      #bfebb5 0%,
+      #d2f1cb 40%,
+      #ebf9e9 70%,
+      rgb(255 255 255 / 0) 100%
+    ),
+    radial-gradient(
+      ellipse 18% 46% at 84% 66%,
+      rgb(205 239 198 / 0.75) 0%,
+      rgb(255 255 255 / 0) 100%
+    ),
+    radial-gradient(
+      ellipse 26% 38% at 72% 100%,
+      #e0f5dc 0%,
+      rgb(255 255 255 / 0) 100%
+    );
+}
+
+/* Faint ruled lines, like a notebook, fading out toward the edges. */
+.dk-fh::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: linear-gradient(rgb(3 23 29 / 0.035) 1px, transparent 1px);
+  background-size: 100% 36px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 42% 60% at 50% 55%,
+    #000 0%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    ellipse 42% 60% at 50% 55%,
+    #000 0%,
+    transparent 75%
+  );
+  pointer-events: none;
+}
+
+.dk-fh__inner {
+  display: grid;
+  gap: clamp(1.5rem, 5vw, 3rem);
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+@media (min-width: 900px) {
+  .dk-fh__inner {
+    grid-template-columns: minmax(0, 532fr) minmax(0, 640fr);
+    column-gap: 28px;
+    align-items: center;
+    min-height: clamp(26rem, 33vw, 32.5rem);
+  }
+}
+
+/* Copy ---------------------------------------------------------------------------------- */
+
+@media (min-width: 1200px) {
+  /* The design sets the copy 8px outside the container edge. */
+  .dk-fh__copy {
+    margin-left: -8px;
+  }
+}
+
+.dk-fh__crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--fh-muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.dk-fh__crumbs li + li {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--fh-ink);
+  font-weight: 600;
+}
+
+/* Chevron, drawn with borders so it adds no text for screen readers. */
+.dk-fh__crumbs li + li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-right: -4px;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  opacity: 0.5;
+  transform: rotate(45deg);
+}
+
+.dk-fh__crumbs a {
+  color: inherit;
+  text-decoration: none;
+  /* A 44px target without changing the line's height. */
+  padding-block: 14px;
+  margin-block: -14px;
+  transition: color var(--motion-duration-micro, 200ms)
+    var(--motion-ease-out, ease-out);
+}
+
+.dk-fh__crumbs a:hover {
+  color: var(--fh-ink);
+}
+
+.dk-fh__crumbs a:focus-visible {
+  outline: 3px solid var(--fh-green);
+  outline-offset: 3px;
+}
+
+.dk-fh__label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: clamp(1.5rem, 2.8vw, 3.1875rem) 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.dk-fh__label-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--fh-green);
+}
+
+.dk-fh__h1 {
+  margin: clamp(0.875rem, 0.75vw, 1rem) 0 0;
+  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(2.75rem, 1.6rem + 3.2vw, 4rem);
+  font-weight: 400;
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+}
+
+/* Each line is a mask for the reveal. The padding keeps descenders and italics visible. */
+.dk-fh__line {
+  display: block;
+  overflow: clip;
+  padding: 0 0.1em 0.2em;
+  margin: 0 -0.1em -0.2em;
+}
+
+.dk-fh__line-in {
+  display: block;
+}
+
+.dk-fh__accent {
+  --mk: 1;
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  font-style: italic;
+}
+
+/*
+ * The marker: starts under the word and runs well past it (418px at 64px in the design),
+ * flat green, sitting on the baseline behind the lower part of the letters.
+ */
+.dk-fh__accent::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: -0.12em;
+  bottom: 0.08em;
+  width: min(6.5em, calc(100vw - 2 * var(--fh-gutter)));
+  height: 0.27em;
+  background: var(--fh-green);
+  transform-origin: left center;
+  transform: scaleX(var(--mk));
+}
+
+.dk-fh__body {
+  max-width: 500px;
+  margin: clamp(1.25rem, 1.8vw, 2.125rem) 0 0;
+  color: color-mix(in srgb, var(--fh-ink) 78%, transparent);
+  font-size: clamp(1rem, 0.85rem + 0.45vw, 1.125rem);
+  line-height: 1.7;
+}
+
+/* Visual -------------------------------------------------------------------------------- */
+
+.dk-fh__visual {
+  position: relative;
+  justify-self: center;
+  width: 100%;
+  max-width: 640px;
+  /* Aspect follows the design (640 x 520); short phones get a slightly flatter box. */
+  aspect-ratio: 640 / 520;
+  max-height: 70svh;
+}
+
+@media (max-width: 899px) {
+  .dk-fh__visual {
+    max-width: 520px;
+    aspect-ratio: 1 / 0.82;
+  }
+}
+
+@media (min-width: 900px) {
+  .dk-fh__visual {
+    justify-self: end;
+  }
+}
+
+.dk-fh__canvas {
+  position: absolute;
+  inset: -6% -4%;
+  opacity: 0;
+  transition: opacity 700ms var(--motion-ease-out, ease-out);
+}
+
+.dk-fh__visual.is-ready .dk-fh__canvas {
+  opacity: 1;
+}
+
+.dk-fh__fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-fh__canvas {
+    transition: none;
+  }
+}

@@ -1,0 +1,409 @@
+/*
+ * "All questions." section of the FAQ page.
+ *
+ * Built to the 1920px design: 1200px content, white page with a soft green glow behind the
+ * list. Topic column 290px, questions column the rest, 30px between. Questions sit in light
+ * translucent rows with a "+" on the right. Under 900px each topic title sits above its list.
+ *
+ * Tailwind v4 drops theme variables nothing references, so each token has a fallback.
+ */
+.dk-fq {
+  --fq-ink: var(--color-teal-900, #03171d);
+  --fq-ink-2: var(--color-teal-800, #1c2e33);
+  --fq-green: var(--color-green-500, #81d870);
+  --fq-green-soft: var(--color-green-300, #b2ee9e);
+  --fq-muted: var(--color-ink-muted, #647174);
+  --fq-border: var(--color-border-subtle, #dce2dc);
+  --fq-gutter: clamp(1rem, 0.32rem + 2.86vw, 5rem);
+  --fq-ease: var(--motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  --fq-sticky-top: calc(var(--header-content-clearance, 7rem) + 1rem);
+
+  position: relative;
+  isolation: isolate;
+  /* Intentional: the glow is wider than the page. Content never relies on this clip. */
+  overflow: clip;
+  padding: clamp(3.5rem, 7vw, 6.5rem) var(--fq-gutter) clamp(4rem, 8vw, 8rem);
+  color: var(--fq-ink);
+  font-family: var(--font-sans, 'Manrope', system-ui, sans-serif);
+  background: #fff;
+}
+
+.dk-fq__glow {
+  position: absolute;
+  z-index: -1;
+  inset: 4% -10% 2%;
+  background:
+    radial-gradient(
+      ellipse 42% 46% at 50% 40%,
+      color-mix(in srgb, var(--fq-green) 38%, transparent) 0%,
+      color-mix(in srgb, var(--fq-green-soft) 22%, transparent) 46%,
+      transparent 74%
+    ),
+    radial-gradient(
+      ellipse 36% 30% at 52% 78%,
+      color-mix(in srgb, var(--fq-green-soft) 26%, transparent) 0%,
+      transparent 72%
+    );
+  pointer-events: none;
+  will-change: transform;
+}
+
+.dk-fq__inner {
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* Heading ------------------------------------------------------------------------------- */
+
+.dk-fq__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: var(--fq-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.dk-fq__eyebrow span {
+  width: 18px;
+  height: 2px;
+  background: var(--fq-green);
+}
+
+.dk-fq__title {
+  margin: 12px 0 0;
+  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(2.25rem, 1.7rem + 1.8vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+
+/* Filters ------------------------------------------------------------------------------- */
+
+.dk-fq__filters {
+  position: relative;
+  margin-top: clamp(1.75rem, 3.6vw, 3rem);
+  scroll-margin-top: var(--fq-sticky-top);
+}
+
+/* Fade the row's right edge so it reads as scrollable. */
+.dk-fq__filters::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 48px;
+  background: linear-gradient(90deg, transparent, #fff 85%);
+  pointer-events: none;
+}
+
+.dk-fq__pills {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  padding: 4px 48px 6px 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.dk-fq__pills::-webkit-scrollbar {
+  display: none;
+}
+
+.dk-fq__indicator {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--fq-ink);
+  box-shadow: 0 8px 20px rgb(3 23 29 / 0.16);
+  transition:
+    transform 420ms var(--fq-ease),
+    width 420ms var(--fq-ease);
+  pointer-events: none;
+}
+
+.dk-fq__pill {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--fq-border);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.85);
+  color: var(--fq-ink);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 250ms var(--fq-ease),
+    background-color 250ms var(--fq-ease),
+    border-color 250ms var(--fq-ease);
+}
+
+.dk-fq__pill-n {
+  color: var(--fq-muted);
+  font-size: 11px;
+  font-weight: 700;
+  transition: color 250ms var(--fq-ease);
+}
+
+.dk-fq__pill[aria-pressed='true'] {
+  border-color: transparent;
+  background: transparent;
+  color: #fff;
+}
+
+.dk-fq__pill[aria-pressed='true'] .dk-fq__pill-n {
+  color: var(--fq-green);
+}
+
+.dk-fq__pill:focus-visible {
+  outline: 3px solid var(--fq-green);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dk-fq__pill[aria-pressed='false']:hover {
+    border-color: var(--fq-ink);
+  }
+}
+
+.dk-fq__meta {
+  margin: 18px 0 0;
+  color: var(--fq-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+/* Topic blocks -------------------------------------------------------------------------- */
+
+.dk-fq__groups {
+  margin-top: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.dk-fq__group {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  padding-block: clamp(1.75rem, 3vw, 2.5rem);
+  scroll-margin-top: var(--fq-sticky-top);
+}
+
+.dk-fq__rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgb(3 23 29 / 0.08);
+}
+
+@media (min-width: 900px) {
+  .dk-fq__group {
+    grid-template-columns: minmax(0, 290fr) minmax(0, 880fr);
+    column-gap: 30px;
+    align-items: start;
+  }
+
+  /* The topic stays beside its questions while a long list scrolls past. */
+  .dk-fq__group-head {
+    position: sticky;
+    top: var(--fq-sticky-top);
+    padding-top: 6px;
+  }
+}
+
+.dk-fq__square {
+  display: block;
+  width: 7px;
+  height: 7px;
+  margin-bottom: 12px;
+  background: var(--fq-green);
+}
+
+.dk-fq__group-title {
+  margin: 0;
+  max-width: 11em;
+  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(1.5rem, 1.3rem + 0.6vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+.dk-fq__group-blurb {
+  max-width: 230px;
+  margin: 8px 0 0;
+  color: var(--fq-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+@media (max-width: 899px) {
+  .dk-fq__group-blurb {
+    max-width: 36rem;
+  }
+}
+
+/* Questions ----------------------------------------------------------------------------- */
+
+.dk-fq__list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dk-fq__item {
+  border: 1px solid rgb(255 255 255 / 0.9);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.58);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 1px 2px rgb(3 23 29 / 0.03);
+  scroll-margin-top: var(--fq-sticky-top);
+  transition:
+    background-color 300ms var(--fq-ease),
+    border-color 300ms var(--fq-ease),
+    box-shadow 300ms var(--fq-ease);
+}
+
+.dk-fq__item.is-open {
+  border-color: var(--fq-border);
+  background: #fff;
+  box-shadow: 0 14px 34px rgb(3 23 29 / 0.07);
+}
+
+.dk-fq__q {
+  margin: 0;
+  font: inherit;
+}
+
+.dk-fq__btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 58px;
+  padding: 12px 14px 12px clamp(16px, 1.6vw, 22px);
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: var(--fq-ink);
+  font-size: clamp(0.875rem, 0.82rem + 0.2vw, 0.9375rem);
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dk-fq__btn:focus-visible {
+  outline: 3px solid var(--fq-green);
+  outline-offset: 2px;
+}
+
+.dk-fq__q-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.dk-fq__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--fq-ink);
+  transition:
+    transform 300ms var(--fq-ease),
+    background-color 200ms var(--fq-ease),
+    color 200ms var(--fq-ease);
+}
+
+.dk-fq__item.is-open .dk-fq__icon {
+  background: var(--fq-ink);
+  color: var(--fq-green);
+  transform: rotate(45deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dk-fq__item:not(.is-open):hover {
+    border-color: var(--fq-border);
+    background: rgb(255 255 255 / 0.9);
+  }
+  .dk-fq__item:not(.is-open) .dk-fq__btn:hover .dk-fq__icon {
+    background: var(--fq-green);
+    transform: rotate(90deg);
+  }
+}
+
+/* The answer opens by animating its row from 0fr to 1fr. */
+.dk-fq__a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 420ms var(--motion-ease-in-out, ease-in-out);
+}
+
+.dk-fq__item.is-open .dk-fq__a {
+  grid-template-rows: 1fr;
+}
+
+.dk-fq__a-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.dk-fq__a-text {
+  max-width: 64ch;
+  margin: 0;
+  padding: 0 clamp(56px, 6vw, 70px) 20px clamp(16px, 1.6vw, 22px);
+  color: var(--fq-muted);
+  font-size: 15px;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 300ms var(--fq-ease),
+    transform 400ms var(--fq-ease);
+}
+
+.dk-fq__item.is-open .dk-fq__a-text {
+  opacity: 1;
+  transform: none;
+  transition-delay: 120ms;
+}
+
+@media (max-width: 479px) {
+  .dk-fq__a-text {
+    padding-right: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-fq__indicator,
+  .dk-fq__a,
+  .dk-fq__a-text,
+  .dk-fq__icon {
+    transition: none;
+  }
+}

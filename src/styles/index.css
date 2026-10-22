@@ -198,6 +198,9 @@ p {
   }
 }
 
+/* Desktop with enough height for sticky, stacking layouts (process stages). Keep in sync with PIN_QUERY. */
+@custom-variant pin (@media (min-width: 64rem) and (min-height: 48rem));
+
 @utility container-page {
   width: min(100%, 80rem);
   margin-inline: auto;

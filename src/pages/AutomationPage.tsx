@@ -1,7 +1,6 @@
 import { PageMeta } from './PageMeta'
 import { AutomationHero } from '@/components/sections/Automation/AutomationHero'
 
-
 import { FaqSection } from '@/components/sections/FAQ/FaqSection'
 import { CtaSection } from '@/components/sections/CtaSection'
 import { OpportunitySection } from '@/components/sections/Automation/Automation/OpportunitySection'
@@ -10,8 +9,10 @@ import { AutomationShowcase } from '@/components/sections/Automation/Automation/
 import { ProcessSection } from '@/components/sections/Automation/Automation/ProcessSection'
 import { CapabilitiesSection } from '@/components/sections/Automation/Automation/CapabilitiesSection'
 import { UnlockSection } from '@/components/sections/Automation/Automation/UnlockSection'
+
 import { CostEstimatorSection } from '@/components/sections/CostEstimatorSection'
 import { WorkflowAssistantSection } from '@/components/sections/Work/WorkflowAssistantSection'
+import { StartingPointSection } from '@/components/sections/Automation/StartingPointSection'
 
 const AUTOMATION_FAQS = [
   {
@@ -46,11 +47,12 @@ export function AutomationPage() {
       <section className="bg-white">
         <AutomationShowcase fill />
       </section>
-        <ProcessSection />
-           <CapabilitiesSection />
-            <UnlockSection />
-              <CostEstimatorSection />
-              <WorkflowAssistantSection />
+      <ProcessSection />
+      <CapabilitiesSection />
+      <UnlockSection />
+      <CostEstimatorSection />
+      <WorkflowAssistantSection />
+      <StartingPointSection />
       <FaqSection items={AUTOMATION_FAQS} />
       <CtaSection />
     </>

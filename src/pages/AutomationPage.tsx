@@ -11,6 +11,7 @@ import { ProcessSection } from '@/components/sections/Automation/Automation/Proc
 import { CapabilitiesSection } from '@/components/sections/Automation/Automation/CapabilitiesSection'
 import { UnlockSection } from '@/components/sections/Automation/Automation/UnlockSection'
 import { CostEstimatorSection } from '@/components/sections/CostEstimatorSection'
+import { WorkflowAssistantSection } from '@/components/sections/Work/WorkflowAssistantSection'
 
 const AUTOMATION_FAQS = [
   {
@@ -49,6 +50,7 @@ export function AutomationPage() {
            <CapabilitiesSection />
             <UnlockSection />
               <CostEstimatorSection />
+              <WorkflowAssistantSection />
       <FaqSection items={AUTOMATION_FAQS} />
       <CtaSection />
     </>

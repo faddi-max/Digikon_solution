@@ -14,6 +14,7 @@ import { WorkPage } from '@/pages/WorkPage'
 
 import './SitePage.css'
 import { ContactOverlayProvider } from '@/components/sections/contact/ContactOverlayProvider'
+import { PrivacyPage } from '@/pages/PrivacyPage'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -41,6 +42,7 @@ export default function App() {
             <Route path="/how-it-works" element={<ProcessPage />} />
             <Route path="/faqs" element={<FaqPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPage />} />
           </Route>
         </Routes>
       </ContactOverlayProvider>

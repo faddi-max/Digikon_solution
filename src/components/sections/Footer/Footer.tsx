@@ -16,6 +16,7 @@ const EXPLORE = [
 const MORE = [
   { label: 'Process', href: '/how-it-works' },
   { label: 'FAQs', href: '/faqs' },
+   { label: 'Privacy Policy', href: '/privacy-policy' },
 ]
 
 const titleCls =

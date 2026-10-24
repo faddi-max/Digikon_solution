@@ -1,0 +1,371 @@
+.dk-tp {
+  --tp-ink: var(--color-teal-900, #03171d);
+  --tp-ink-2: var(--color-teal-800, #1c2e33);
+  --tp-green: var(--color-green-500, #81d870);
+  --tp-soft: var(--color-green-300, #b2ee9e);
+  --tp-gutter: clamp(1rem, 0.32rem + 2.86vw, 5rem);
+  --tp-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  /* The fixed header is solid, so the page starts under it and the glow reaches the top. */
+  margin-top: calc(-1 * var(--header-content-clearance));
+  padding: calc(var(--header-content-clearance) + 1.5rem) var(--tp-gutter)
+    clamp(4rem, 8vw, 8rem);
+  background: var(--tp-ink);
+  color: #fff;
+  font-family: var(--font-sans, 'Manrope', system-ui, sans-serif);
+}
+
+/* Green glow from the left edge, fading into the dark by about a third of the width. */
+.dk-tp::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(
+      34% 85% at 0% 12%,
+      rgb(129 216 112 / 0.55) 0%,
+      rgb(129 216 112 / 0.22) 42%,
+      transparent 100%
+    ),
+    var(--tp-ink);
+  pointer-events: none;
+}
+
+/* CSS rings are the fallback; they hide once the WebGL rings are drawing. */
+.dk-tp__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 600ms var(--tp-ease);
+}
+.dk-tp[data-ready='true'] .dk-tp__bg {
+  opacity: 0;
+}
+.dk-tp__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgb(129 216 112 / 0.18);
+}
+.dk-tp__ring--a {
+  top: -19vw;
+  right: -14vw;
+  width: 38vw;
+  aspect-ratio: 1;
+  box-shadow: 0 0 0 clamp(14px, 1.8vw, 34px) rgb(129 216 112 / 0.04);
+}
+.dk-tp__ring--b {
+  right: 3vw;
+  bottom: -2vw;
+  width: 18vw;
+  aspect-ratio: 1;
+  border-style: dotted;
+  border-color: rgb(255 255 255 / 0.12);
+}
+
+.dk-tp__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.dk-tp__canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dk-tp__inner {
+  max-width: 1148px;
+  margin-inline: auto;
+}
+
+/* Header ------------------------------------------------------------------ */
+.dk-tp__crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: rgb(255 255 255 / 0.7);
+}
+.dk-tp__crumbs li + li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+}
+.dk-tp__crumbs li + li::before {
+  content: '';
+  width: 0.375rem;
+  height: 0.375rem;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  opacity: 0.5;
+  transform: rotate(45deg);
+}
+.dk-tp__crumbs a {
+  color: var(--tp-green);
+  text-decoration: none;
+  padding-block: 0.8rem;
+  margin-block: -0.8rem;
+}
+.dk-tp__crumbs a:focus-visible {
+  outline: 3px solid var(--tp-green);
+  outline-offset: 3px;
+}
+
+.dk-tp__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: clamp(1.25rem, 3vw, 2rem) 0 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.dk-tp__eyebrow span {
+  width: 7px;
+  height: 7px;
+  background: var(--tp-green);
+}
+
+.dk-tp__h1 {
+  margin: 0.75rem 0 0;
+  max-width: 11em;
+  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(2.5rem, 1.7rem + 3.2vw, 4.25rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.dk-tp__line {
+  display: block;
+  overflow: clip;
+  padding: 0 0.1em 0.18em;
+  margin: 0 -0.1em -0.18em;
+}
+.dk-tp__line-in {
+  display: block;
+}
+.dk-tp__h1 em {
+  font-style: italic;
+  color: var(--tp-green);
+}
+
+.dk-tp__lead {
+  max-width: 28rem;
+  margin: 1.25rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: rgb(255 255 255 / 0.62);
+}
+
+/* Grid -------------------------------------------------------------------- */
+.dk-tp__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.875rem;
+  margin: clamp(2.5rem, 6vw, 5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.dk-tp__slot:nth-child(even) {
+  margin-top: 1.25rem;
+}
+/* An odd last card on two columns spans both, so the grid never ends on a gap. */
+.dk-tp__slot:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+.dk-tp__slot:last-child:nth-child(odd) .dk-tp__card {
+  aspect-ratio: 16 / 11;
+}
+
+@media (min-width: 700px) {
+  .dk-tp__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .dk-tp__slot:nth-child(even) {
+    margin-top: 1.75rem;
+  }
+  .dk-tp__slot:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+  .dk-tp__slot:last-child:nth-child(odd) .dk-tp__card {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+@media (min-width: 1180px) {
+  .dk-tp__grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* Card -------------------------------------------------------------------- */
+.dk-tp__card {
+  --mx: 50%;
+  --my: 30%;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  background: var(--tp-ink-2);
+  box-shadow: 0 1.5rem 2.5rem -1.5rem rgb(0 0 0 / 0.6);
+  transition: box-shadow 300ms var(--tp-ease);
+  cursor: default;
+}
+.dk-tp__card:focus-visible {
+  outline: 3px solid var(--tp-green);
+  outline-offset: 3px;
+}
+.dk-tp__img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  transition: transform 800ms var(--tp-ease);
+}
+.dk-tp__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgb(3 23 29 / 0.94) 0%,
+    rgb(3 23 29 / 0.62) 34%,
+    rgb(3 23 29 / 0) 62%
+  );
+}
+.dk-tp__sheen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    60% 45% at var(--mx) var(--my),
+    rgb(178 238 158 / 0.22),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.dk-tp__info {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: clamp(0.75rem, 1.4vw, 1rem);
+}
+.dk-tp__tag {
+  margin: 0;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--tp-green);
+}
+.dk-tp__name {
+  margin: 0.375rem 0 0;
+  font-size: clamp(0.9375rem, 0.85rem + 0.3vw, 1.0625rem);
+  font-weight: 700;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.dk-tp__role {
+  margin: 0.125rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: rgb(255 255 255 / 0.72);
+}
+
+/* The bio opens upward using a grid-rows transition, so no height is measured. */
+.dk-tp__bio {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 420ms var(--motion-ease-in-out, ease-in-out),
+    opacity 300ms ease-out;
+}
+.dk-tp__bio > p {
+  min-height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding-top: 0;
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.82);
+}
+
+.dk-tp__rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--tp-green);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 500ms var(--tp-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dk-tp__card:hover {
+    box-shadow: 0 2rem 3rem -1.25rem rgb(0 0 0 / 0.7);
+  }
+  .dk-tp__card:hover .dk-tp__sheen {
+    opacity: 1;
+  }
+}
+.dk-tp__card:hover .dk-tp__img,
+.dk-tp__card:focus-visible .dk-tp__img {
+  transform: scale(1.06);
+}
+.dk-tp__card:hover .dk-tp__bio,
+.dk-tp__card:focus-visible .dk-tp__bio,
+.dk-tp__card:focus-within .dk-tp__bio {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.dk-tp__card:hover .dk-tp__bio > p,
+.dk-tp__card:focus-visible .dk-tp__bio > p {
+  padding-top: 0.5rem;
+}
+.dk-tp__card:hover .dk-tp__rule,
+.dk-tp__card:focus-visible .dk-tp__rule {
+  transform: scaleX(1);
+}
+
+/* Touch has no hover, so the bio is always shown. */
+@media (hover: none) {
+  .dk-tp__bio {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  .dk-tp__bio > p {
+    padding-top: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-tp__img,
+  .dk-tp__bio,
+  .dk-tp__rule,
+  .dk-tp__sheen,
+  .dk-tp__bg {
+    transition: none;
+  }
+}

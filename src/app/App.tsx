@@ -3,7 +3,7 @@ import { Route, Routes, useLocation } from 'react-router-dom'
 
 import { AppRouter } from '@/app/router'
 import { AboutPage } from '@/pages/AboutPage'
-import { ContactPage } from '@/pages/ContactPage'
+
 import { FaqPage } from '@/pages/FaqPage'
 import { HomePage } from '@/pages/HomePage'
 import { PageLayout } from '@/pages/PageLayout'
@@ -15,6 +15,7 @@ import { WorkPage } from '@/pages/WorkPage'
 import './SitePage.css'
 import { ContactOverlayProvider } from '@/components/sections/contact/ContactOverlayProvider'
 import { PrivacyPage } from '@/pages/PrivacyPage'
+import { OurTeam } from '@/pages/OurTeam'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -41,7 +42,7 @@ export default function App() {
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/how-it-works" element={<ProcessPage />} />
             <Route path="/faqs" element={<FaqPage />} />
-            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/team" element={<OurTeam />} />
             <Route path="/privacy-policy" element={<PrivacyPage />} />
           </Route>
         </Routes>

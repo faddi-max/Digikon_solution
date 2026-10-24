@@ -310,16 +310,16 @@ export function Header() {
             ),
           )}
 
-          <button
-            type="button"
-            className="dk-desktop-nav__link dk-desktop-nav__contact"
-            aria-haspopup="dialog"
-            aria-expanded={isContactOpen}
-            data-active={isContactOpen}
-            onClick={handleContactClick}
+          <NavLink
+            to="/team"
+            className="dk-desktop-nav__link"
+            onClick={() => {
+              setIsServicesOpen(false)
+              setIsContactOpen(false)
+            }}
           >
-            Contact Us
-          </button>
+            Our Team
+          </NavLink>
         </nav>
 
         <CtaButton

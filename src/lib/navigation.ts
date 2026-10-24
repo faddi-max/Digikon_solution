@@ -1,3 +1,4 @@
+
 export type NavigationItem = {
   href: string
   label: string
@@ -9,7 +10,6 @@ export const NAV_LINKS: readonly NavigationItem[] = [
   { label: 'Work', href: '/work' },
   { label: 'Products', href: '/products' },
   { label: 'How it works', href: '/how-it-works' },
-
 ]
 
 export const PRIMARY_CTA = {

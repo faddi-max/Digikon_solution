@@ -1,6 +1,6 @@
 import { PageMeta } from './PageMeta'
 
-export function ContactPage() {
+export function OurTeam() {
   return (
     <section className="dk-page__intro" aria-labelledby="contact-title">
       <PageMeta title="Contact" />

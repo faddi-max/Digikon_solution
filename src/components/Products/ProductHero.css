@@ -2,7 +2,6 @@
 /* Independent Products page hero.
    All styles are scoped to .dk-ph and .dk-ph-art.
    ServiceHero and SearchMock remain untouched. */
-
 .dk-ph {
   --ph-ink: #061c20;
   --ph-muted: #71817e;
@@ -12,9 +11,8 @@
   position: relative;
   isolation: isolate;
   margin-top: 0;
-  min-height: 412px;
   overflow: hidden;
-  padding: 0 var(--ph-gutter) 48px;
+  padding: 0 0 clamp(32px, 3.4vw, 64px);
   color: var(--ph-ink);
   background:
     radial-gradient(
@@ -42,6 +40,114 @@
     linear-gradient(rgb(31 90 65 / 4%) 1px, transparent 1px),
     linear-gradient(90deg, rgb(31 90 65 / 4%) 1px, transparent 1px);
   background-size: 20px 20px;
+  mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 88%) 30%, transparent 65%);
+}
+
+/*
+ * Left edge follows a centred 1160px frame (380px at 1920); the right edge is open so the
+ * illustration runs to the edge of the viewport, as in the design.
+ */
+.dk-ph__inner {
+  display: grid;
+  grid-template-columns: minmax(0, min(520px, 44%)) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(18px, 2vw, 36px);
+  width: 100%;
+  min-height: clamp(412px, 34vw, 660px);
+  padding-left: max(var(--ph-gutter), calc((100% - 1160px) / 2));
+  padding-right: 0;
+}
+.dk-ph__title {
+  margin: 0;
+  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(36px, 3vw, 60px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+}
+
+/* Each line is a mask for the rise-in. The padding keeps italics and the marker visible. */
+.dk-ph__line {
+  display: block;
+  overflow: clip;
+  white-space: nowrap;
+  padding: 0 0.1em 0.16em;
+  margin: 0 -0.1em -0.16em;
+}
+
+.dk-ph__line-in {
+  display: block;
+}
+
+.dk-ph__title em {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.dk-ph__accent {
+  --mk: 1;
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+}
+
+.dk-ph__accent::after {
+  position: absolute;
+  z-index: -1;
+  right: -2px;
+  bottom: 0.05em;
+  left: 0;
+  height: 0.19em;
+  background: var(--ph-green);
+  content: '';
+  transform-origin: left center;
+  transform: scaleX(var(--mk));
+}.dk-ph__visual {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.dk-ph-art {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  aspect-ratio: 680 / 420;
+  isolation: isolate;
+}
+
+/* GSAP moves these wrappers, so the panels keep their own skew and rotate. */
+.dk-ph-art__layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.dk-ph__copy {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 520px;
+}
+
+
+.dk-ph *,
+.dk-ph *::before,
+.dk-ph *::after {
+  box-sizing: border-box;
+}
+
+.dk-ph__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(31 90 65 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(31 90 65 / 4%) 1px, transparent 1px);
+  background-size: 20px 20px;
   mask-image: linear-gradient(
     90deg,
     #000 0%,
@@ -50,16 +156,6 @@
   );
 }
 
-.dk-ph__inner {
-  display: grid;
-  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.45fr);
-  align-items: center;
-  gap: clamp(18px, 2.4vw, 36px);
-  width: 100%;
-  max-width: 1160px;
-  min-height: 412px;
-  margin-inline: auto;
-}
 
 .dk-ph__copy {
   position: relative;
@@ -867,7 +963,125 @@
   height: 14px;
   animation-delay: -2s;
 }
+/* Animation */
 
+@keyframes dk-ph-float-a {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -6px; }
+}
+
+@keyframes dk-ph-float-b {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 7px; }
+}
+
+@keyframes dk-ph-orb-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -9px; }
+}
+
+/* The hero sets data-run="false" while it is off screen. */
+.dk-ph[data-run='false'] .dk-ph-art * {
+  animation-play-state: paused;
+}
+
+/* Small laptop and tablet landscape */
+@media (max-width: 1100px) {
+  .dk-ph__inner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .dk-ph__inner {
+    gap: 12px;
+    min-height: 360px;
+  }
+
+  .dk-ph__title {
+    font-size: clamp(29px, 4.2vw, 40px);
+  }
+
+  .dk-ph__description {
+    font-size: 15px;
+  }
+
+  .dk-ph-art__card--search svg {
+    width: 17px;
+    height: 17px;
+  }
+}
+
+/* Mobile: stacked, art centred inside the gutter */
+@media (max-width: 640px) {
+  .dk-ph__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    min-height: 0;
+    padding-inline: 22px;
+  }
+
+  .dk-ph__copy {
+    max-width: 440px;
+  }
+
+  .dk-ph__label {
+    margin-top: 22px;
+  }
+
+  .dk-ph__title {
+    font-size: clamp(32px, 8.5vw, 43px);
+    line-height: 1.04;
+  }
+
+  .dk-ph__description {
+    max-width: 380px;
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .dk-ph__button {
+    min-height: 44px;
+    margin-top: 15px;
+    padding-inline: 19px;
+    font-size: 13px;
+  }
+
+  .dk-ph__visual {
+    justify-content: center;
+  }
+
+  .dk-ph-art {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 380px) {
+  .dk-ph__inner {
+    padding-inline: 16px;
+  }
+
+  .dk-ph__title {
+    font-size: 29px;
+  }
+
+  .dk-ph-art__card--check {
+    right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-ph-art,
+  .dk-ph-art *,
+  .dk-ph__button,
+  .dk-ph__button svg,
+  .dk-ph__crumbs a {
+    animation: none !important;
+    transition: none !important;
+  }
+}
 /* Animation */
 
 @keyframes dk-ph-art-enter {
@@ -1015,4 +1229,12 @@
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* The fixed header floats over the page, and .dk-page reserves its height as
+   padding. Pull the hero up under it and re-add the space as inner padding, so
+   the hero background reaches the header and no canvas-coloured strip shows. */
+.dk-ph {
+  margin-top: calc(-1 * var(--header-content-clearance, 6.25rem));
+  padding-top: var(--header-content-clearance, 6.25rem);
 }

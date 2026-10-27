@@ -8,7 +8,6 @@ import { NAV_LINKS, PRIMARY_CTA } from '@/lib/navigation'
 import './Header.css'
 import { MobileMenu } from './MobileMenu'
 import { CtaButton } from '../ui/CtaButton'
-import { useContactOverlay } from '../sections/contact/ContactOverlayContext'
 
 const focusableSelector = 'a[href], button:not([disabled])'
 
@@ -102,13 +101,11 @@ function ServiceMenuIcon({
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isServicesOpen, setIsServicesOpen] = useState(false)
-  const [isContactOpen, setIsContactOpen] = useState(false)
 
   const toggleRef = useRef<HTMLButtonElement>(null)
   const servicesMenuRef = useRef<HTMLDivElement>(null)
   const returnFocusRef = useRef(false)
 
-  const contact = useContactOverlay()
   const { pathname } = useLocation()
 
   const isServicesRoute = pathname.startsWith('/services')
@@ -127,16 +124,6 @@ export function Header() {
     setIsMenuOpen(true)
   }
 
-  const handleContactClick = () => {
-    if (isContactOpen) {
-      setIsContactOpen(false)
-      return
-    }
-
-    setIsServicesOpen(false)
-    setIsContactOpen(true)
-    contact.open()
-  }
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -226,7 +213,6 @@ export function Header() {
 
   useEffect(() => {
     setIsServicesOpen(false)
-    setIsContactOpen(false)
   }, [pathname])
 
   return (
@@ -253,7 +239,6 @@ export function Header() {
                   aria-controls="services-menu"
                   aria-current={isServicesRoute ? 'page' : undefined}
                   onClick={() => {
-                    setIsContactOpen(false)
                     setIsServicesOpen((open) => !open)
                   }}
                 >
@@ -302,7 +287,6 @@ export function Header() {
                 key={href}
                 onClick={() => {
                   setIsServicesOpen(false)
-                  setIsContactOpen(false)
                 }}
               >
                 {label}
@@ -315,7 +299,6 @@ export function Header() {
             className="dk-desktop-nav__link"
             onClick={() => {
               setIsServicesOpen(false)
-              setIsContactOpen(false)
             }}
           >
             Our Team
@@ -358,3 +341,4 @@ export function Header() {
     </header>
   )
 }
+

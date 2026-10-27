@@ -2,9 +2,9 @@ import { useRef } from 'react'
 
 import { gsap, prefersReducedMotion, useGSAP } from '@/lib/motion'
 
-import { PolicyCard } from './PolicyCard'
-import { PrivacySidebar } from './PrivacySidebar'
-import { POLICY_SECTIONS, PRIVACY_PAGE as P } from './privacyData'
+import { PolicyCard } from '../Privacy/PolicyCard'
+import { PrivacySidebar } from '../Privacy/PrivacySidebar'
+import { POLICY_SECTIONS, PRIVACY_PAGE as P } from '../Privacy/privacyData'
 import './Privacy.css'
 
 export function PrivacyHero() {
@@ -68,3 +68,4 @@ export function PrivacyHero() {
     </section>
   )
 }
+

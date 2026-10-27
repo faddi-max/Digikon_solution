@@ -34,11 +34,7 @@ const linkCls =
   'hover:after:scale-x-100 focus-visible:after:scale-x-100 ' +
   'motion-reduce:transition-none motion-reduce:after:transition-none'
 
-const chipCls =
-  'inline-block rounded-[3px] border border-canvas-50/30 px-2 py-[3px] text-[9.5px] font-bold ' +
-  'uppercase leading-[1.2] tracking-[0.12em] text-canvas-50/80 no-underline ' +
-  'transition-colors duration-200 hover:text-canvas-50 ' +
-  'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-green-500'
+
 
 export function Footer() {
   const root = useRef<HTMLElement>(null)

@@ -1,0 +1,303 @@
+/*
+ * Work showcase: dark mosaic under the Work hero. Scoped to .dk-ws.
+ * The grid is a size container, so type, radii and controls scale with its width (cqw) and
+ * the section matches the design at any size. Mosaic: tracks 118 : 46 : 119 with a 6 gap
+ * (from the design's 295px grid), wide and narrow cards alternating by row.
+ */
+.dk-ws {
+  --ws-green: #81d870;
+  --ws-gutter: clamp(20px, 5.2vw, 80px);
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding: clamp(36px, 5vw, 84px) var(--ws-gutter) clamp(48px, 6vw, 110px);
+  color: #fff;
+  font-family: var(--font-sans, 'Manrope', system-ui, sans-serif);
+  background:
+    radial-gradient(ellipse 55% 45% at 6% 8%, rgb(76 160 98 / 55%) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 35% at 96% 60%, rgb(40 110 80 / 22%) 0%, transparent 70%),
+    linear-gradient(160deg, #0d2e25 0%, #07201d 28%, #051312 60%, #040e0e 100%);
+}
+
+.dk-ws *,
+.dk-ws *::before,
+.dk-ws *::after {
+  box-sizing: border-box;
+}
+
+/* Faint blueprint lines and nodes on the left, as in the design. */
+.dk-ws__deco {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(120 200 150 / 9%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(120 200 150 / 9%) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: 8px 22px;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 55%) 14%, transparent 30%);
+  mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 55%) 14%, transparent 30%);
+}
+
+.dk-ws__node {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgb(150 215 170 / 38%);
+  box-shadow: 0 0 0 5px rgb(150 215 170 / 8%);
+}
+.dk-ws__node--a { top: 22px; left: 8px; }
+.dk-ws__node--b { top: 150px; left: 72px; }
+.dk-ws__node--c { top: 62%; left: 136px; }
+
+.dk-ws__inner {
+  width: min(100%, 960px);
+  margin-inline: auto;
+}
+
+.dk-ws__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: clamp(10px, 1.4vw, 18px);
+  color: rgb(255 255 255 / 52%);
+  font-size: clamp(9px, 0.95vw, 11px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.dk-ws__eyebrow {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+/* Mosaic ------------------------------------------------------------------------------- */
+
+.dk-ws__grid {
+  display: grid;
+  grid-template-columns: 118fr 46fr 119fr;
+  grid-auto-rows: 45.8cqw;
+  gap: 2.03cqw;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  container-type: inline-size;
+}
+
+.dk-ws__item {
+  min-width: 0;
+  min-height: 0;
+}
+
+.dk-ws__item[data-cell='wide-left'] { grid-column: 1 / 3; }
+.dk-ws__item[data-cell='narrow-right'] { grid-column: 3; }
+.dk-ws__item[data-cell='narrow-left'] { grid-column: 1; }
+.dk-ws__item[data-cell='wide-right'] { grid-column: 2 / 4; }
+
+/* Card --------------------------------------------------------------------------------- */
+
+.dk-ws__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 3.4cqw;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: clamp(8px, 1.7cqw, 16px);
+  background: #0a1f1c;
+  box-shadow: 0 18px 40px rgb(0 0 0 / 32%);
+  transition:
+    transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 300ms ease-out;
+}
+
+.dk-ws__card:hover {
+  border-color: rgb(255 255 255 / 28%);
+  transform: translateY(-3px);
+}
+
+.dk-ws__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dk-ws__card:hover .dk-ws__img {
+  transform: scale(1.04);
+}
+
+.dk-ws__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(2 10 9 / 28%) 0%, transparent 24%),
+    linear-gradient(180deg, transparent 38%, rgb(2 12 10 / 64%) 66%, rgb(2 12 10 / 94%) 100%);
+}
+
+.dk-ws__tag {
+  position: absolute;
+  top: 3.4cqw;
+  left: 3.4cqw;
+  padding: 0.5em 1em;
+  border: 1px solid rgb(255 255 255 / 24%);
+  border-radius: 999px;
+  background: rgb(4 18 16 / 55%);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: rgb(255 255 255 / 86%);
+  font-size: clamp(7px, 1cqw, 10px);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dk-ws__body {
+  position: relative;
+  max-width: calc(100% - 5.6cqw);
+}
+
+.dk-ws__title {
+  margin: 0;
+  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(15px, 3.7cqw, 38px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.dk-ws__summary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  max-width: 34em;
+  margin: 0.55em 0 0;
+  color: rgb(255 255 255 / 66%);
+  font-size: clamp(8px, 1.45cqw, 15px);
+  line-height: 1.5;
+}
+
+.dk-ws__arrow {
+  position: absolute;
+  right: 3.4cqw;
+  bottom: 3.4cqw;
+  display: grid;
+  place-items: center;
+  width: clamp(22px, 3.4cqw, 36px);
+  height: clamp(22px, 3.4cqw, 36px);
+  border: 1px solid rgb(255 255 255 / 26%);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 14%);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  transition:
+    background-color 200ms ease-out,
+    color 200ms ease-out,
+    transform 200ms ease-out;
+}
+
+.dk-ws__arrow svg {
+  width: 44%;
+  height: 44%;
+}
+
+.dk-ws__arrow[data-accent='true'],
+.dk-ws__arrow:hover {
+  border-color: transparent;
+  background: var(--ws-green);
+  color: #03171d;
+}
+
+.dk-ws__arrow:hover {
+  transform: translate(2px, -2px);
+}
+
+.dk-ws__arrow:focus-visible {
+  outline: 3px solid var(--ws-green);
+  outline-offset: 3px;
+}
+
+/* Responsive --------------------------------------------------------------------------- */
+
+@media (min-width: 1600px) {
+  .dk-ws__inner {
+    width: min(100%, 1100px);
+  }
+}
+
+/* Phone: one column, cards keep a 4:3 frame and readable type. */
+@media (max-width: 640px) {
+  .dk-ws {
+    padding-inline: 16px;
+  }
+
+  .dk-ws__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+    gap: 14px;
+  }
+
+  .dk-ws__item[data-cell] {
+    grid-column: 1;
+  }
+
+  .dk-ws__card {
+    aspect-ratio: 4 / 3.1;
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .dk-ws__tag {
+    top: 16px;
+    left: 16px;
+    font-size: 9px;
+  }
+
+  .dk-ws__body {
+    max-width: calc(100% - 52px);
+  }
+
+  .dk-ws__title {
+    font-size: clamp(22px, 7vw, 28px);
+  }
+
+  .dk-ws__summary {
+    font-size: 12.5px;
+  }
+
+  .dk-ws__arrow {
+    right: 16px;
+    bottom: 16px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-ws__card,
+  .dk-ws__img,
+  .dk-ws__arrow {
+    transition: none;
+  }
+
+  .dk-ws__card:hover,
+  .dk-ws__card:hover .dk-ws__img,
+  .dk-ws__arrow:hover {
+    transform: none;
+  }
+}

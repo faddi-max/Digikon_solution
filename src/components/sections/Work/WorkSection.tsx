@@ -6,30 +6,12 @@ import {
   type KeyboardEvent,
 } from 'react'
 
+import { Link } from 'react-router-dom'
+
 import { ScrollTrigger } from '@/lib/motion'
 
 import { FILTERS, PROJECTS, type Project, type WorkFilter } from './workData'
 import './Work.css'
-
-const ART = import.meta.glob(
-  '../../../assets/images/services/*.{png,webp,jpg,jpeg,avif}',
-  {
-    eager: true,
-    query: '?url',
-    import: 'default',
-  },
-) as Record<string, string>
-
-function artFor(name: string): string | undefined {
-  const hit = Object.keys(ART).find(
-    (p) =>
-      p
-        .split('/')
-        .pop()
-        ?.replace(/\.[^.]+$/, '') === name,
-  )
-  return hit ? ART[hit] : undefined
-}
 
 const pad = (n: number) => (n < 10 ? '0' : '') + n
 const MARQUEE = ['Platforms', 'Product', 'Editorial', 'Analytics', 'Mobile']
@@ -65,7 +47,7 @@ type CardProps = {
 }
 
 function WorkCard({ project, index, total, active, onSelect }: CardProps) {
-  const art = artFor(project.art)
+  const art = project.image
 
   return (
     <article
@@ -123,12 +105,12 @@ function WorkCard({ project, index, total, active, onSelect }: CardProps) {
                 <li key={t}>{t}</li>
               ))}
             </ul>
-            <a className="dk-work__cta" href={project.href}>
+            <Link className="dk-work__cta" to={project.href}>
               View client story
               <span className="dk-work__cta-ic">
                 <Icon d={ARROW_UR} size={13} />
               </span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

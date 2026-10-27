@@ -17,6 +17,7 @@ const MORE = [
   { label: 'Process', href: '/how-it-works' },
   { label: 'FAQs', href: '/faqs' },
    { label: 'Privacy Policy', href: '/privacy-policy' },
+     { label: 'Testimonials', href: '/testimonials' },
 ]
 
 const titleCls =
@@ -151,11 +152,7 @@ export function Footer() {
                     hello@example.com
                   </a>
                 </li>
-                <li>
-                  <Link className={chipCls} to="/contact">
-                    Placeholder
-                  </Link>
-                </li>
+              
                 <li>
                   <Link className={linkCls} to="/">
                     Back to top ↑

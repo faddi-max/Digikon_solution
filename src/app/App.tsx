@@ -11,11 +11,13 @@ import { ProcessPage } from '@/pages/ProcessPage'
 import { ProductsPage } from '@/pages/ProductsPage'
 import { ServicesPage } from '@/pages/ServicesPage'
 import { WorkPage } from '@/pages/WorkPage'
+import { WorkDetailPage } from '@/pages/WorkDetailPage'
 
 import './SitePage.css'
 import { ContactOverlayProvider } from '@/components/sections/contact/ContactOverlayProvider'
 import { PrivacyPage } from '@/pages/PrivacyPage'
 import { OurTeam } from '@/pages/OurTeam'
+import { TestimonialsPage } from '@/pages/TestimonialsPage'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -39,11 +41,13 @@ export default function App() {
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/services/:serviceId" element={<ServicesPage />} />
             <Route path="/work" element={<WorkPage />} />
+            <Route path="/work/:slug" element={<WorkDetailPage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/how-it-works" element={<ProcessPage />} />
             <Route path="/faqs" element={<FaqPage />} />
             <Route path="/team" element={<OurTeam />} />
             <Route path="/privacy-policy" element={<PrivacyPage />} />
+             <Route path="/testimonials" element={<TestimonialsPage />} />
           </Route>
         </Routes>
       </ContactOverlayProvider>

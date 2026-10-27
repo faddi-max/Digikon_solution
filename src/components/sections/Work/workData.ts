@@ -1,3 +1,5 @@
+import { WORK_PROJECTS } from './workProjects'
+
 export const FILTERS = ['All work', 'Platforms', 'Product', 'Editorial', 'Analytics', 'Mobile'] as const
 export type WorkFilter = (typeof FILTERS)[number]
 
@@ -8,64 +10,28 @@ export type Project = {
   year: string
   summary: string
   tags: readonly string[]
+  /** Project details page. */
   href: string
-  /** Basename (no extension) of the visual in src/assets/images/services/. */
-  art: string
+  /** Project visual, imported by workProjects.ts. */
+  image: string
 }
 
-/**
- * Placeholders only, copied from the design. Replace with approved client work
- * before launch. Do not present these as real projects.
- */
-export const PROJECTS: readonly Project[] = [
-  {
-    id: 'project-one',
-    title: 'Project one',
-    category: 'Platforms',
-    year: '[YEAR]',
-    summary: '[One line on the challenge and what changed for the client.]',
-    tags: ['Strategy', 'UX', 'Build'],
-    href: '#contact',
-    art: 'web-design',
-  },
-  {
-    id: 'project-two',
-    title: 'Project two',
-    category: 'Product',
-    year: '[YEAR]',
-    summary: '[One line on the challenge and what changed for the client.]',
-    tags: ['Strategy', 'UX', 'Build'],
-    href: '#contact',
-    art: 'automation-ai',
-  },
-  {
-    id: 'project-three',
-    title: 'Project three',
-    category: 'Editorial',
-    year: '[YEAR]',
-    summary: '[One line on the challenge and what changed for the client.]',
-    tags: ['Strategy', 'UX', 'Build'],
-    href: '#contact',
-    art: 'content-editorial',
-  },
-  {
-    id: 'project-four',
-    title: 'Project four',
-    category: 'Analytics',
-    year: '[YEAR]',
-    summary: '[One line on the challenge and what changed for the client.]',
-    tags: ['Strategy', 'UX', 'Build'],
-    href: '#contact',
-    art: 'analytics-reporting',
-  },
-  {
-    id: 'project-five',
-    title: 'Project five',
-    category: 'Mobile',
-    year: '[YEAR]',
-    summary: '[One line on the challenge and what changed for the client.]',
-    tags: ['Strategy', 'UX', 'Build'],
-    href: '#contact',
-    art: 'search-seo',
-  },
-]
+const CATEGORY: Record<string, Project['category']> = {
+  Platform: 'Platforms',
+  Product: 'Product',
+  Editorial: 'Editorial',
+  Analytics: 'Analytics',
+  Mobile: 'Mobile',
+}
+
+/** The same placeholder projects as the gallery and the details pages (see workProjects.ts). */
+export const PROJECTS: readonly Project[] = WORK_PROJECTS.map((p) => ({
+  id: p.slug,
+  title: p.title,
+  category: CATEGORY[p.tag.split(' · ')[0]] ?? 'Platforms',
+  year: p.meta.year,
+  summary: p.summary,
+  tags: p.meta.role.split(', ').slice(0, 3),
+  href: `/work/${p.slug}`,
+  image: p.image,
+}))

@@ -1,0 +1,259 @@
+/*
+ * Work promise banner. Scoped to .dk-wp.
+ * Card proportions are measured from the design (1240 x 190, headline column 40%, three
+ * 19.3% promise columns). The card is a size container; type and gaps use cqw with floors.
+ */
+.dk-wp {
+  --wp-green: #81d870;
+  --wp-gutter: clamp(20px, 5.2vw, 80px);
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding: clamp(28px, 5vw, 72px) var(--wp-gutter) clamp(32px, 4.5vw, 64px);
+  font-family: var(--font-sans, 'Manrope', system-ui, sans-serif);
+  background:
+    radial-gradient(ellipse 70% 90% at 50% 0%, rgb(205 238 200 / 70%) 0%, transparent 72%),
+    linear-gradient(180deg, #e6f6e0 0%, #f4fbf1 55%, #fff 100%);
+}
+
+/* Faint grid with a node at every crossing, as in the design. */
+.dk-wp::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  --wp-cell: clamp(48px, 7vw, 100px);
+  background-image:
+    radial-gradient(circle, rgb(120 180 130 / 22%) 0 3px, transparent 4px),
+    linear-gradient(rgb(110 175 125 / 14%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(110 175 125 / 14%) 1px, transparent 1px);
+  background-size: var(--wp-cell) var(--wp-cell);
+  background-position: calc(var(--wp-cell) * 0.5) calc(var(--wp-cell) * 0.5);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgb(0 0 0 / 60%) 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, rgb(0 0 0 / 60%) 55%, transparent 100%);
+}
+
+.dk-wp *,
+.dk-wp *::before,
+.dk-wp *::after {
+  box-sizing: border-box;
+}
+
+.dk-wp__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40.1fr 19.3fr 19.3fr 19.3fr;
+  align-items: center;
+  width: min(100%, 960px);
+  margin-inline: auto;
+  padding-inline: 3% 0;
+  overflow: hidden;
+  container-type: inline-size;
+  aspect-ratio: 1240 / 190;
+  border-radius: clamp(10px, 1.7vw, 20px);
+  background: linear-gradient(120deg, #07191b 0%, #051315 100%);
+  color: #fff;
+  box-shadow: 0 22px 50px rgb(8 40 30 / 22%);
+}
+
+/* The grid columns above need the lead to span the first track only. */
+.dk-wp__lead {
+  display: grid;
+  gap: 1.1cqw;
+  min-width: 0;
+  padding-right: 2cqw;
+  /* The card has 3% left padding; the first track is 40.1% of the remaining width. */
+}
+
+.dk-wp__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.9cqw;
+  margin: 0;
+  color: rgb(255 255 255 / 78%);
+  font-size: clamp(7px, 0.78cqw, 10px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dk-wp__eyebrow span {
+  width: 0.55cqw;
+  height: 0.55cqw;
+  min-width: 5px;
+  min-height: 5px;
+  background: var(--wp-green);
+}
+
+.dk-wp__title {
+  display: grid;
+  margin: 0;
+  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(18px, 3.3cqw, 36px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.dk-wp__title > span {
+  display: block;
+  white-space: nowrap;
+}
+
+.dk-wp__accent {
+  color: var(--wp-green);
+}
+
+.dk-wp__points {
+  display: contents;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dk-wp__point {
+  display: grid;
+  align-content: center;
+  gap: 1cqw;
+  align-self: stretch;
+  min-width: 0;
+  margin-block: 3.4cqw;
+  padding-left: 2.4cqw;
+  border-left: 1px solid rgb(255 255 255 / 14%);
+}
+
+.dk-wp__no {
+  color: var(--wp-green);
+  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(16px, 2.9cqw, 32px);
+  line-height: 1;
+}
+
+.dk-wp__text {
+  max-width: 11em;
+  color: rgb(255 255 255 / 56%);
+  font-size: clamp(8px, 0.92cqw, 11.5px);
+  line-height: 1.5;
+}
+
+/* Soft green orb, centred on the right edge and clipped by the card. */
+.dk-wp__orb {
+  position: absolute;
+  top: 50%;
+  right: -1%;
+  z-index: 0;
+  width: 6.4cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #8fe07f 0%, #5fb86c 55%, rgb(80 170 100 / 0%) 100%);
+  filter: blur(6px);
+  box-shadow: 0 0 5cqw 1.6cqw rgb(110 215 120 / 45%);
+  transform: translateY(-48%);
+  pointer-events: none;
+}
+
+.dk-wp__lead,
+.dk-wp__point {
+  position: relative;
+  z-index: 1;
+}
+
+/* Tablet: card grows taller so the text keeps room. */
+@media (max-width: 860px) {
+  .dk-wp__card {
+    aspect-ratio: auto;
+    min-height: 0;
+    padding-block: 4cqw;
+  }
+
+  .dk-wp__title {
+    font-size: clamp(22px, 3.6cqw + 8px, 32px);
+  }
+
+  .dk-wp__text {
+    font-size: 11px;
+  }
+
+  .dk-wp__eyebrow {
+    font-size: 9px;
+  }
+
+  .dk-wp__no {
+    font-size: 22px;
+  }
+}
+
+/* Phone: headline on top, the three promises in a row beneath. */
+@media (max-width: 640px) {
+  .dk-wp {
+    --wp-gutter: 16px;
+    padding-block: 28px 36px;
+  }
+
+  .dk-wp__card {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    padding: 28px 20px 24px;
+    border-radius: 18px;
+  }
+
+  .dk-wp__lead {
+    grid-column: 1 / -1;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding-right: 0;
+  }
+
+  .dk-wp__eyebrow {
+    gap: 8px;
+    font-size: 10px;
+  }
+
+  .dk-wp__title {
+    font-size: clamp(28px, 8.4vw, 36px);
+  }
+
+  .dk-wp__point {
+    margin-block: 0;
+    padding: 2px 0 0 12px;
+    gap: 8px;
+  }
+
+  .dk-wp__point:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .dk-wp__no {
+    font-size: 24px;
+  }
+
+  .dk-wp__text {
+    max-width: none;
+    font-size: 11.5px;
+  }
+
+  .dk-wp__orb {
+    top: auto;
+    right: -28px;
+    bottom: -28px;
+    width: 84px;
+    transform: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .dk-wp__card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .dk-wp__point,
+  .dk-wp__point:first-child {
+    padding: 0 0 0 12px;
+    border-left: 1px solid rgb(255 255 255 / 14%);
+  }
+}

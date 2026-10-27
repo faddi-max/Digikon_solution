@@ -1,0 +1,360 @@
+/*
+ * Review bento, built to the 1920px design (content 1228px wide).
+ *
+ * Desktop (1024px and up): every size is a design pixel times --cu, where one --cu is
+ * 1/1228 of the content width. At 1260px or wider it is exactly the design; below that the
+ * whole composition scales as one unit.
+ * Tablet (up to 1023px): six columns, wide cards span a full row.
+ * Phone (up to 639px): one column.
+ *
+ * Slot numbers follow the order in testimonialsReviewData.ts.
+ */
+.dk-tr {
+  --tr-ink: #03171d;
+  --tr-green: #81d870;
+  --tr-canvas: #f7f8f5;
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background:
+    radial-gradient(
+      ellipse min(26vw, 500px) 200px at 50% 90px,
+      rgba(129, 216, 112, 0.36) 0%,
+      rgba(129, 216, 112, 0) 100%
+    ),
+    var(--tr-ink);
+  color: var(--tr-canvas);
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+
+/* The container that --cu is measured against. */
+.dk-tr__inner {
+  --cu: calc(100cqw / 1228);
+
+  container-type: inline-size;
+  width: min(100% - 32px, 1228px);
+  margin-inline: auto;
+}
+
+.dk-tr__frame {
+  padding-block: clamp(64px, 10vw, 100px);
+}
+
+/* Header ----------------------------------------------------------------------------- */
+.dk-tr__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 16px;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+.dk-tr__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--tr-canvas);
+}
+
+.dk-tr__eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--tr-green);
+}
+
+.dk-tr__heading {
+  margin: 0;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(32px, 7vw, 44px);
+  font-weight: 400;
+  /* DM Serif Display only has a regular weight. Without this the browser fakes a bold. */
+  font-synthesis: none;
+  line-height: 1.13;
+  letter-spacing: -0.01em;
+}
+
+.dk-tr__line {
+  display: block;
+}
+
+.dk-tr .dk-srt__accent {
+  color: var(--tr-green);
+}
+
+/* Grid ------------------------------------------------------------------------------- */
+.dk-tr__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dk-tr__item {
+  display: flex;
+  grid-column: span 3;
+  min-width: 0;
+}
+
+.dk-tr__item[data-slot='1'],
+.dk-tr__item[data-slot='6'],
+.dk-tr__item[data-slot='9'] {
+  grid-column: span 6;
+}
+
+/* Card */
+.dk-tr__card {
+  --fs: 18px;
+  --lh: 28px;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 24px 24px 24px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  transition:
+    transform 250ms ease-out,
+    box-shadow 250ms ease-out,
+    border-color 250ms ease-out;
+}
+
+.dk-tr__card[data-size='lg'] {
+  --fs: 24px;
+  --lh: 34px;
+}
+
+.dk-tr__card[data-tone='dark'] {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(160deg, #0d2a30 0%, #06191f 100%);
+  color: var(--tr-canvas);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.dk-tr__card[data-tone='light'] {
+  background: var(--tr-canvas);
+  color: var(--tr-ink);
+}
+
+.dk-tr__card[data-tone='green'] {
+  background: var(--tr-green);
+  color: var(--tr-ink);
+}
+
+.dk-tr__mark {
+  display: block;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 40px;
+  font-synthesis: none;
+  line-height: 0.8;
+  color: var(--tr-green);
+}
+
+/* A green mark on a green card would vanish, so it goes dark there. */
+.dk-tr__card[data-tone='green'] .dk-tr__mark {
+  color: var(--tr-ink);
+  opacity: 0.7;
+}
+
+.dk-tr__quote {
+  margin: 16px 0 0;
+}
+
+.dk-tr__quote p {
+  margin: 0;
+  font-size: var(--fs);
+  font-weight: 500;
+  line-height: var(--lh);
+  letter-spacing: -0.005em;
+  text-wrap: pretty;
+}
+
+/* Client line, pinned to the bottom of the card. */
+.dk-tr__who {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.dk-tr__avatar {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(247, 248, 245, 0.35);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dk-tr__card[data-tone='light'] .dk-tr__avatar,
+.dk-tr__card[data-tone='green'] .dk-tr__avatar {
+  border-color: rgba(3, 23, 29, 0.2);
+}
+
+.dk-tr__meta {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.dk-tr__name {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.dk-tr__role {
+  font-size: 11px;
+  line-height: 1.3;
+  color: rgba(247, 248, 245, 0.58);
+}
+
+.dk-tr__card[data-tone='light'] .dk-tr__role,
+.dk-tr__card[data-tone='green'] .dk-tr__role {
+  color: rgba(3, 23, 29, 0.62);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dk-tr__card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.6);
+  }
+  .dk-tr__card[data-tone='dark']:hover {
+    border-color: rgba(129, 216, 112, 0.35);
+  }
+}
+
+/* Phone: one column ------------------------------------------------------------------ */
+@media (max-width: 639px) {
+  .dk-tr__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dk-tr__item,
+  .dk-tr__item[data-slot] {
+    grid-column: auto;
+  }
+
+  .dk-tr__card[data-size='lg'] {
+    --fs: 20px;
+    --lh: 30px;
+  }
+
+  .dk-tr__card {
+    --fs: 17px;
+    --lh: 26px;
+  }
+}
+
+/* Desktop: the 1920px design, scaled by --cu ------------------------------------------ */
+@media (min-width: 1024px) {
+  .dk-tr__frame {
+    padding-block: calc(157 * var(--cu)) calc(110 * var(--cu));
+  }
+
+  .dk-tr__head {
+    grid-template-columns: calc(265 * var(--cu)) minmax(0, 1fr);
+    column-gap: 0;
+    align-items: center;
+    margin-bottom: calc(62 * var(--cu));
+  }
+
+  .dk-tr__eyebrow {
+    gap: calc(10 * var(--cu));
+    font-size: calc(15 * var(--cu));
+  }
+
+  .dk-tr__heading {
+    font-size: calc(54 * var(--cu));
+    line-height: calc(61 * var(--cu));
+  }
+
+  .dk-tr__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: calc(24 * var(--cu));
+    align-items: start;
+  }
+
+  .dk-tr__item,
+  .dk-tr__item[data-slot] {
+    grid-column: span var(--span, 4);
+    height: calc(var(--h) * var(--cu));
+    margin-bottom: calc(var(--mb, 0) * var(--cu));
+  }
+
+  /*
+   * Per slot: columns, height, vertical offset (dy) and where the first quote line sits
+   * (qy), all in design px. dy moves only the painted card, so the row heights stay put.
+   */
+  .dk-tr__item[data-slot='1'] { --span: 7; --h: 347; --dy: 0;  --qy: 98;  }
+  .dk-tr__item[data-slot='2'] { --span: 5; --h: 343; --dy: -8; --qy: 134; }
+  .dk-tr__item[data-slot='3'] { --span: 4; --h: 326; --dy: 0;  --qy: 90;  }
+  .dk-tr__item[data-slot='4'] { --span: 4; --h: 326; --dy: 13; --qy: 90;  }
+  .dk-tr__item[data-slot='5'] { --span: 4; --h: 326; --dy: 13; --qy: 90;  }
+  .dk-tr__item[data-slot='6'] { --span: 8; --h: 334; --dy: 0;  --qy: 96;  }
+  .dk-tr__item[data-slot='7'] { --span: 4; --h: 355; --dy: 5;  --qy: 98;  --mb: -11; }
+  .dk-tr__item[data-slot='8'] { --span: 5; --h: 330; --dy: 0;  --qy: 104; }
+  .dk-tr__item[data-slot='9'] { --span: 7; --h: 326; --dy: 4;  --qy: 98;  }
+
+  .dk-tr__card {
+    --fs: calc(22 * var(--cu));
+    --lh: calc(34 * var(--cu));
+
+    height: 100%;
+    padding: calc(21 * var(--cu)) calc(32 * var(--cu)) calc(24 * var(--cu));
+    border-radius: calc(20 * var(--cu));
+    translate: 0 calc(var(--dy, 0) * var(--cu));
+  }
+
+  .dk-tr__card[data-size='lg'] {
+    --fs: calc(30 * var(--cu));
+    --lh: calc(46 * var(--cu));
+  }
+
+  .dk-tr__mark {
+    font-size: calc(48 * var(--cu));
+  }
+
+  /* The first line's centre sits --qy below the card top: 21 padding + 38.4 mark box. */
+  .dk-tr__quote {
+    margin-top: calc((var(--qy) - 59.4) * var(--cu) - var(--lh) / 2);
+  }
+
+  .dk-tr__card[data-size='lg'] .dk-tr__quote {
+    max-width: calc(700 * var(--cu));
+  }
+
+  .dk-tr__who {
+    gap: calc(14 * var(--cu));
+    padding-top: 0;
+  }
+
+  .dk-tr__avatar {
+    width: calc(40 * var(--cu));
+    height: calc(40 * var(--cu));
+  }
+
+  .dk-tr__name {
+    font-size: max(12px, calc(13 * var(--cu)));
+  }
+
+  .dk-tr__role {
+    font-size: max(10px, calc(11 * var(--cu)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-tr__card {
+    transition: none;
+  }
+  .dk-tr__card:hover {
+    transform: none;
+  }
+}

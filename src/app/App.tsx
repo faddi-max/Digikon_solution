@@ -18,6 +18,8 @@ import { ContactOverlayProvider } from '@/components/sections/contact/ContactOve
 import { PrivacyPage } from '@/pages/PrivacyPage'
 import { OurTeam } from '@/pages/OurTeam'
 import { TestimonialsPage } from '@/pages/TestimonialsPage'
+import { BlogPage } from '@/pages/BlogPage'
+import ArticlePage from '@/pages/SingleBlogPage'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -48,6 +50,8 @@ export default function App() {
             <Route path="/team" element={<OurTeam />} />
             <Route path="/privacy-policy" element={<PrivacyPage />} />
              <Route path="/testimonials" element={<TestimonialsPage />} />
+             <Route path="/blogs" element={<BlogPage />} />
+             <Route path="/blog/:slug" element={<ArticlePage />} />
           </Route>
         </Routes>
       </ContactOverlayProvider>

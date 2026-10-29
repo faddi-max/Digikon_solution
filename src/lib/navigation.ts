@@ -10,6 +10,7 @@ export const NAV_LINKS: readonly NavigationItem[] = [
   { label: 'Work', href: '/work' },
   { label: 'Products', href: '/products' },
   { label: 'How it works', href: '/how-it-works' },
+   { label: 'Blogs', href: '/blogs' }
 ]
 
 export const PRIMARY_CTA = {

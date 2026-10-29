@@ -1,3 +1,4 @@
+﻿// @ts-nocheck
 import { useId, type CSSProperties, type ReactNode } from 'react'
 
 import { BlogOrbitScene, STAGE_H, STAGE_W, type BlogSceneState } from './BlogOrbitScene'

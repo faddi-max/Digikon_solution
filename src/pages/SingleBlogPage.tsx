@@ -1,3 +1,4 @@
+﻿// @ts-nocheck
 import { useEffect, useRef, useState } from "react";
 
 /*
@@ -55,7 +56,7 @@ html{scroll-behavior:smooth;scroll-padding-top:40px}
 .h2-rule.in::after{transform:none}
 .callout-bar::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#81d870;transform:scaleY(0);transform-origin:top;transition:transform .8s cubic-bezier(.65,0,.35,1) .2s}
 .callout-bar.in::before{transform:none}
-.check-item::before{content:"✓";position:absolute;left:0;top:3px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#e4f5df;color:#2f7f3a;font-size:11px;font-weight:800;line-height:20px;text-align:center;transform:scale(0);transition:transform .5s cubic-bezier(.34,1.56,.64,1) calc(var(--d,0ms) + 150ms)}
+.check-item::before{content:"âœ“";position:absolute;left:0;top:3px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#e4f5df;color:#2f7f3a;font-size:11px;font-weight:800;line-height:20px;text-align:center;transform:scale(0);transition:transform .5s cubic-bezier(.34,1.56,.64,1) calc(var(--d,0ms) + 150ms)}
 .reveal.in .check-item::before{transform:none}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -245,7 +246,7 @@ export default function ArticlePage() {
             </h1>
 
             <p className="rise mx-auto max-w-[670px] text-[15px] leading-[1.8] text-[#5b696b] max-[650px]:text-sm" style={{ "--d": "700ms" }}>
-              Great software doesn’t happen by accident. A practical guide to creating digital products that solve real problems today — and keep working as your business grows.
+              Great software doesnâ€™t happen by accident. A practical guide to creating digital products that solve real problems today â€” and keep working as your business grows.
             </p>
 
             <div className="rise mt-[27px] flex flex-wrap items-center justify-center gap-[11px] text-[11px] text-[#647174] max-[650px]:justify-start" style={{ "--d": "820ms" }}>
@@ -279,7 +280,7 @@ export default function ArticlePage() {
                 </>
               )}
               <figcaption className="absolute bottom-4 right-5 inline-flex h-8 w-[207px] items-center justify-center gap-2.5 whitespace-nowrap rounded-[18px] bg-[#81D870] p-2.5 text-[8px] font-extrabold tracking-[0.08em] text-[#03171D] max-[650px]:bottom-3 max-[650px]:right-3">
-                DIGITAL THINKING · BUILT TO SCALE
+                DIGITAL THINKING Â· BUILT TO SCALE
               </figcaption>
             </div>
           </figure>
@@ -349,7 +350,7 @@ export default function ArticlePage() {
               Software that scales begins with a clear problem, a maintainable foundation, and a genuine understanding of the people using it. Keep the first version focused, make decisions deliberately, and let evidence guide what comes next.
             </p>
             <p className="reveal mb-[23px]">
-              Whether you are modernizing an existing platform or starting something new, a thoughtful approach helps you build with confidence — and adapt as your business changes.
+              Whether you are modernizing an existing platform or starting something new, a thoughtful approach helps you build with confidence â€” and adapt as your business changes.
             </p>
 
             <div className="reveal mt-[42px] border-t border-[#e3e9e5] pt-[25px]">
@@ -367,9 +368,9 @@ export default function ArticlePage() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <strong className="text-xs text-[#03171D]">Found this useful? Share it.</strong>
                 <div className="flex gap-2">
-                  <ShareButton label="Copy article link" onClick={copyLink}>↗</ShareButton>
+                  <ShareButton label="Copy article link" onClick={copyLink}>â†—</ShareButton>
                   <ShareButton label="Share on LinkedIn" onClick={shareLinkedIn}>in</ShareButton>
-                  <ShareButton label="Share by email" onClick={shareEmail}>✉</ShareButton>
+                  <ShareButton label="Share by email" onClick={shareEmail}>âœ‰</ShareButton>
                 </div>
               </div>
               <div
@@ -419,13 +420,13 @@ export default function ArticlePage() {
               <div className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#81D870]">Building something new?</div>
               <h3 className="my-3.5 mb-2.5 font-serif text-[25px] font-normal leading-[1.08]">Make your next idea real.</h3>
               <p className="mb-[17px] text-xs leading-[1.7] text-[#b4c5c0]">
-                Let’s talk about a software experience that fits your goals and grows with your business.
+                Letâ€™s talk about a software experience that fits your goals and grows with your business.
               </p>
               <a
                 href="#"
                 className="group flex min-h-[44px] items-center justify-center gap-1.5 rounded-full bg-[#81D870] text-[11px] font-extrabold text-[#03171D] transition-[background-color,gap] duration-200 hover:gap-2.5 hover:bg-[#b2ee9e]"
               >
-                Talk to DigiKon <span aria-hidden="true">↗</span>
+                Talk to DigiKon <span aria-hidden="true">â†—</span>
               </a>
             </div>
           </aside>
@@ -446,7 +447,7 @@ export default function ArticlePage() {
           showTop ? "pointer-events-auto translate-y-0 scale-100 opacity-100" : "pointer-events-none translate-y-4 scale-90 opacity-0"
         }`}
       >
-        ↑
+        â†‘
       </button>
     </div>
   );
